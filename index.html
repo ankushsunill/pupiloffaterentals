@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+
+<html data-theme="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta
+    content="POF Rental is a luxury car rental Dubai service offering premium cars, monthly deals, airport delivery, sports cars, prestige SUVs, VIP chauffeur options, and Chinese luxury cars."
+    name="description" />
+  <title>POF Rental | Dubai Luxury Car Rental</title>
+  <link as="image" href="media/logo.png" rel="preload" />
+  <link as="image" href="media/banner-01-poster.webp" rel="preload" />
+  <link as="image" href="media/range-rover-autobiography.webp" rel="preload" />
+  <link href="styles.css" rel="stylesheet" />
+  <style>
+    .about-section {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      justify-content: space-between;
+      min-height: 100vh;
+      gap: 2.5rem;
+      padding: 5rem 1.5rem 4rem;
+    }
+
+    .about-visual {
+      flex: 1 1 520px;
+      min-height: 560px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 2rem;
+      background: #090909;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    }
+
+    .about-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .about-visual-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(1, 1, 1, 0.15), rgba(1, 1, 1, 0.6));
+      pointer-events: none;
+    }
+
+    .about-year-card {
+      position: absolute;
+      left: 1.5rem;
+      bottom: 1.5rem;
+      z-index: 2;
+      width: fit-content;
+      padding: 1rem 1.2rem;
+      border-radius: 1.4rem;
+      background: rgba(0, 0, 0, 0.65);
+      color: #fff;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+    }
+
+    .about-year-number {
+      font-size: clamp(2.2rem, 3vw, 3rem);
+      line-height: 1;
+      font-weight: 800;
+    }
+
+    .about-year-label {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      margin-top: 0.4rem;
+      opacity: 0.85;
+    }
+
+    .about-content {
+      flex: 1 1 480px;
+      min-height: 560px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .about-content h2 {
+      max-width: 780px;
+    }
+
+    .about-quote {
+      margin: 0;
+      padding: 1.4rem 1.4rem;
+      border-left: 4px solid #c9a84c;
+      border-radius: 1.2rem;
+      background: rgba(201, 168, 76, 0.08);
+      color: #c9a84b;
+      font-size: 1rem;
+      line-height: 1.85;
+    }
+
+    .about-features {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .about-feature {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 1.1rem;
+      border-radius: 1.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      align-items: flex-start;
+    }
+
+    .about-feature-icon {
+      font-size: 1.4rem;
+      margin-top: 0.2rem;
+      color: #c9a84c;
+      flex-shrink: 0;
+    }
+
+    .about-feature-title {
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    @media (max-width: 1024px) {
+      .about-section {
+        flex-direction: column;
+        min-height: auto;
+        padding: 3rem 1.25rem 2rem;
+      }
+
+      .about-visual,
+      .about-content {
+        min-height: auto;
+      }
+
+      .about-features {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <script defer="" src="app.js"></script>
+</head>
+
+<body>
+  <div aria-live="polite" class="loader" id="loader">
+    <div class="loader-glow"></div>
+    <div class="loader-logo-wrap">
+      <div class="loader-ring" id="loaderRing">
+        <svg aria-hidden="true" height="120" viewbox="0 0 120 120" width="120">
+          <circle cx="60" cy="60" fill="none" r="54" stroke="rgba(201,168,76,0.18)" stroke-width="1"></circle>
+          <circle cx="60" cy="60" fill="none" r="54" stroke="url(#ringGrad)" stroke-dasharray="60 280"
+            stroke-linecap="round" stroke-width="1"></circle>
+          <circle cx="60" cy="60" fill="none" r="46" stroke="rgba(201,168,76,0.07)" stroke-width="0.5"></circle>
+          <g id="ringTicks"></g>
+          <defs>
+            <lineargradient id="ringGrad" x1="0%" x2="100%" y1="0%" y2="0%">
+              <stop offset="0%" stop-color="#C9A84C" stop-opacity="0"></stop>
+              <stop offset="60%" stop-color="#E8C96B" stop-opacity="1"></stop>
+              <stop offset="100%" stop-color="#C9A84C" stop-opacity="0.3"></stop>
+            </lineargradient>
+          </defs>
+        </svg>
+      </div>
+      <img alt="Pupil of Fate" class="loader-logo-img" src="media/logo.png" />
+    </div>
+    <div class="loader-tagline">Luxury Car Rental · Dubai</div>
+    <div class="loader-bar-wrap">
+      <div class="loader-bar" id="loaderBar"></div>
+    </div>
+    <div class="loader-count" id="loaderCount">000</div>
+  </div>
+  <div aria-hidden="true" class="cursor"></div>
+  <div aria-hidden="true" class="cursor-follower"></div>
+  <nav class="nav transparent" id="siteNav">
+    <div class="nav-progress-bar" id="navProgress"></div>
+    <a aria-label="POF Rental home" class="nav-logo" href="#book">
+      <img alt="Pupil of Fate" class="nav-logo-img" height="42" src="media/logo.png" width="280" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="">Book a Car<span class="nav-link-line"></span></a></li>
+      <li><a href="">Car Listings<span class="nav-link-line"></span></a></li>
+      <li><a href="">Long Lease<span class="nav-link-line"></span></a></li>
+      <li><a href="">Chinese Luxury Cars<span class="nav-link-line"></span></a></li>
+      <li><a href="">Car Care<span class="nav-link-line"></span></a></li>
+      <li><a href="">Offers<span class="nav-link-line"></span></a></li>
+    </ul>
+    <div class="nav-actions">
+      <button aria-label="Current theme: light. Switch to dark theme" class="theme-toggle" data-theme-toggle=""
+        type="button">☀︎</button>
+      <button class="nav-cta" data-scroll-target="#book" type="button">Reserve Now</button>
+    </div>
+    <button aria-expanded="false" aria-label="Menu" class="mobile-menu-btn" id="mobileMenuBtn" type="button">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="mobile-nav-overlay" id="mobileNav">
+    <div class="mobile-nav-logo">
+      <img alt="Pupil of Fate" height="34" src="media/logo.png" width="220" />
+    </div>
+    <a class="mobile-nav-link" href="" style="--i:0"><span class="mobile-nav-num">01</span>Book a Car</a>
+    <a class="mobile-nav-link" href="" style="--i:1"><span class="mobile-nav-num">02</span>Car Listings</a>
+    <a class="mobile-nav-link" href="" style="--i:2"><span class="mobile-nav-num">03</span>Long Lease</a>
+    <a class="mobile-nav-link" href="" style="--i:3"><span class="mobile-nav-num">04</span>Chinese Luxury
+      Cars</a>
+    <a class="mobile-nav-link" href="" style="--i:4"><span class="mobile-nav-num">05</span>Car Care</a>
+    <a class="mobile-nav-link" href="" style="--i:5"><span class="mobile-nav-num">06</span>Offers</a>
+    <button aria-label="Current theme: light. Switch to dark theme" class="theme-toggle mobile-theme-toggle"
+      data-theme-toggle="" type="button">☀︎</button>
+    <div class="mobile-nav-footer">Dubai's Premier Luxury Car Rental</div>
+  </div>
+  <main>
+    <section class="hero" id="book">
+      <div aria-hidden="true" class="hero-video-wrap" id="heroVideoWrap">
+        <video autoplay="" class="hero-video active" data-critical-video="true" data-hero-index="0" loop="" muted=""
+          playsinline="" poster="media/Huracan.mp4" preload="metadata">
+          <source src="media/Huracan.mp4" type="video/mp4" />
+        </video>
+        <div class="hero-video-shade"></div>
+        <div class="hero-poster-fallback"></div>
+      </div>
+      <div class="hero-glass-line hero-glass-line-left"></div>
+      <div class="hero-glass-line hero-glass-line-right"></div>
+      <svg aria-hidden="true" class="hero-diagonal" preserveaspectratio="none" viewbox="0 0 400 800">
+        <line stroke="currentColor" stroke-width="1" x1="400" x2="0" y1="0" y2="800"></line>
+        <line stroke="currentColor" stroke-width="0.5" x1="380" x2="0" y1="0" y2="760"></line>
+      </svg>
+      <div class="hero-content">
+        <div class="hero-eyebrow">
+          <span class="eyebrow-line"></span>
+          Dubai · UAE Luxury Rentals
+          <span class="eyebrow-line"></span>
+        </div>
+        <h1 class="hero-title"><span class="word">LUXURY CARS</span><br /><span class="word accent">Rentals Dubai</span>
+        </h1>
+        <p class="hero-subtitle">Premium Cars · Monthly Deals · Airport Delivery · VIP Concierge</p>
+        <!-- <div class="hero-actions">
+            <a href="#fleet" class="btn-primary magnetic"><span>Explore Fleet</span></a>
+            <a href="https://wa.me/?text=Hello%20POF%20Rental%2C%20I%20would%20like%20to%20speak%20with%20the%20Dubai%20concierge%20about%20a%20luxury%20rental." target="_blank" rel="noreferrer" class="btn-secondary magnetic">WhatsApp Concierge</a>
+          </div> -->
+        <div aria-label="Homepage video selector" class="hero-video-controls" id="heroVideoControls">
+          <button aria-label="Show video 1" class="hero-dot active" data-hero-dot="0" type="button"></button>
+          <button aria-label="Show video 2" class="hero-dot" data-hero-dot="1" type="button"></button>
+          <button aria-label="Show video 3" class="hero-dot" data-hero-dot="2" type="button"></button>
+          <button aria-label="Show video 4" class="hero-dot" data-hero-dot="3" type="button"></button>
+          <button aria-label="Show video 5" class="hero-dot" data-hero-dot="4" type="button"></button>
+        </div>
+        <!-- <div aria-label="Live premium rental highlights" class="hero-media-strip">
+          <button class="hero-preview active" data-hero-preview="0" type="button">
+            <img alt="Close-up of a luxury performance car in Dubai" src="media/banner-01-poster.webp" />
+            <span><strong>Premium Fleet</strong><small>showroom-conditioned cars</small></span>
+          </button>
+          <button class="hero-preview" data-hero-preview="1" type="button">
+            <img alt="Convertible supercar arrival" src="media/banner-02-poster.webp" />
+            <span><strong>Airport Delivery</strong><small>DXB, hotel &amp; home handover</small></span>
+          </button>
+          <button class="hero-preview" data-hero-preview="3" type="button">
+            <img alt="Luxury car moving through palm-lined Dubai streets" src="media/banner-04-poster.webp" />
+            <span><strong>VIP Concierge</strong><small>24/7 booking support</small></span>
+          </button>
+        </div> -->
+        <div aria-live="polite" class="hero-slide-label" id="heroSlideLabel">Experience Luxury Car Rental Dubai With POF
+          Rental</div>
+      </div>
+      <!-- <button aria-label="Scroll to fleet" class="hero-scroll" data-scroll-target="#fleet" type="button">
+        <span class="scroll-mouse"><span class="scroll-wheel"></span></span>
+        <span>Scroll</span>
+      </button> -->
+      <!-- <div class="hero-stats">
+          <div class="hero-stat"><div class="num">200+</div><div class="label">Luxury Vehicles</div></div>
+          <div class="hero-stat"><div class="num">24/7</div><div class="label">Concierge</div></div>
+          <div class="hero-stat"><div class="num">5&#9733;</div><div class="label">Rated Service</div></div>
+          <div class="hero-stat"><div class="num">10+</div><div class="label">Years in Dubai</div></div>
+        </div> -->
+      <div class="hero-bottom-fade"></div>
+    </section>
+    <div aria-label="Current offers" class="sale-ticker">
+      <div class="sale-ticker-inner">
+        <span class="sale-ticker-item">Exclusive Super Sale · June 25 – July 1, 2026<span class="dot"></span></span>
+        <span class="sale-ticker-item">Ferrari Purosangue from AED 3,399/day<span class="dot"></span></span>
+        <span class="sale-ticker-item">Ferrari 12 Cilindri from AED 3,399/day<span class="dot"></span></span>
+        <span class="sale-ticker-item">Porsche 911 GT3 RS from AED 1,899/day<span class="dot"></span></span>
+        <span class="sale-ticker-item">Mercedes-AMG G63 · Limited Availability<span class="dot"></span></span>
+        <span class="sale-ticker-item">Airport Delivery · No Extra Charge<span class="dot"></span></span>
+        <span class="sale-ticker-item">VIP Concierge 24/7 · WhatsApp Support<span class="dot"></span></span>
+        <span class="sale-ticker-item">Exclusive Super Sale · June 25 – July 1, 2026<span class="dot"></span></span>
+        <span class="sale-ticker-item">Ferrari Purosangue from AED 3,399/day<span class="dot"></span></span>
+        <span class="sale-ticker-item">Ferrari 12 Cilindri from AED 3,399/day<span class="dot"></span></span>
+        <span class="sale-ticker-item">Porsche 911 GT3 RS from AED 1,899/day<span class="dot"></span></span>
+        <span class="sale-ticker-item">Mercedes-AMG G63 · Limited Availability<span class="dot"></span></span>
+        <span class="sale-ticker-item">Airport Delivery · No Extra Charge<span class="dot"></span></span>
+        <span class="sale-ticker-item">VIP Concierge 24/7 · WhatsApp Support<span class="dot"></span></span>
+      </div>
+    </div>
+    <section aria-label="POF Rental live motion experience" class="experience-studio">
+      <div class="experience-copy reveal-group">
+        <div class="section-eyebrow fade-up">Dubai Luxury Car Rental</div>
+        <h2 class="section-title fade-up delay-1">Experience Luxury Car Rental Dubai<br /><span class="gold">With POF
+            Rental</span></h2>
+        <p class="section-copy fade-up delay-2">Welcome to POF Rental, your premier destination for the ultimate driving
+          experience in the UAE. Whether you are a tourist seeking the thrill of high-performance engineering or a
+          resident requiring elite executive transport, our world-class fleet is curated to exceed every expectation.
+        </p>
+      </div>
+      <div class="experience-grid">
+        <article class="experience-card experience-card-wide fade-up" data-cursor="hover">
+          <video data-lazy-video="true" loop="" muted="" playsinline="" poster="media/Porsche gt3 grey.mp4"
+            preload="none">
+            <source data-src="media/Porsche gt3 grey.mp4" type="video/mp4" />
+          </video>
+          <div class="experience-card-copy">
+            <span>01</span>
+            <h3>Porsche 911 992 GT3 RS Rental in Dubai</h3>
+            <p>A street-legal race car built for aerodynamic precision, powered by a high-revving 4.0L flat-six engine
+              with 518 hp and extreme track-focused aero.</p>
+          </div>
+        </article>
+        <article class="experience-card fade-up delay-1" data-cursor="hover">
+          <img alt="Range Rover Autobiography exterior" decoding="async" loading="lazy" src="media/2.webp" />
+          <div class="experience-card-copy">
+            <span>02</span>
+            <h3>Ferrari Purosangue Rental in Dubai</h3>
+            <p>The Ferrari Purosangue redefines the luxury SUV segment with authentic supercar DNA, a naturally
+              aspirated 6.5L V12 and a refined four-seat cabin.</p>
+          </div>
+        </article>
+        <article class="experience-card fade-up delay-2" data-cursor="hover">
+          <video data-lazy-video="true" loop="" muted="" playsinline="" poster="media/2 3.webp" preload="none">
+            <source data-src="media/2 3.webp" type="video/mp4" />
+          </video>
+          <div class="experience-card-copy">
+            <span>03</span>
+            <h3>Mercedes-AMG G63 Rental in Dubai</h3>
+            <p>The Mercedes-AMG G63 blends iconic design with elite performance, premium Nappa leather, MBUX displays
+              and confident city-to-dunes capability.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+    <section class="section featured-section" id="fleet">
+      <div class="section-header reveal-group">
+        <div class="section-eyebrow anim-el fade-up">Our Exclusive Fleet Categories</div>
+        <h2 class="section-title anim-el fade-up delay-1">Premium Cars,<br /><span class="gold">Monthly Deals</span>
+        </h2>
+        <p class="section-copy anim-el fade-up delay-2">Explore supercars, prestige SUVs, VIP chauffeur options and
+          Chinese luxury cars with flexible daily, weekly and monthly rental plans.</p>
+      </div>
+      <div class="cars-grid">
+        <article class="car-card car-card-featured fade-up">
+          <div class="car-card-img-wrap">
+            <img alt="Porsche 911 992 GT3 RS" class="car-card-img" decoding="async" loading="eager"
+              src="media/4.webp" />
+            <div class="car-card-img-glow"></div>
+          </div>
+          <span class="sale-badge">SALE</span>
+          <div class="car-card-overlay">
+            <div class="car-card-brand">Porsche</div>
+            <div class="car-card-name">Porsche 911 992 GT3 RS</div>
+            <div class="car-card-specs">
+              <div class="car-spec"><span class="car-spec-val">518</span><span class="car-spec-label">HP</span></div>
+              <div class="car-spec"><span class="car-spec-val">860kg</span><span class="car-spec-label">Torque</span>
+              </div>
+              <div class="car-spec"><span class="car-spec-val">3.2s</span><span class="car-spec-label">0-100</span>
+              </div>
+            </div>
+            <div class="car-card-price-wrap">
+              <span class="car-card-price-old">AED 3,250</span>
+              <span class="car-card-price">AED 1,899</span>
+              <span class="car-card-price-unit">/day</span>
+            </div>
+            <a class="car-card-btn"
+              href="https://wa.me/?text=Hello%20POF%20Rental%2C%20I%20want%20to%20reserve%20the%20Porsche%20911%20992%20GT3%20RS%20in%20Dubai.%20Please%20share%20availability%20and%20pricing."
+              rel="noreferrer" target="_blank">Reserve Now <span class="arrow"></span></a>
+          </div>
+        </article>
+        <article class="car-card fade-up delay-1">
+          <div class="car-card-img-wrap">
+            <img alt="Ferrari Purosangue" class="car-card-img" decoding="async" loading="lazy"
+              src="https://www.europeanprestige.co.uk/blobs/stock/622/images/9fcf5566-e1bb-4d12-80e3-3614d6f690cf/hi4a2745.jpg?width=2000&amp;height=1333" />
+            <div class="car-card-img-glow"></div>
+          </div>
+          <span class="sale-badge">SALE</span>
+          <div class="car-card-overlay">
+            <div class="car-card-brand">Ferrari</div>
+            <div class="car-card-name">Ferrari Purosangue</div>
+            <div class="car-card-specs">
+              <div class="car-spec"><span class="car-spec-val">725</span><span class="car-spec-label">HP</span></div>
+              <div class="car-spec"><span class="car-spec-val">716Nm</span><span class="car-spec-label">Torque</span>
+              </div>
+              <div class="car-spec"><span class="car-spec-val">3.3s</span><span class="car-spec-label">0-100</span>
+              </div>
+            </div>
+            <div class="car-card-price-wrap">
+              <span class="car-card-price-old">AED 6,000</span>
+              <span class="car-card-price">AED 3,399</span>
+              <span class="car-card-price-unit">/day</span>
+            </div>
+            <a class="car-card-btn"
+              href="https://wa.me/?text=Hello%20POF%20Rental%2C%20I%20want%20to%20reserve%20the%20Ferrari%20Purosangue%20in%20Dubai.%20Please%20share%20availability%20and%20pricing."
+              rel="noreferrer" target="_blank">Reserve Now <span class="arrow"></span></a>
+          </div>
+        </article>
+        <article class="car-card fade-up delay-2">
+          <div class="car-card-img-wrap">
+            <img alt="Ferrari 12 Cilindri" class="car-card-img" decoding="async" loading="lazy"
+              src="https://hips.hearstapps.com/hmg-prod/images/2024-ferrari-12cilindri-152-66312e340983b.jpg?crop=0.8888888888888888xw:1xh;center,top&amp;resize=1200:*" />
+            <div class="car-card-img-glow"></div>
+          </div>
+          <span class="sale-badge badge-new">NEW</span>
+          <div class="car-card-overlay">
+            <div class="car-card-brand">Ferrari</div>
+            <div class="car-card-name">Ferrari 12 Cilindri</div>
+            <div class="car-card-specs">
+              <div class="car-spec"><span class="car-spec-val">830</span><span class="car-spec-label">HP</span></div>
+              <div class="car-spec"><span class="car-spec-val">678Nm</span><span class="car-spec-label">Torque</span>
+              </div>
+              <div class="car-spec"><span class="car-spec-val">2.9s</span><span class="car-spec-label">0-100</span>
+              </div>
+            </div>
+            <div class="car-card-price-wrap">
+              <span class="car-card-price-old">AED 6,000</span>
+              <span class="car-card-price">AED 3,399</span>
+              <span class="car-card-price-unit">/day</span>
+            </div>
+            <a class="car-card-btn"
+              href="https://wa.me/?text=Hello%20POF%20Rental%2C%20I%20want%20to%20reserve%20the%20Ferrari%2012%20Cilindri%20in%20Dubai.%20Please%20share%20availability%20and%20pricing."
+              rel="noreferrer" target="_blank">Reserve Now <span class="arrow"></span></a>
+          </div>
+        </article>
+        <article class="car-card fade-up delay-3">
+          <div class="car-card-img-wrap">
+            <img alt="Range Rover Autobiography" class="car-card-img" decoding="async" loading="lazy"
+              src="media/range-rover-autobiography.webp" />
+            <div class="car-card-img-glow"></div>
+          </div>
+          <div class="car-card-overlay">
+            <div class="car-card-brand">Range Rover</div>
+            <div class="car-card-name">Autobiography</div>
+            <div class="car-card-specs">
+              <div class="car-spec"><span class="car-spec-val">523</span><span class="car-spec-label">HP</span></div>
+              <div class="car-spec"><span class="car-spec-val">750Nm</span><span class="car-spec-label">Torque</span>
+              </div>
+              <div class="car-spec"><span class="car-spec-val">4.6s</span><span class="car-spec-label">0-100</span>
+              </div>
+            </div>
+            <div class="car-card-price-wrap">
+              <span class="car-card-price">AED 2,200</span>
+              <span class="car-card-price-unit">/day</span>
+            </div>
+            <a class="car-card-btn"
+              href="https://wa.me/?text=Hello%20POF%20Rental%2C%20I%20want%20to%20reserve%20the%20Range%20Rover%20Autobiography%20in%20Dubai.%20Please%20share%20availability%20and%20pricing."
+              rel="noreferrer" target="_blank">Book <span class="arrow"></span></a>
+          </div>
+        </article>
+        <article class="car-card motion-showcase-card fade-up delay-4">
+          <div class="car-card-img-wrap">
+            <video class="car-card-img car-card-video" data-lazy-video="true" loop="" muted="" playsinline=""
+              poster="media/4 3.webp" preload="none">
+              <source data-src="media/banner-04.mp4" type="video/mp4" />
+            </video>
+            <div class="car-card-img-glow"></div>
+          </div>
+          <span class="sale-badge badge-live">LIVE</span>
+          <div class="car-card-overlay">
+            <div class="car-card-brand">Mercedes-AMG</div>
+            <div class="car-card-name">Mercedes-AMG G63</div>
+            <div class="car-card-specs">
+              <div class="car-spec"><span class="car-spec-val">24/7</span><span class="car-spec-label">Concierge</span>
+              </div>
+              <div class="car-spec"><span class="car-spec-val">DXB</span><span class="car-spec-label">Delivery</span>
+              </div>
+              <div class="car-spec"><span class="car-spec-val">VIP</span><span class="car-spec-label">Handover</span>
+              </div>
+            </div>
+            <div class="car-card-price-wrap">
+              <span class="car-card-price">Instant</span>
+              <span class="car-card-price-unit">WhatsApp Quote</span>
+            </div>
+            <a class="car-card-btn"
+              href="https://wa.me/?text=Hello%20POF%20Rental%2C%20I%20want%20a%20cinematic%20Dubai%20arrival%20rental%20handover.%20Please%20assist."
+              rel="noreferrer" target="_blank">Explore Mercedes G63 <span class="arrow"></span></a>
+          </div>
+        </article>
+      </div>
+    </section>
+    <section aria-label="Premium car fleet scroll showcase" class="fleet-scroll-section">
+      <div class="section-header fleet-scroll-header reveal-group">
+        <div class="section-eyebrow anim-el fade-up">Luxury Car Rental Dubai</div>
+        <h2 class="section-title anim-el fade-up delay-1">Explore Our Full<br /><span class="gold">Range</span></h2>
+        <p class="section-copy anim-el fade-up delay-2">Discover premium sports cars, prestige SUVs, Chinese luxury EVs,
+          and chauffeur-ready models curated for Dubai roads.</p>
+      </div>
+      <div class="scroll-track-wrap">
+        <div class="scroll-track scroll-track-left" data-scroll-row="left"></div>
+        <div class="scroll-track scroll-track-right" data-scroll-row="right"></div>
+      </div>
+    </section>
+    <section class="about-section" id="about">
+      <div class="about-visual reveal-group">
+        <video aria-label="Ferrari Purosangue White luxury video" class="about-video" autoplay muted loop playsinline
+          preload="auto" poster="media/Purosangue White-poster.webp">
+          <source src="media/Purosangue White.mp4" type="video/mp4" />
+        </video>
+        <div class="about-visual-overlay"></div>
+        <div class="about-year-card">
+          <div class="about-year-number">10+</div>
+          <div class="about-year-label">Years of Excellence</div>
+        </div>
+      </div>
+      <div class="about-content reveal-group">
+        <div class="section-eyebrow fade-up">Experience the Best Luxury Car Rental Dubai Has to Offer</div>
+        <h2 class="section-title fade-up delay-1">Top Car Rental<br /><span class="gold">Service in Dubai</span></h2>
+        <p class="about-text fade-up delay-2">POF Rental delivers a refined luxury rental experience with elite
+          supercars, prestige SUVs and VIP services across Dubai. Every booking is supported by transparent pricing,
+          premium delivery and concierge-level care.</p>
+        <blockquote class="about-quote fade-up delay-3">No compromises. Every journey is tailored for peak performance,
+          unmatched comfort, and unforgettable arrivals.</blockquote>
+        <div class="about-features fade-up delay-4">
+          <div class="about-feature"><span class="about-feature-icon">✦</span>
+            <div>
+              <div class="about-feature-title">Transparent Booking</div>
+              <div class="about-feature-text">Luxury rentals with clear pricing, flexible terms, and smooth reservation
+                flow.</div>
+            </div>
+          </div>
+          <div class="about-feature"><span class="about-feature-icon">◉</span>
+            <div>
+              <div class="about-feature-title">VIP Delivery</div>
+              <div class="about-feature-text">Handover at DXB, hotels, homes or business addresses with elite support.
+              </div>
+            </div>
+          </div>
+          <div class="about-feature"><span class="about-feature-icon">◆</span>
+            <div>
+              <div class="about-feature-title">Curated Fleet</div>
+              <div class="about-feature-text">High-performance machines and luxury icons selected for Dubai roads.</div>
+            </div>
+          </div>
+          <div class="about-feature"><span class="about-feature-icon">◎</span>
+            <div>
+              <div class="about-feature-title">Premium Care</div>
+              <div class="about-feature-text">Detailed, showroom-ready vehicles with advanced cabin comfort.</div>
+            </div>
+          </div>
+        </div>
+        <a class="btn-primary fade-up delay-5"
+          href="https://wa.me/?text=Hello%20POF%20Rental%2C%20I%20would%20like%20to%20book%20the%20Ferrari%20Purosangue%20White.%20Please%20assist."
+          rel="noreferrer" target="_blank"><span>Book Purosangue White</span></a>
+      </div>
+    </section>
+    <section class="chinese-section" id="chinese">
+      <div class="chinese-text-content reveal-group">
+        <div class="section-eyebrow fade-up">Exclusive POF Rental x HeliDubai</div>
+        <h2 class="section-title fade-up delay-1">POF Rental x<br /><span class="gold">HeliDubai Experience</span></h2>
+        <p class="chinese-text fade-up delay-2">Experience unrivaled luxury travel in Dubai with our premium partnership
+          between POF Rental and HeliDubai. From elite vehicles to helicopter transfers, enjoy seamless arrivals,
+          departures and city tours in style.</p>
+        <p class="chinese-text fade-up delay-3">Whether you're arriving for business or leisure, our curated mobility
+          services ensure effortless journeys across the city. Rent a luxury car, book a heli transfer, and arrive like
+          a VIP with POF Rental x HeliDubai.</p>
+        <div class="chinese-brands fade-up delay-3">
+          <div class="chinese-brand">POF Rental</div>
+          <div class="chinese-brand">HeliDubai</div>
+          <div class="chinese-brand">VIP Transfers</div>
+          <div class="chinese-brand">Luxury Travel</div>
+        </div>
+        <a class="btn-primary fade-up delay-4" href="#fleet"><span>Explore POF x HeliDubai</span></a>
+      </div>
+      <div class="chinese-visual fade-up">
+        <video aria-label="POF Rental x HeliDubai luxury experience video" class="chinese-img chinese-video" autoplay
+          muted playsinline loop preload="auto" poster="media/chinese-luxury-poster.webp">
+          <source src="media/POF Rental x HeliDubai.mp4" type="video/mp4" />
+        </video>
+        <div class="chinese-img-accent"></div>
+        <div class="tech-badge">
+          <div class="tech-badge-title">Luxury · Heli Transfer</div>
+          <div class="tech-badge-text">Seamless VIP Journeys</div>
+        </div>
+      </div>
+    </section>
+    <section class="lease-section" id="lease">
+      <div class="section-header reveal-group">
+        <div class="section-eyebrow fade-up">Flexible Booking &amp; Long-Term Fleet Options</div>
+        <h2 class="section-title fade-up delay-1">Weekly and Monthly<br /><span class="gold">Rental Plans</span></h2>
+      </div>
+      <div class="lease-grid reveal-group">
+        <article class="lease-card fade-up">
+          <div class="lease-card-number">01</div>
+          <h3 class="lease-card-title">Weekly Rental</h3>
+          <p class="lease-card-text">For extended vacations, business trips, or temporary vehicle placement, short-term
+            leasing provides incredible flexibility and competitive weekly rates compared to standard daily hires.</p>
+          <div class="lease-card-price"><span class="from">From</span><span class="amount">AED 2,500</span><span
+              class="unit">/week</span></div>
+        </article>
+        <article class="lease-card lease-card-highlight fade-up delay-1">
+          <div class="lease-card-number">02</div>
+          <h3 class="lease-card-title">Monthly Lease</h3>
+          <p class="lease-card-text">Our luxury car rental Dubai monthly programs give you prolonged access to premium
+            mobility without long-term commitments, with clear monthly plans for longer visits.</p>
+          <div class="lease-card-price"><span class="from">From</span><span class="amount">AED 8,500</span><span
+              class="unit">/month</span></div>
+          <div class="popular-badge">Most Popular</div>
+        </article>
+        <article class="lease-card fade-up delay-2">
+          <div class="lease-card-number">03</div>
+          <h3 class="lease-card-title">Long Term</h3>
+          <p class="lease-card-text">Long-term car rental and monthly vehicle rental solutions for residents, visitors
+            and corporate clients, with simple extensions and seasonal monthly car rental deals.</p>
+          <div class="lease-card-price"><span class="from">From</span><span class="amount">AED 6,000</span><span
+              class="unit">/month</span></div>
+        </article>
+      </div>
+      <div class="airport-card fade-up">
+        <div>
+          <div class="airport-title">Car Rental Dubai Airport Delivery</div>
+          <p>Start your journey the moment you land. We specialize in luxury car rental Dubai airport services, offering
+            prompt delivery directly to Dubai International Airport (DXB), your luxury hotel, or corporate headquarters.
+            Our VIP concierge brings the vehicle directly to you.</p>
+        </div>
+        <a class="btn-primary"
+          href="https://wa.me/?text=Hello%20POF%20Rental%2C%20I%20want%20to%20book%20airport%20delivery%20at%20DXB.%20Please%20assist%20with%20available%20cars."
+          rel="noreferrer" target="_blank"><span>Explore Airport Delivery</span></a>
+      </div>
+    </section>
+    <section class="promo-section" id="offers">
+      <div class="promo-card fade-up">
+        <div class="promo-validity"><span>★</span> Valid June 25 – July 1, 2026 <span>★</span></div>
+        <h2 class="promo-title">EXCLUSIVE SUPER SALE</h2>
+        <p class="promo-subtitle">Limited time. Limited availability. Premium machines at exceptional value.</p>
+        <div class="promo-deals">
+          <div class="promo-deal">
+            <div class="promo-deal-car">Ferrari Purosangue (Blue)</div>
+            <div class="promo-deal-price-old">AED 6,000</div>
+            <div class="promo-deal-price">AED 3,399</div>
+            <div class="promo-deal-unit">/day</div>
+          </div>
+          <div class="promo-deal">
+            <div class="promo-deal-car">Ferrari 12 Cilindri</div>
+            <div class="promo-deal-price-old">AED 6,000</div>
+            <div class="promo-deal-price">AED 3,399</div>
+            <div class="promo-deal-unit">/day</div>
+          </div>
+          <div class="promo-deal">
+            <div class="promo-deal-car">Porsche 911 GT3 RS (Yellow)</div>
+            <div class="promo-deal-price-old">AED 3,250</div>
+            <div class="promo-deal-price">AED 1,899</div>
+            <div class="promo-deal-unit">/day</div>
+          </div>
+        </div>
+        <a class="btn-primary"
+          href="https://wa.me/?text=Hello%20POF%20Rental%2C%20I%20want%20to%20claim%20the%20exclusive%20super%20sale%20offer.%20Please%20share%20availability."
+          rel="noreferrer" target="_blank"><span>Claim Your Deal Now</span></a>
+      </div>
+    </section>
+    <section class="why-section">
+      <div class="section-eyebrow fade-up">Why Choose POF Rental?</div>
+      <h2 class="section-title fade-up delay-1">Simple. Transparent.<br /><span class="gold">Concierge-Led.</span></h2>
+      <div class="why-grid">
+        <article class="why-item fade-up"><span class="why-icon">◉</span>
+          <div class="why-title">Simple &amp; Transparent</div>
+          <p class="why-text">We prioritize total honesty with clear tracking on luxury car rental Dubai price
+            structures, zero hidden fees, and highly sought-after no-deposit options on select premium models.</p>
+        </article>
+        <article class="why-item fade-up delay-1"><span class="why-icon">◎</span>
+          <div class="why-title">VIP Concierge Service</div>
+          <p class="why-text">Enjoy 24/7 dedicated customer support. Whether you search for car rental Dubai near me or
+            cars for rent near me from your smartphone, our team handles delivery seamlessly.</p>
+        </article>
+        <article class="why-item fade-up delay-2"><span class="why-icon">◆</span>
+          <div class="why-title">Membership Benefits</div>
+          <p class="why-text">Unlock true elite status with our exclusive Membership Program. Members gain instant
+            access to priority bookings, private seasonal promotions, and tailored discounts across the fleet.</p>
+        </article>
+      </div>
+    </section>
+    <section class="faq-section">
+      <div class="faq-inner reveal-group">
+        <div class="section-eyebrow fade-up">Frequently Asked Questions</div>
+        <h2 class="section-title fade-up delay-1">Frequently Asked<br /><span class="gold">Questions</span></h2>
+        <div class="faq-list fade-up delay-2">
+          <div class="faq-item"><button aria-expanded="false" class="faq-question" type="button">What kinds of cars can
+              I rent with POF Rental?<span class="faq-toggle">+</span></button>
+            <div class="faq-answer">
+              <p class="faq-answer-text">POF Rental offers a curated, showroom-conditioned fleet across four main
+                categories: Supercars &amp; Sports Cars, Prestige SUVs, VIP &amp; Chauffeur Fleet, and Luxury Chinese
+                Fleet with electric and hybrid options from brands like BYD, Zeekr and Hongqi.</p>
+            </div>
+          </div>
+          <div class="faq-item"><button aria-expanded="false" class="faq-question" type="button">Do you offer airport
+              delivery in Dubai?<span class="faq-toggle">+</span></button>
+            <div class="faq-answer">
+              <p class="faq-answer-text">Yes. We specialize in luxury car rental Dubai airport services with prompt
+                delivery directly to Dubai International Airport (DXB). Your VIP concierge brings the vehicle directly
+                to you - no searching for a rental counter.</p>
+            </div>
+          </div>
+          <div class="faq-item"><button aria-expanded="false" class="faq-question" type="button">Are there any hidden
+              fees or deposits?<span class="faq-toggle">+</span></button>
+            <div class="faq-answer">
+              <p class="faq-answer-text">POF Rental prioritizes total honesty with clear tracking on all price
+                structures, zero hidden fees, and no-deposit options on select premium models. Pricing is always
+                transparent before you confirm your booking.</p>
+            </div>
+          </div>
+          <div class="faq-item"><button aria-expanded="false" class="faq-question" type="button">Can I rent a car for a
+              month or longer?<span class="faq-toggle">+</span></button>
+            <div class="faq-answer">
+              <p class="faq-answer-text">Yes. Choose flexible monthly car rental Dubai or car rental Dubai monthly plans
+                for longer visits, with clear prices, seasonal offers and simple extensions when available.</p>
+            </div>
+          </div>
+          <div class="faq-item"><button aria-expanded="false" class="faq-question" type="button">What Chinese luxury
+              cars do you offer?<span class="faq-toggle">+</span></button>
+            <div class="faq-answer">
+              <p class="faq-answer-text">Our dedicated Chinese Car Rental Dubai segment showcases premium electric and
+                hybrid vehicles with smart technology, digital screens and executive-level cabin comfort from brands
+                like Jetour, BYD, Zeekr and Hongqi.</p>
+            </div>
+          </div>
+          <div class="faq-item"><button aria-expanded="false" class="faq-question" type="button">Do you offer a
+              chauffeur service?<span class="faq-toggle">+</span></button>
+            <div class="faq-answer">
+              <p class="faq-answer-text">Yes. If you prefer to relax in the back seat while navigating the city, we
+                provide premium Dubai luxury car rental with driver and professional chauffeur options for executives
+                and VIP guests.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a aria-label="POF Rental home" class="nav-logo footer-logo" href="#book"><img alt="POF Rental"
+            class="footer-logo-img" height="34" src="media/logo.png" width="220" /></a>
+        <p class="footer-tagline">Dubai's premier luxury car rental service for premium cars, monthly deals, airport
+          delivery and VIP concierge bookings across the UAE.</p>
+        <div class="footer-social">
+          <a aria-label="LinkedIn" class="social-link" href="https://www.linkedin.com" rel="noreferrer"
+            target="_blank">◆</a>
+          <a aria-label="Instagram" class="social-link" href="https://www.instagram.com" rel="noreferrer"
+            target="_blank">◉</a>
+          <a aria-label="X / Twitter" class="social-link" href="https://twitter.com" rel="noreferrer"
+            target="_blank">◎</a>
+          <a aria-label="WhatsApp" class="social-link"
+            href="https://wa.me/?text=Hello%20POF%20Rental%2C%20I%20would%20like%20help%20booking%20a%20luxury%20car%20in%20Dubai."
+            rel="noreferrer" target="_blank">●</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Fleet</div>
+        <ul class="footer-links">
+          <li><a href="#fleet">Supercars &amp; Sports Cars</a></li>
+          <li><a href="#fleet">Prestige SUVs</a></li>
+          <li><a href="#lease">VIP &amp; Chauffeur</a></li>
+          <li><a href="#chinese">Chinese Luxury Cars</a></li>
+          <li><a href="#lease">Long Term Lease</a></li>
+          <li><a href="#about">Car Care</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Services</div>
+        <ul class="footer-links">
+          <li><a href="#book">Book a Car</a></li>
+          <li><a href="#lease">Airport Delivery</a></li>
+          <li><a href="#lease">Monthly Rental</a></li>
+          <li><a href="#about">Car Care</a></li>
+          <li><a href="#offers">Membership</a></li>
+          <li><a href="#offers">Offers</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <ul class="footer-links">
+          <li><a href="https://maps.google.com/?q=Dubai%2C%20UAE" rel="noreferrer" target="_blank">Dubai, UAE</a></li>
+          <li><a href="tel:+971">+971 · 24/7 Support</a></li>
+          <li><a
+              href="https://wa.me/?text=Hello%20POF%20Rental%2C%20I%20would%20like%20help%20booking%20a%20luxury%20car%20in%20Dubai."
+              rel="noreferrer" target="_blank">WhatsApp</a></li>
+          <li><a href="mailto:info@pofrental.com">info@pofrental.com</a></li>
+        </ul>
+        <div class="footer-language-wrap">
+          <div class="footer-col-title">Language</div>
+          <div class="footer-language-row">
+            <button class="footer-language active" type="button">EN</button>
+            <button class="footer-language" type="button">AR</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 POF Rental. All rights reserved.</div>
+      <div class="footer-legal">
+        <a href="mailto:info@pofrental.com?subject=Privacy%20Policy%20Request">Privacy Policy</a>
+        <a href="mailto:info@pofrental.com?subject=Terms%20of%20Use%20Request">Terms of Use</a>
+        <a href="mailto:info@pofrental.com?subject=Cookie%20Policy%20Request">Cookie Policy</a>
+      </div>
+    </div>
+  </footer>
+  <section aria-hidden="true" aria-label="Chat with POF Concierge" class="chatbot-window" id="chatbotWindow">
+    <div class="chatbot-header">
+      <div class="chatbot-avatar">✦</div>
+      <div class="chatbot-info">
+        <h4>Aria · POF Concierge</h4>
+        <p><span class="chatbot-status-dot"></span>Ready · Dubai</p>
+      </div>
+      <button aria-label="Close chat" class="chatbot-close" id="chatClose" type="button">×</button>
+    </div>
+    <div class="chatbot-messages" id="chatMessages"></div>
+    <div class="chatbot-quick-bar">
+      <button class="quick-action-btn" data-chat-text="What are the current deals?" type="button">Deals</button>
+      <button class="quick-action-btn" data-chat-text="I need airport pickup" type="button">Airport</button>
+      <button class="quick-action-btn" data-chat-text="Tell me about long-term lease options"
+        type="button">Monthly</button>
+      <button class="quick-action-btn" data-chat-text="Which car should I choose?" type="button">Recommend</button>
+      <a class="quick-action-btn quick-whatsapp"
+        href="https://wa.me/?text=Hello%20POF%20Rental%2C%20I%20would%20like%20help%20from%20the%20concierge."
+        rel="noreferrer" target="_blank">WhatsApp</a>
+    </div>
+    <form class="chatbot-input-area" id="chatForm">
+      <input autocomplete="off" class="chatbot-input" id="chatInput"
+        placeholder="Ask about availability, pricing, cars..." type="text" />
+      <button aria-label="Send message" class="chatbot-send" disabled="" id="chatSend" type="submit">
+        <svg aria-hidden="true" fill="none" height="16" viewbox="0 0 16 16" width="16">
+          <path d="M14 8L2 2l3 6-3 6 12-6z" fill="currentColor"></path>
+        </svg>
+      </button>
+    </form>
+  </section>
+  <button aria-label="Open chat with Aria" class="chatbot-trigger" id="chatTrigger" title="Chat with Aria"
+    type="button">
+    <span id="chatTriggerIcon">✦</span>
+    <span class="chatbot-pulse"></span>
+  </button>
+  <div aria-labelledby="exit-popup-title" aria-modal="true" class="exit-popup-backdrop" hidden="" id="exitPopup"
+    role="dialog">
+    <div class="exit-popup-card">
+      <button aria-label="Close offer" class="exit-popup-close" data-close-exit="" type="button">×</button>
+      <div class="exit-popup-kicker">Before you go</div>
+      <h3 id="exit-popup-title">Unlock a Dubai fleet concierge quote</h3>
+      <p>Tell us your date, delivery location, and preferred vehicle style. We will recommend the right luxury rental
+        option for your UAE trip.</p>
+      <div class="exit-popup-actions">
+        <a class="btn-primary"
+          href="https://wa.me/?text=Hello%20POF%20Rental%2C%20I%20would%20like%20a%20concierge%20quote%20for%20a%20luxury%20car%20rental%20in%20Dubai."
+          rel="noreferrer" target="_blank"><span>Chat on WhatsApp</span></a>
+        <button class="btn-secondary" data-close-exit="" type="button">Keep Browsing</button>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
