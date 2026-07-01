@@ -8,37 +8,43 @@
 }
 
 :root {
-  --gold: #c9a84b;
-  --gold-light: #e9cf77;
-  --gold-dark: #8f7330;
+  --gold: #c6b889;
+  --gold-light: #c6b889f8;
+  --gold-dark: #c8b473;
   --obsidian: #080808;
   --carbon: #101010;
   --graphite: #181818;
   --ash: #2b2b2b;
-  --mist: #9b9b9b;
-  --silver: #d6d2ca;
-  --white: #f8f6f2;
+  --mist: #a7a39b;
+  --silver: #d8d2c4;
+  --white: #f8f6f0;
   --glass: rgba(255, 255, 255, 0.055);
   --glass-strong: rgba(255, 255, 255, 0.09);
-  --glass-border: rgba(201, 168, 75, 0.22);
+  --glass-border: rgba(185, 143, 42, 0.22);
   --shadow: rgba(0, 0, 0, 0.45);
+  --loader-bg: #080808;
+  --loader-fg: #f8f6f0;
+  --loader-muted: rgba(248, 246, 240, 0.72);
   --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-display: var(--font-body);
   --font-serif: var(--font-body);
 }
 
 [data-theme='light'] {
-  --obsidian: #f8f6f2;
-  --carbon: #ffffff;
-  --graphite: #f0ede7;
-  --ash: #ded8cd;
-  --mist: #5d5d5d;
-  --silver: #222222;
-  --white: #080808;
-  --glass: rgba(255, 255, 255, 0.64);
-  --glass-strong: rgba(255, 255, 255, 0.82);
-  --glass-border: rgba(201, 168, 75, 0.35);
-  --shadow: rgba(0, 0, 0, 0.12);
+  --obsidian: #f7f3ea;
+  --carbon: #fffdf8;
+  --graphite: #ede6d9;
+  --ash: #d8cfbf;
+  --mist: #55504a;
+  --silver: #191713;
+  --white: #090806;
+  --glass: rgba(255, 253, 248, 0.72);
+  --glass-strong: rgba(255, 253, 248, 0.9);
+  --glass-border: rgba(185, 143, 42, 0.28);
+  --shadow: rgba(44, 34, 18, 0.12);
+  --loader-bg: #fffdf8;
+  --loader-fg: #090806;
+  --loader-muted: rgba(9, 8, 6, 0.66);
 }
 
 html {
@@ -65,8 +71,7 @@ body::before {
   pointer-events: none;
   z-index: -1;
   background:
-    radial-gradient(circle at 20% 10%, rgba(201, 168, 75, 0.12), transparent 28rem),
-    radial-gradient(circle at 80% 35%, rgba(255, 255, 255, 0.04), transparent 24rem),
+    radial-gradient(circle at 18% 8%, rgba(185, 143, 42, 0.1), transparent 26rem),
     linear-gradient(135deg, var(--obsidian), var(--carbon));
 }
 
@@ -154,8 +159,8 @@ button {
 .loader {
   position: fixed;
   inset: 0;
-  background: #080808;
-  color: #f8f6f2;
+  background: var(--loader-bg);
+  color: var(--loader-fg);
   z-index: 9999;
   display: flex;
   flex-direction: column;
@@ -171,7 +176,7 @@ button {
   min-width: 320px;
   height: 42vw;
   min-height: 320px;
-  background: radial-gradient(circle, rgba(201, 168, 75, 0.13), transparent 66%);
+  background: radial-gradient(circle, rgba(185, 143, 42, 0.16), transparent 66%);
   animation: loaderGlowPulse 3s ease-in-out infinite alternate;
 }
 
@@ -215,7 +220,7 @@ button {
   width: 164px;
   height: auto;
   z-index: 2;
-  filter: brightness(1.28) drop-shadow(0 18px 42px rgba(201, 168, 75, 0.28));
+  filter: drop-shadow(0 18px 42px rgba(185, 143, 42, 0.24));
 }
 
 .loader-tagline,
@@ -223,13 +228,13 @@ button {
   font-size: 0.68rem;
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: rgba(248, 246, 242, 0.72);
+  color: var(--loader-muted);
 }
 
 .loader-bar-wrap {
   width: min(280px, 72vw);
   height: 1px;
-  background: rgba(255, 255, 255, 0.16);
+  background: color-mix(in srgb, var(--loader-fg) 16%, transparent);
   overflow: hidden;
 }
 
@@ -265,8 +270,8 @@ button {
 
 .nav.scrolled {
   background: rgba(8, 8, 8, 0.76);
-  backdrop-filter: blur(22px) saturate(1.3);
-  -webkit-backdrop-filter: blur(22px) saturate(1.3);
+  backdrop-filter: blur(14px) saturate(1.1);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
   border-bottom-color: var(--glass-border);
   padding-block: 0.75rem;
   box-shadow: 0 18px 60px var(--shadow);
@@ -376,7 +381,7 @@ button {
 .nav-cta,
 .theme-toggle {
   border: 1px solid var(--glass-border);
-  background: var(--glass);
+  background: transparent;
   color: var(--gold);
   padding: 0.68rem 1rem;
   font-size: 0.72rem;
@@ -435,7 +440,7 @@ button {
   justify-content: center;
   gap: 1.8rem;
   background: rgba(8, 8, 8, 0.94);
-  backdrop-filter: blur(26px);
+  backdrop-filter: blur(16px);
   opacity: 0;
   pointer-events: none;
   transform: translateY(-18px);
@@ -564,7 +569,7 @@ video {
   position: relative;
   z-index: 5;
   text-align: left;
-  width: min(1040px, calc(100% - 2rem));
+  width: min(1600px, calc(100% - 2rem));
   padding: 1rem;
   text-shadow: 0 18px 55px rgba(0, 0, 0, 0.78);
 }
@@ -592,7 +597,7 @@ video {
   font-weight: 800;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.25rem;
 }
 
 .section-eyebrow {
@@ -614,12 +619,12 @@ video {
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: -0.055em;
-  line-height: 0.9;
+  line-height: 1.2;
   color: var(--white);
 }
 
 .hero-title {
-  font-size: clamp(4rem, 11vw, 5rem);
+  font-size: clamp(4rem, 11vw, 6rem);
 }
 
 .hero-title .word {
@@ -1683,7 +1688,7 @@ footer {
   flex-direction: column;
   background: rgba(16, 16, 16, 0.9);
   border: 1px solid var(--glass-border);
-  backdrop-filter: blur(26px) saturate(1.2);
+  backdrop-filter: blur(16px) saturate(1.1);
   box-shadow: 0 28px 100px var(--shadow);
   opacity: 0;
   pointer-events: none;
@@ -2021,7 +2026,7 @@ footer {
 
 .exit-popup-card p {
   margin: 1rem 0 1.5rem;
-  color: rgba(248, 246, 242, 0.72);
+  color: var(--loader-muted);
   line-height: 1.7;
 }
 
@@ -2272,8 +2277,7 @@ body.menu-open {
 }
 
 .loader-merging {
-  background: rgba(8, 8, 8, 0.58);
-  backdrop-filter: blur(10px);
+  background: color-mix(in srgb, var(--loader-bg) 76%, transparent);
 }
 
 .loader-merging .loader-logo-wrap {
@@ -2308,7 +2312,7 @@ body.menu-open {
 
 .nav.transparent .nav-links a,
 [data-theme='light'] .nav.transparent .nav-links a {
-  color: #c9a84b;
+  color: #c6b889;
   text-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
 }
 
@@ -2316,8 +2320,7 @@ body.menu-open {
 .nav.transparent .nav-cta,
 [data-theme='light'] .nav.transparent .theme-toggle,
 [data-theme='light'] .nav.transparent .nav-cta {
-  color: #be9300;
-  border-color: rgba(201, 168, 75, 0.38);
+  border-color: rgba(198, 184, 137, 0.38);
 }
 
 main>section,
@@ -2326,11 +2329,14 @@ main>section,
   transition: box-shadow 0.45s ease, filter 0.45s ease;
 }
 
-main>section:hover,
-.footer:hover {
-  box-shadow:
-    inset 0 0 0 1px rgba(201, 168, 75, 0.12),
-    inset 0 34px 90px rgba(201, 168, 75, 0.035);
+@media (hover: hover) and (pointer: fine) {
+  .car-card:hover,
+  .experience-card:hover,
+  .lease-card:hover,
+  .promo-deal:hover,
+  .faq-item:hover {
+    box-shadow: inset 0 0 0 1px rgba(185, 143, 42, 0.12);
+  }
 }
 
 .section-motion,
@@ -2343,17 +2349,17 @@ main>section:hover,
     border-color 0.35s ease,
     background 0.35s ease;
   transition-delay: var(--motion-delay, 0ms);
-  will-change: opacity, transform;
+  will-change: auto;
 }
 
 .section-motion.from-left,
 .motion-child.from-left {
-  transform: translate3d(-58px, 28px, 0);
+  transform: translate3d(-24px, 18px, 0);
 }
 
 .section-motion.from-right,
 .motion-child.from-right {
-  transform: translate3d(58px, 28px, 0);
+  transform: translate3d(24px, 18px, 0);
 }
 
 .section-motion.visible,
@@ -2370,9 +2376,9 @@ main>section:hover,
 
 .motion-child.visible.interactive-surface:hover,
 .interactive-surface:hover {
-  transform: perspective(920px) rotateX(var(--tilt-y)) rotateY(var(--tilt-x)) translateY(-8px) scale(1.01);
-  border-color: rgba(201, 168, 75, 0.48);
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(201, 168, 75, 0.12);
+  transform: translateY(-4px);
+  border-color: rgba(185, 143, 42, 0.4);
+  box-shadow: 0 18px 52px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(185, 143, 42, 0.1);
 }
 
 .featured-section.section {
@@ -2609,7 +2615,7 @@ html[data-theme='dark'] body {
 }
 
 .hero-poster-fallback {
-  background: url('media/banner-01-poster.jpg') center / cover no-repeat;
+  background: url('media/DSC07812.webp') center / cover no-repeat;
 }
 
 .hero-video::after {
@@ -2617,7 +2623,7 @@ html[data-theme='dark'] body {
 }
 
 .hero-video-wrap {
-  filter: saturate(1.05) contrast(1.07);
+  filter: none;
 }
 
 .hero-video-shade {
@@ -2965,5 +2971,493 @@ html[data-theme='dark'] body {
 
   .experience-studio {
     padding-inline: 1rem;
+  }
+}
+
+/* Performance guardrails for Chrome/demo-host rendering */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-video,
+  .car-card-img,
+  .experience-card img,
+  .experience-card video,
+  .about-video,
+  .chinese-video {
+    backface-visibility: hidden;
+  }
+}
+
+@media (max-width: 900px), (prefers-reduced-motion: reduce) {
+  .section-motion,
+  .motion-child,
+  .fade-up {
+    opacity: 1;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .hero::before,
+  .hero::after,
+  .loader-glow,
+  .loader-ring {
+    animation: none !important;
+  }
+
+  .nav.scrolled,
+  .mobile-nav-overlay,
+  .chatbot-window,
+  .btn-secondary {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+
+/* Editorial image upgrades */
+.lease-card,
+.why-item,
+.promo-deal,
+.airport-card {
+  isolation: isolate;
+}
+
+.lease-card-media,
+.why-media,
+.airport-card-media {
+  position: relative;
+  overflow: hidden;
+  background: var(--graphite);
+  border: 1px solid color-mix(in srgb, var(--gold) 24%, transparent);
+}
+
+.lease-card-media {
+  height: clamp(150px, 14vw, 220px);
+  margin: 0 0 1.45rem;
+}
+
+.lease-card-media img,
+.why-media img,
+.airport-card-media img,
+.promo-deal-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.95) contrast(1.03) brightness(0.82);
+  transition: transform 0.5s ease, filter 0.5s ease;
+}
+
+.lease-card:hover .lease-card-media img,
+.why-item:hover .why-media img,
+.promo-deal:hover .promo-deal-img,
+.airport-card:hover .airport-card-media img {
+  transform: scale(1.045);
+  filter: saturate(1.02) contrast(1.04) brightness(0.94);
+}
+
+.lease-card-media::after,
+.why-media::after,
+.airport-card-media::after,
+.promo-deal::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, 0.48));
+}
+
+.lease-card-title,
+.lease-card-text,
+.lease-card-price,
+.popular-badge,
+.why-icon,
+.why-title,
+.why-text {
+  position: relative;
+  z-index: 2;
+}
+
+.promo-deal {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  align-content: end;
+  min-height: 260px;
+  text-align: left;
+}
+
+.promo-deal-img {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.promo-deal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(8, 8, 8, 0.24), rgba(8, 8, 8, 0.88));
+}
+
+.promo-deal-car,
+.promo-deal-price-old,
+.promo-deal-price,
+.promo-deal-unit {
+  position: relative;
+  z-index: 2;
+}
+
+.why-item {
+  overflow: hidden;
+  padding: 0;
+  text-align: left;
+}
+
+.why-media {
+  height: clamp(170px, 15vw, 235px);
+  border-width: 0 0 1px;
+}
+
+.why-icon,
+.why-title,
+.why-text {
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+.why-icon {
+  margin-top: 1.6rem;
+}
+
+.why-text {
+  margin-bottom: 2rem;
+}
+
+.airport-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.54fr);
+  align-items: stretch;
+  padding: 0;
+  overflow: hidden;
+}
+
+.airport-card-copy {
+  padding: clamp(1.6rem, 3vw, 3rem);
+}
+
+.airport-card-media {
+  min-height: 280px;
+  border-width: 0 0 0 1px;
+}
+
+[data-theme='light'] .promo-deal::before {
+  background: linear-gradient(180deg, rgba(8, 8, 8, 0.18), rgba(8, 8, 8, 0.82));
+}
+
+/* Premium solid chatbot */
+:root {
+  --chat-bg: #10100f;
+  --chat-panel: #151513;
+  --chat-line: rgba(185, 143, 42, 0.34);
+  --chat-text: #f8f6f0;
+  --chat-muted: #aaa39a;
+}
+
+[data-theme='light'] {
+  --chat-bg: #fffdf8;
+  --chat-panel: #f3eddf;
+  --chat-line: rgba(185, 143, 42, 0.32);
+  --chat-text: #090806;
+  --chat-muted: #625a50;
+}
+
+.chatbot-window {
+  width: min(520px, calc(100vw - 2rem));
+  height: clamp(520px, 50vw, 720px);
+  background: var(--chat-bg) !important;
+  color: var(--chat-text);
+  border: 1px solid var(--chat-line);
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 32px 88px rgba(0, 0, 0, 0.34);
+}
+
+.chatbot-header,
+.chatbot-input-area,
+.chatbot-quick-bar {
+  background: var(--chat-panel);
+  border-color: var(--chat-line);
+}
+
+.chatbot-header {
+  padding: 1rem 1.15rem;
+}
+
+.chatbot-avatar,
+.chat-avatar-dot,
+.chatbot-send,
+.chatbot-trigger {
+  background: var(--gold);
+  color: #080806;
+}
+
+.chatbot-info h4,
+.chat-bubble,
+.chatbot-input {
+  color: var(--chat-text);
+}
+
+.chatbot-info p,
+.chat-time,
+.chatbot-input::placeholder {
+  color: var(--chat-muted);
+}
+
+.chatbot-messages {
+  background: var(--chat-bg);
+  padding: 1.4rem 1.15rem;
+}
+
+.chat-bubble,
+.chatbot-typing {
+  background: var(--chat-panel);
+  border: 1px solid var(--chat-line);
+  color: var(--chat-text);
+}
+
+.chat-msg.user .chat-bubble {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #080806;
+}
+
+.chat-suggestion,
+.quick-action-btn {
+  background: transparent;
+  border: 1px solid var(--chat-line);
+  color: var(--gold);
+}
+
+.chat-suggestion:hover,
+.quick-action-btn:hover {
+  background: var(--gold);
+  color: #080806;
+}
+
+.chatbot-input {
+  background: var(--chat-bg);
+  border-color: var(--gold);
+}
+
+.chatbot-close {
+  color: var(--chat-muted);
+}
+
+.chatbot-close:hover {
+  color: var(--gold);
+}
+
+@media (max-width: 1024px) {
+  .airport-card {
+    grid-template-columns: 1fr;
+  }
+
+  .airport-card-media {
+    border-width: 1px 0 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .lease-card-media,
+  .why-media {
+    height: 190px;
+  }
+
+  .chatbot-window {
+    right: 1rem;
+    bottom: 5.75rem;
+    width: calc(100vw - 2rem);
+    height: min(620px, calc(100svh - 7rem));
+  }
+}
+
+
+/* Content-aware image polish */
+.lease-card,
+.promo-deal,
+.why-item,
+.airport-card {
+  transition:
+    transform 520ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 420ms ease,
+    background 420ms ease,
+    box-shadow 520ms ease;
+}
+
+.lease-card {
+  padding: 0;
+  min-height: 520px;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--graphite) 96%, transparent), var(--carbon));
+}
+
+.lease-card-title,
+.lease-card-text,
+.lease-card-price,
+.popular-badge {
+  margin-left: clamp(1.4rem, 2.4vw, 2.4rem);
+  margin-right: clamp(1.4rem, 2.4vw, 2.4rem);
+}
+
+.lease-card-title {
+  margin-top: 1.35rem;
+}
+
+.lease-card-price {
+  margin-bottom: clamp(1.5rem, 2.4vw, 2.4rem);
+}
+
+.lease-card-media {
+  height: clamp(190px, 17vw, 270px);
+  margin: 0;
+  border-width: 0 0 1px;
+}
+
+.lease-card-media figcaption,
+.why-media span,
+.promo-save,
+.airport-kicker {
+  position: absolute;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0.48rem 0.7rem;
+  background: color-mix(in srgb, var(--gold) 88%, #080806);
+  color: #080806;
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.lease-card-media figcaption {
+  left: 1rem;
+  bottom: 1rem;
+}
+
+.lease-card-number {
+  z-index: 4;
+  transition: color 420ms ease, transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lease-card:hover .lease-card-number {
+  color: rgba(185, 143, 42, 0.24);
+  transform: translate3d(-4px, 4px, 0);
+}
+
+.promo-card {
+  background:
+    linear-gradient(135deg, rgba(185, 143, 42, 0.08), transparent 34%),
+    var(--carbon);
+}
+
+.promo-deal {
+  min-height: clamp(260px, 24vw, 360px);
+  padding: 1.25rem;
+}
+
+.promo-save {
+  top: 1rem;
+  left: 1rem;
+}
+
+.promo-deal-price {
+  color: var(--gold-light);
+  text-shadow: 0 12px 32px rgba(0, 0, 0, 0.56);
+}
+
+.promo-deal:hover {
+  transform: translateY(-6px);
+}
+
+.why-grid {
+  align-items: stretch;
+}
+
+.why-item {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--graphite) 92%, transparent), var(--carbon));
+}
+
+.why-media span {
+  left: 1rem;
+  bottom: 1rem;
+}
+
+.why-title {
+  margin-top: 0.25rem;
+}
+
+.airport-card {
+  background:
+    linear-gradient(135deg, rgba(185, 143, 42, 0.08), transparent 38%),
+    var(--carbon);
+}
+
+.airport-card-copy {
+  position: relative;
+}
+
+.airport-kicker {
+  position: static;
+  margin-bottom: 1rem;
+  width: fit-content;
+}
+
+.airport-card .btn-primary {
+  align-self: end;
+  margin: clamp(1.6rem, 3vw, 3rem);
+  margin-left: 0;
+}
+
+.lease-card-media img,
+.why-media img,
+.promo-deal-img,
+.airport-card-media img {
+  transform: scale(1.012);
+  transform-origin: center;
+}
+
+.fade-up.visible .lease-card-media img,
+.fade-up.visible .why-media img,
+.fade-up.visible .promo-deal-img,
+.fade-up.visible .airport-card-media img {
+  animation: mediaReveal 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes mediaReveal {
+  from {
+    opacity: 0;
+    transform: scale(1.08) translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1.012) translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-up.visible .lease-card-media img,
+  .fade-up.visible .why-media img,
+  .fade-up.visible .promo-deal-img,
+  .fade-up.visible .airport-card-media img {
+    animation: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  .lease-card {
+    min-height: auto;
   }
 }

@@ -25,10 +25,17 @@ const mimeTypes = {
 };
 
 function safeResolve(requestPath) {
-  const decodedPath = decodeURIComponent(requestPath.split('?')[0]);
+  let decodedPath;
+  try {
+    decodedPath = decodeURIComponent(requestPath.split('?')[0]);
+  } catch (_) {
+    return null;
+  }
+
   const normalizedPath = path.normalize(decodedPath).replace(/^([/\\])+/, '');
-  const filePath = path.join(root, normalizedPath || 'index.html');
-  if (!filePath.startsWith(root)) return null;
+  const filePath = path.resolve(root, normalizedPath || 'index.html');
+  const relativePath = path.relative(root, filePath);
+  if (relativePath.startsWith('..') || path.isAbsolute(relativePath)) return null;
   return filePath;
 }
 
@@ -47,7 +54,16 @@ const server = http.createServer((req, res) => {
   }
 
   if (!fs.existsSync(filePath)) {
-    filePath = path.join(root, 'index.html');
+    const acceptsHtml = (req.headers.accept || '').includes('text/html');
+    const ext = path.extname(filePath);
+
+    if (req.method === 'GET' && acceptsHtml && !ext) {
+      filePath = path.join(root, 'index.html');
+    } else {
+      res.writeHead(404);
+      res.end('Not found');
+      return;
+    }
   }
 
   fs.stat(filePath, (err, stat) => {

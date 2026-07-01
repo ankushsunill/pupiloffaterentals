@@ -3,7 +3,7 @@ const path = require('path');
 
 const root = path.resolve(__dirname, '..');
 const dist = path.join(root, 'dist');
-const include = ['index.html', 'styles.css', 'app.js', 'pof-logo.png', 'media'];
+const include = ['index.html', 'styles.css', 'app.js', 'media'];
 
 fs.rmSync(dist, { recursive: true, force: true });
 fs.mkdirSync(dist, { recursive: true });

@@ -18,7 +18,7 @@
     { brand: "Lamborghini", name: "Huracan EVO", hp: "640", torque: "600Nm", sprint: "2.9", price: "5,500", img: "media/01.webp" },
     { brand: "Rolls-Royce", name: "Ghost", hp: "563", torque: "900Nm", sprint: "4.8", price: "6,800", img: "media/44.webp" },
     { brand: "Bentley", name: "Continental GT", hp: "542", torque: "770Nm", sprint: "4.0", price: "4,800", img: "media/4.webp" },
-    { brand: "Porsche", name: "Cayenne Turbo GT", hp: "640", torque: "800Nm", sprint: "3.3", price: "2,800", img: "media/3.webp" },
+    { brand: "Porsche", name: "Cayenne Turbo GT", hp: "640", torque: "800Nm", sprint: "3.3", price: "2,800", img: "media/2 2.webp" },
     { brand: "McLaren", name: "Artura", hp: "671", torque: "720Nm", sprint: "3.0", price: "4,900", img: "media/4 2.webp" },
     { brand: "Range Rover", name: "Autobiography", hp: "523", torque: "750Nm", sprint: "4.6", price: "2,200", img: "media/range-rover-autobiography.webp" }
   ];
@@ -108,7 +108,14 @@
     }
   }
 
+  function syncLoaderTheme() {
+    const loader = $("#loader");
+    if (!loader) return;
+    loader.dataset.theme = document.documentElement.dataset.theme || DEFAULT_THEME;
+  }
+
   function initLoader() {
+    syncLoaderTheme();
     const loader = $("#loader");
     const bar = $("#loaderBar");
     const count = $("#loaderCount");
@@ -136,14 +143,14 @@
         window.setTimeout(() => {
           loader.classList.add("loader-done");
           loader.hidden = true;
-        }, 1120);
+        }, 620);
         return;
       }
 
       loader.classList.add("loader-done");
       window.setTimeout(() => {
         loader.hidden = true;
-      }, 650);
+      }, 320);
     };
 
     if (reducedMotion) {
@@ -154,20 +161,21 @@
     }
 
     const interval = window.setInterval(() => {
-      progress = Math.min(100, progress + Math.random() * 9 + 4);
-      bar.style.width = `${progress}%`;
+      progress = Math.min(100, progress + Math.random() * 18 + 12);
+      bar.style.width = progress + "%";
       count.textContent = String(Math.floor(progress)).padStart(3, "0");
       if (progress >= 100) {
         window.clearInterval(interval);
-        window.setTimeout(finish, 260);
+        window.setTimeout(finish, 120);
       }
-    }, 40);
+    }, 34);
   }
 
   function applyTheme(theme) {
     const nextTheme = theme === "light" ? "light" : "dark";
     document.documentElement.dataset.theme = nextTheme;
     safeStorage(localStorage, "pof-theme", nextTheme);
+    syncLoaderTheme();
 
     $$("[data-theme-toggle]").forEach((button) => {
       const isDark = nextTheme === "dark";
@@ -353,15 +361,22 @@
   }
 
   function initScrollMotion() {
+    if (window.matchMedia("(max-width: 900px), (prefers-reduced-motion: reduce)").matches) return;
+
     const animatedSections = $$(".section-motion");
     if (animatedSections.length === 0) return;
 
+    let lastScrollY = -1;
     const update = () => {
+      const scrollY = Math.round(window.scrollY || document.documentElement.scrollTop || 0);
+      if (Math.abs(scrollY - lastScrollY) < 24) return;
+      lastScrollY = scrollY;
+
       const viewport = window.innerHeight || 1;
       animatedSections.forEach((section) => {
         const rect = section.getBoundingClientRect();
         const progress = Math.min(1, Math.max(0, (viewport - rect.top) / (viewport + rect.height)));
-        section.style.setProperty("--scroll-progress", progress.toFixed(3));
+        section.style.setProperty("--scroll-progress", progress.toFixed(2));
       });
     };
 
@@ -444,20 +459,10 @@
       });
     });
 
+    if (!window.matchMedia("(pointer: fine) and (min-width: 1180px)").matches) return;
+
     $$(".lease-card, .why-item, .promo-deal, .about-feature, .airport-card, .faq-item, .promo-card").forEach((surface) => {
       surface.classList.add("interactive-surface");
-      surface.addEventListener("mousemove", (event) => {
-        const rect = surface.getBoundingClientRect();
-        const x = (event.clientX - rect.left) / rect.width - 0.5;
-        const y = (event.clientY - rect.top) / rect.height - 0.5;
-        surface.style.setProperty("--tilt-x", `${x * 4}deg`);
-        surface.style.setProperty("--tilt-y", `${-y * 4}deg`);
-      });
-
-      surface.addEventListener("mouseleave", () => {
-        surface.style.setProperty("--tilt-x", "0deg");
-        surface.style.setProperty("--tilt-y", "0deg");
-      });
     });
   }
 
@@ -832,6 +837,7 @@
           playVideo(video);
         } else {
           video.pause();
+          video.currentTime = 0;
         }
       });
     }, { rootMargin: "180px 0px", threshold: 0.05 });
@@ -845,14 +851,14 @@
       media.addEventListener("error", () => {
         if (media.dataset.fallbackApplied === "true") return;
         media.dataset.fallbackApplied = "true";
-        media.src = "media/banner-01-poster.jpg";
+        media.src = "media/DSC07812.webp";
       });
     });
   }
 
   function initMagneticButtons() {
     const targets = $$(".magnetic, .btn-primary, .btn-secondary, .nav-cta, .car-card-btn, .mini-book-link, .hero-preview");
-    if (window.matchMedia("(pointer: coarse)").matches) return;
+    if (!window.matchMedia("(pointer: fine) and (min-width: 1180px)").matches) return;
 
     targets.forEach((target) => {
       target.addEventListener("mousemove", (event) => {
