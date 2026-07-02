@@ -2330,6 +2330,7 @@ main>section,
 }
 
 @media (hover: hover) and (pointer: fine) {
+
   .car-card:hover,
   .experience-card:hover,
   .lease-card:hover,
@@ -2976,6 +2977,7 @@ html[data-theme='dark'] body {
 
 /* Performance guardrails for Chrome/demo-host rendering */
 @media (prefers-reduced-motion: no-preference) {
+
   .hero-video,
   .car-card-img,
   .experience-card img,
@@ -2986,7 +2988,9 @@ html[data-theme='dark'] body {
   }
 }
 
-@media (max-width: 900px), (prefers-reduced-motion: reduce) {
+@media (max-width: 900px),
+(prefers-reduced-motion: reduce) {
+
   .section-motion,
   .motion-child,
   .fade-up {
@@ -3267,6 +3271,7 @@ html[data-theme='dark'] body {
 }
 
 @media (max-width: 720px) {
+
   .lease-card-media,
   .why-media {
     height: 190px;
@@ -3448,6 +3453,7 @@ html[data-theme='dark'] body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .fade-up.visible .lease-card-media img,
   .fade-up.visible .why-media img,
   .fade-up.visible .promo-deal-img,
@@ -3646,7 +3652,9 @@ html[data-theme='dark'] body {
   transition: transform 520ms cubic-bezier(0.16, 1, 0.3, 1), opacity 320ms ease;
 }
 
-@media (hover: none), (max-width: 900px) {
+@media (hover: none),
+(max-width: 900px) {
+
   .lease-card:hover .lease-card-media img,
   .why-item:hover .why-media img,
   .promo-deal:hover .promo-deal-img,
