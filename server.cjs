@@ -104,7 +104,20 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(port, host, () => {
-  console.log(`POF Rental site running at http://${host}:${port}`);
-  console.log('Press Ctrl+C to stop the server.');
-});
+function listen(currentPort) {
+  server.once('error', (error) => {
+    if (error.code === 'EADDRINUSE' && currentPort < port + 20) {
+      console.log(`Port ${currentPort} is busy, trying ${currentPort + 1}...`);
+      listen(currentPort + 1);
+      return;
+    }
+    throw error;
+  });
+
+  server.listen(currentPort, host, () => {
+    console.log(`POF Rental site running at http://${host}:${currentPort}`);
+    console.log('Press Ctrl+C to stop the server.');
+  });
+}
+
+listen(port);
