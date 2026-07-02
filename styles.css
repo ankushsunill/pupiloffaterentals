@@ -551,7 +551,7 @@ video {
 .hero-poster-fallback {
   position: absolute;
   inset: 0;
-  background: url('https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=1800&q=75&auto=format&fit=crop') center / cover no-repeat;
+  background: url('media/01.webp') center / cover no-repeat;
   z-index: -1;
 }
 
@@ -2615,7 +2615,7 @@ html[data-theme='dark'] body {
 }
 
 .hero-poster-fallback {
-  background: url('media/ui/hero-poster.webp') center / cover no-repeat;
+  background: url('media/01.webp') center / cover no-repeat;
 }
 
 .hero-video::after {

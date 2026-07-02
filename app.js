@@ -13,13 +13,13 @@
   ];
 
   const fleet = [
-    { brand: "Mercedes-AMG", name: "G63 AMG", hp: "577", torque: "850Nm", sprint: "4.2", price: "2,500", img: "media/ui/lease-weekly.webp" },
-    { brand: "Ferrari", name: "Roma Spider", hp: "620", torque: "760Nm", sprint: "3.4", price: "4,200", img: "media/ui/offer-12cilindri.webp" },
-    { brand: "Lamborghini", name: "Huracan EVO", hp: "640", torque: "600Nm", sprint: "2.9", price: "5,500", img: "media/ui/fleet-huracan.webp" },
-    { brand: "Rolls-Royce", name: "Ghost", hp: "563", torque: "900Nm", sprint: "4.8", price: "6,800", img: "media/ui/lease-long-term.webp" },
-    { brand: "Bentley", name: "Continental GT", hp: "542", torque: "770Nm", sprint: "4.0", price: "4,800", img: "media/ui/card-porsche.webp" },
-    { brand: "Porsche", name: "Cayenne Turbo GT", hp: "640", torque: "800Nm", sprint: "3.3", price: "2,800", img: "media/ui/fleet-cayenne.webp" },
-    { brand: "McLaren", name: "Artura", hp: "671", torque: "720Nm", sprint: "3.0", price: "4,900", img: "media/ui/fleet-mclaren.webp" },
+    { brand: "Mercedes-AMG", name: "G63 AMG", hp: "577", torque: "850Nm", sprint: "4.2", price: "2,500", img: "media/2 3.webp" },
+    { brand: "Ferrari", name: "Roma Spider", hp: "620", torque: "760Nm", sprint: "3.4", price: "4,200", img: "media/01 2.webp" },
+    { brand: "Lamborghini", name: "Huracan EVO", hp: "640", torque: "600Nm", sprint: "2.9", price: "5,500", img: "media/01.webp" },
+    { brand: "Rolls-Royce", name: "Ghost", hp: "563", torque: "900Nm", sprint: "4.8", price: "6,800", img: "media/DSC07812.webp" },
+    { brand: "Bentley", name: "Continental GT", hp: "542", torque: "770Nm", sprint: "4.0", price: "4,800", img: "media/4.webp" },
+    { brand: "Porsche", name: "Cayenne Turbo GT", hp: "640", torque: "800Nm", sprint: "3.3", price: "2,800", img: "media/44.webp" },
+    { brand: "McLaren", name: "Artura", hp: "671", torque: "720Nm", sprint: "3.0", price: "4,900", img: "media/4 2.webp" },
     { brand: "Range Rover", name: "Autobiography", hp: "523", torque: "750Nm", sprint: "4.6", price: "2,200", img: "media/range-rover-autobiography.webp" }
   ];
 
@@ -860,7 +860,7 @@
       media.addEventListener("error", () => {
         if (media.dataset.fallbackApplied === "true") return;
         media.dataset.fallbackApplied = "true";
-        media.src = "media/ui/hero-poster.webp";
+        media.src = "media/01.webp";
       });
     });
   }
