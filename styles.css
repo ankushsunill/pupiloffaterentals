@@ -278,7 +278,7 @@ button {
 }
 
 [data-theme='light'] .nav.scrolled {
-  background: rgba(248, 246, 242, 0.82);
+  background: rgb(255 255 255);
 }
 
 .nav-progress-bar {
@@ -2232,6 +2232,7 @@ footer {
   background: transparent;
   text-align: left;
   cursor: pointer;
+  margin: 10px;
 }
 
 .footer-language {
@@ -3683,12 +3684,12 @@ html[data-theme='dark'] body::before {
     linear-gradient(135deg, #030303 0%, #10100f 48%, #070707 100%);
 }
 
-main > section:not(.hero),
+main>section:not(.hero),
 .footer {
   isolation: isolate;
 }
 
-main > section:not(.hero)::before {
+main>section:not(.hero)::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -3835,11 +3836,11 @@ main > section:not(.hero)::before {
 .footer {
   background:
     radial-gradient(circle at 20% 0%, rgba(214, 189, 115, 0.1), transparent 26rem),
-    linear-gradient(180deg, var(--carbon), #030303);
+    linear-gradient(180deg, var(--carbon), #03030333);
 }
 
 @media (max-width: 720px) {
-  body.menu-open .nav > .nav-logo {
+  body.menu-open .nav>.nav-logo {
     opacity: 0;
     pointer-events: none;
   }
@@ -3857,6 +3858,7 @@ main > section:not(.hero)::before {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .experience-card,
   .car-card,
   .lease-card,

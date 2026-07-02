@@ -2,7 +2,7 @@
   "use strict";
 
   const WHATSAPP_BASE = "https://wa.me/?text=";
-  const DEFAULT_THEME = "dark";
+  const DEFAULT_THEME = "light";
   const CHAT_ENDPOINT = window.POF_CHAT_ENDPOINT || "";
   const HERO_LABELS = [
     "Close-up performance details in motion",
@@ -193,7 +193,7 @@
   }
 
   function initTheme() {
-    const defaultVersion = "dark-2026-07";
+    const defaultVersion = "light-2026-07";
     if (safeStorage(localStorage, "pof-theme-default-version") !== defaultVersion) {
       safeStorage(localStorage, "pof-theme", DEFAULT_THEME);
       safeStorage(localStorage, "pof-theme-manual", "false");
