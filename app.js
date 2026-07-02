@@ -84,9 +84,8 @@
   function shouldUseMotionMedia() {
     const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
     const constrainedNetwork = connection && (connection.saveData || /(^|-)2g$/.test(connection.effectiveType || ""));
-    const compactViewport = window.innerWidth <= 900;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    return !constrainedNetwork && !compactViewport && !reducedMotion;
+    return !constrainedNetwork && !reducedMotion;
   }
 
   function playVideo(video) {

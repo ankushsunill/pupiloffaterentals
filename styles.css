@@ -549,10 +549,7 @@ video {
 }
 
 .hero-poster-fallback {
-  position: absolute;
-  inset: 0;
-  background: url('media/01.webp') center / cover no-repeat;
-  z-index: -1;
+  display: none;
 }
 
 .hero-video-shade {
@@ -2616,7 +2613,7 @@ html[data-theme='dark'] body {
 }
 
 .hero-poster-fallback {
-  background: url('media/01.webp') center / cover no-repeat;
+  display: none;
 }
 
 .hero-video::after {
