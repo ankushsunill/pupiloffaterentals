@@ -13,13 +13,13 @@
   ];
 
   const fleet = [
-    { brand: "Mercedes-AMG", name: "G63 AMG", hp: "577", torque: "850Nm", sprint: "4.2", price: "2,500", img: "media/10.webp" },
-    { brand: "Ferrari", name: "Roma Spider", hp: "620", torque: "760Nm", sprint: "3.4", price: "4,200", img: "media/01 2.webp" },
-    { brand: "Lamborghini", name: "Huracan EVO", hp: "640", torque: "600Nm", sprint: "2.9", price: "5,500", img: "media/01.webp" },
-    { brand: "Rolls-Royce", name: "Ghost", hp: "563", torque: "900Nm", sprint: "4.8", price: "6,800", img: "media/44.webp" },
-    { brand: "Bentley", name: "Continental GT", hp: "542", torque: "770Nm", sprint: "4.0", price: "4,800", img: "media/4.webp" },
-    { brand: "Porsche", name: "Cayenne Turbo GT", hp: "640", torque: "800Nm", sprint: "3.3", price: "2,800", img: "media/2 2.webp" },
-    { brand: "McLaren", name: "Artura", hp: "671", torque: "720Nm", sprint: "3.0", price: "4,900", img: "media/4 2.webp" },
+    { brand: "Mercedes-AMG", name: "G63 AMG", hp: "577", torque: "850Nm", sprint: "4.2", price: "2,500", img: "media/ui/lease-weekly.webp" },
+    { brand: "Ferrari", name: "Roma Spider", hp: "620", torque: "760Nm", sprint: "3.4", price: "4,200", img: "media/ui/offer-12cilindri.webp" },
+    { brand: "Lamborghini", name: "Huracan EVO", hp: "640", torque: "600Nm", sprint: "2.9", price: "5,500", img: "media/ui/fleet-huracan.webp" },
+    { brand: "Rolls-Royce", name: "Ghost", hp: "563", torque: "900Nm", sprint: "4.8", price: "6,800", img: "media/ui/lease-long-term.webp" },
+    { brand: "Bentley", name: "Continental GT", hp: "542", torque: "770Nm", sprint: "4.0", price: "4,800", img: "media/ui/card-porsche.webp" },
+    { brand: "Porsche", name: "Cayenne Turbo GT", hp: "640", torque: "800Nm", sprint: "3.3", price: "2,800", img: "media/ui/fleet-cayenne.webp" },
+    { brand: "McLaren", name: "Artura", hp: "671", torque: "720Nm", sprint: "3.0", price: "4,900", img: "media/ui/fleet-mclaren.webp" },
     { brand: "Range Rover", name: "Autobiography", hp: "523", torque: "750Nm", sprint: "4.6", price: "2,200", img: "media/range-rover-autobiography.webp" }
   ];
 
@@ -81,8 +81,16 @@
     video.load();
   }
 
+  function shouldUseMotionMedia() {
+    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const constrainedNetwork = connection && (connection.saveData || /(^|-)2g$/.test(connection.effectiveType || ""));
+    const compactViewport = window.innerWidth <= 900;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    return !constrainedNetwork && !compactViewport && !reducedMotion;
+  }
+
   function playVideo(video) {
-    if (!video) return;
+    if (!video || !shouldUseMotionMedia()) return;
     loadVideo(video);
     const play = video.play();
     if (play && typeof play.catch === "function") play.catch(() => { });
@@ -272,13 +280,14 @@
     if (videos.length === 0) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const allowHeroVideo = shouldUseMotionMedia();
     let active = 0;
     let timer = null;
     let heroVisible = true;
 
     const startTimer = () => {
       window.clearInterval(timer);
-      if (!reducedMotion) timer = window.setInterval(() => setActive(active + 1), 7000);
+      if (!reducedMotion && allowHeroVideo && videos.length > 1) timer = window.setInterval(() => setActive(active + 1), 7000);
     };
 
     const setActive = (index, userAction = false) => {
@@ -286,7 +295,7 @@
       videos.forEach((video, currentIndex) => {
         const isActive = currentIndex === active;
         video.classList.toggle("active", isActive);
-        if (isActive && heroVisible && !reducedMotion) {
+        if (isActive && heroVisible && allowHeroVideo && !reducedMotion) {
           playVideo(video);
         } else {
           video.pause();
@@ -305,7 +314,7 @@
       const observer = new IntersectionObserver((entries) => {
         heroVisible = entries.some((entry) => entry.isIntersecting);
         if (heroVisible) {
-          if (!reducedMotion) playVideo(videos[active]);
+          if (allowHeroVideo && !reducedMotion) playVideo(videos[active]);
           startTimer();
         } else {
           window.clearInterval(timer);
@@ -851,7 +860,7 @@
       media.addEventListener("error", () => {
         if (media.dataset.fallbackApplied === "true") return;
         media.dataset.fallbackApplied = "true";
-        media.src = "media/DSC07812.webp";
+        media.src = "media/ui/hero-poster.webp";
       });
     });
   }

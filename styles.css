@@ -689,7 +689,7 @@ video {
 }
 
 [data-theme='light'] .btn-secondary {
-  color: var(--white);
+  color: #c6b889;
 }
 
 .btn-primary:hover,
@@ -2026,7 +2026,7 @@ footer {
 
 .exit-popup-card p {
   margin: 1rem 0 1.5rem;
-  color: var(--loader-muted);
+  color: #c6b889;
   line-height: 1.7;
 }
 
@@ -2615,7 +2615,7 @@ html[data-theme='dark'] body {
 }
 
 .hero-poster-fallback {
-  background: url('media/DSC07812.webp') center / cover no-repeat;
+  background: url('media/ui/hero-poster.webp') center / cover no-repeat;
 }
 
 .hero-video::after {
@@ -3459,5 +3459,201 @@ html[data-theme='dark'] body {
 @media (max-width: 1024px) {
   .lease-card {
     min-height: auto;
+  }
+}
+
+
+/* Airport delivery side-panel refinement */
+.airport-card {
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 0.62fr);
+  grid-template-areas:
+    "copy side"
+    "media side";
+  gap: 0;
+  min-height: 640px;
+}
+
+.airport-card-copy {
+  grid-area: copy;
+  align-self: start;
+}
+
+.airport-card-side {
+  grid-area: side;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.4rem;
+  padding: clamp(1.6rem, 3.5vw, 3.4rem);
+  border-left: 1px solid color-mix(in srgb, var(--gold) 24%, transparent);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--gold) 8%, transparent), transparent 48%),
+    color-mix(in srgb, var(--carbon) 88%, var(--gold) 12%);
+}
+
+.airport-card-side .btn-primary {
+  width: 100%;
+  margin: 0;
+}
+
+.airport-service-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.airport-service-list div {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 0.8rem;
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, var(--gold) 22%, transparent);
+  background: color-mix(in srgb, var(--graphite) 74%, transparent);
+  transform: translateY(10px);
+  opacity: 0;
+  transition:
+    transform 620ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 620ms ease,
+    border-color 360ms ease,
+    background 360ms ease;
+}
+
+.airport-card.visible .airport-service-list div,
+.airport-card.fade-up.visible .airport-service-list div {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.airport-service-list div:nth-child(2) {
+  transition-delay: 90ms;
+}
+
+.airport-service-list div:nth-child(3) {
+  transition-delay: 180ms;
+}
+
+.airport-service-list div:hover {
+  border-color: color-mix(in srgb, var(--gold) 55%, transparent);
+  background: color-mix(in srgb, var(--graphite) 82%, var(--gold) 18%);
+}
+
+.airport-service-list span {
+  grid-row: span 2;
+  color: var(--gold);
+  font-size: 0.66rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+}
+
+.airport-service-list strong {
+  color: var(--white);
+  font-size: 0.86rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.airport-service-list small {
+  color: var(--mist);
+  line-height: 1.55;
+}
+
+.airport-card-media {
+  grid-area: media;
+  min-height: 390px;
+  border-width: 1px 0 0;
+}
+
+.airport-card-media::before {
+  content: 'ARRIVAL READY';
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  z-index: 4;
+  color: var(--gold-light);
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.lease-card-media::before,
+.why-media::before,
+.promo-deal-img::before {
+  content: none;
+}
+
+.lease-card:hover,
+.why-item:hover,
+.promo-deal:hover,
+.airport-card:hover {
+  box-shadow: 0 28px 86px color-mix(in srgb, var(--shadow) 70%, transparent);
+}
+
+.lease-card-media img,
+.why-media img,
+.promo-deal-img,
+.airport-card-media img {
+  will-change: transform;
+}
+
+@media (max-width: 1024px) {
+  .airport-card {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "copy"
+      "side"
+      "media";
+    min-height: auto;
+  }
+
+  .airport-card-side {
+    border-left: 0;
+    border-top: 1px solid color-mix(in srgb, var(--gold) 24%, transparent);
+  }
+}
+
+@media (max-width: 720px) {
+  .airport-service-list div {
+    grid-template-columns: 1fr;
+  }
+
+  .airport-service-list span {
+    grid-row: auto;
+  }
+}
+
+
+/* Smooth-scroll compositor guard */
+.lease-card,
+.why-item,
+.promo-deal,
+.airport-card,
+.car-card,
+.experience-card,
+.scroll-car-card {
+  contain: layout paint;
+}
+
+.lease-card-media img,
+.why-media img,
+.promo-deal-img,
+.airport-card-media img,
+.car-card-img,
+.scroll-car-img,
+.experience-card img,
+.chinese-img,
+.about-video {
+  transition: transform 520ms cubic-bezier(0.16, 1, 0.3, 1), opacity 320ms ease;
+}
+
+@media (hover: none), (max-width: 900px) {
+  .lease-card:hover .lease-card-media img,
+  .why-item:hover .why-media img,
+  .promo-deal:hover .promo-deal-img,
+  .airport-card:hover .airport-card-media img,
+  .car-card:hover .car-card-img,
+  .experience-card:hover img,
+  .experience-card:hover video {
+    transform: none;
   }
 }
