@@ -2,7 +2,7 @@
   "use strict";
 
   const WHATSAPP_BASE = "https://wa.me/?text=";
-  const DEFAULT_THEME = "light";
+  const DEFAULT_THEME = "dark";
   const CHAT_ENDPOINT = window.POF_CHAT_ENDPOINT || "";
   const HERO_LABELS = [
     "Close-up performance details in motion",
@@ -193,6 +193,13 @@
   }
 
   function initTheme() {
+    const defaultVersion = "dark-2026-07";
+    if (safeStorage(localStorage, "pof-theme-default-version") !== defaultVersion) {
+      safeStorage(localStorage, "pof-theme", DEFAULT_THEME);
+      safeStorage(localStorage, "pof-theme-manual", "false");
+      safeStorage(localStorage, "pof-theme-default-version", defaultVersion);
+    }
+
     const hasManualTheme = safeStorage(localStorage, "pof-theme-manual") === "true";
     applyTheme(hasManualTheme ? safeStorage(localStorage, "pof-theme") || DEFAULT_THEME : DEFAULT_THEME);
     $$("[data-theme-toggle]").forEach((button) => {
