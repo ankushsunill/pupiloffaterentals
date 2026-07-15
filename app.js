@@ -231,18 +231,28 @@
     gsap.registerPlugin(ScrollTrigger);
 
     gsap.set(".nav", { y: -24, opacity: 0 });
-    gsap.set(".hero .kicker, .hero h1, .hero-copy, .hero-actions, .hero-dashboard", { y: 36, opacity: 0 });
-    gsap.set(".hero-dashboard > *", { y: 18, opacity: 0 });
+    gsap.set(".hero .kicker, .hero-copy, .hero-actions", { y: 30, opacity: 0 });
+    gsap.set(".hero-title-line", { y: 46, opacity: 0, clipPath: "inset(0 0 100% 0)" });
     gsap.set(".hero-media", { scale: 1.14, filter: "brightness(0.78) saturate(1.18)" });
     gsap.timeline({ defaults: { ease: "expo.out" }, delay: 0.08 })
       .to(".nav", { y: 0, opacity: 1, duration: 0.58 }, 0)
       .to(".hero .kicker", { y: 0, opacity: 1, duration: 0.52 }, 0.04)
-      .to(".hero h1", { y: 0, opacity: 1, duration: 0.78 }, 0.12)
+      .to(".hero-title-line", { y: 0, opacity: 1, clipPath: "inset(0 0 0% 0)", duration: 0.72, stagger: 0.09 }, 0.1)
       .to(".hero-copy", { y: 0, opacity: 1, duration: 0.62 }, 0.28)
       .to(".hero-media", { scale: 1, filter: "brightness(1) saturate(1.05)", duration: 1.08 }, 0.04)
-      .to(".hero-actions", { y: 0, opacity: 1, duration: 0.58 }, 0.5)
-      .to(".hero-dashboard", { y: 0, opacity: 1, duration: 0.62 }, 0.58)
-      .to(".hero-dashboard > *", { y: 0, opacity: 1, duration: 0.46, stagger: 0.045 }, 0.68);
+      .to(".hero-actions", { y: 0, opacity: 1, duration: 0.58 }, 0.52);
+
+    gsap.to(".hero-title-line:first-child", {
+      xPercent: -3.5,
+      ease: "none",
+      scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 1 }
+    });
+
+    gsap.to(".hero-title-line:last-child", {
+      xPercent: 2.5,
+      ease: "none",
+      scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 1 }
+    });
 
     gsap.to(".hero-media", {
       scale: 1.16,

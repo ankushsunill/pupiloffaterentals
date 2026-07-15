@@ -6,9 +6,6 @@ const contactPhone = "+971549957255";
 const wa = (message) => `https://wa.me/${contactNumber}?text=${encodeURIComponent(message)}`;
 
 const iconPaths = {
-  clock: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
-  plane: <><path d="M2 22h20" /><path d="m6.4 17.4-2.4-.4-2-4 1.1-.6a2 2 0 0 1 1.8.1l2.6 1.7 2-.2-3-7 1.9-.8a2 2 0 0 1 2.6 1l3 6 3.5-.8a2 2 0 0 1 2.5 2v.5a2 2 0 0 1-1.5 1.9l-8.9 2.4a2 2 0 0 1-1.1 0Z" /></>,
-  shield: <><path d="M20 13c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V5l8-3 8 3v8Z" /><path d="m9 12 2 2 4-4" /></>,
   sun: <><circle cx="12" cy="12" r="3.5" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></>,
   moon: <path d="M20.8 15.1A8.5 8.5 0 0 1 8.9 3.2 8.5 8.5 0 1 0 20.8 15.1Z" />,
   message: <><path d="M21 15a4 4 0 0 1-4 4H8l-5 3 1.7-5A8 8 0 1 1 21 15Z" /><path d="M8 11h8M8 15h5" /></>,
@@ -265,7 +262,10 @@ export default function Home() {
           <div className="hero-content">
             <div className="hero-copy-wrap">
               <p className="kicker">POF Rental / Dubai</p>
-              <h1>Luxury mobility, edited for arrival.</h1>
+              <h1 aria-label="Luxury mobility, edited for arrival.">
+                <span className="hero-title-line">Luxury mobility,</span>
+                <span className="hero-title-line">edited for arrival.</span>
+              </h1>
               <p className="hero-copy">A quieter way to book Dubai supercars, prestige SUVs, chauffeur-ready vehicles, HeliDubai transfers, and long-term fleet plans.</p>
               <div className="hero-actions">
                 <ActionLink href={wa("Hello POF Rental, I want a VIP luxury car rental quote in Dubai.")}>Open Concierge</ActionLink>
@@ -278,25 +278,6 @@ export default function Home() {
             <span />
             <span />
             <span />
-          </div>
-
-          <div className="hero-dashboard" aria-label="POF Rental service highlights">
-            <div className="hero-dashboard-lead"><span>POF standard</span><strong>Arrival, refined.</strong></div>
-            <div className="hero-dashboard-item">
-              <span className="hero-dashboard-icon"><UiIcon name="clock" /></span>
-              <div><strong>24/7</strong><small>Private concierge</small></div>
-              <em>Always live</em>
-            </div>
-            <div className="hero-dashboard-item">
-              <span className="hero-dashboard-icon"><UiIcon name="plane" /></span>
-              <div><strong>DXB</strong><small>Airport delivery</small></div>
-              <em>To your terminal</em>
-            </div>
-            <div className="hero-dashboard-item">
-              <span className="hero-dashboard-icon"><UiIcon name="shield" /></span>
-              <div><strong>0</strong><small>Hidden fees</small></div>
-              <em>Confirmed clearly</em>
-            </div>
           </div>
         </section>
 
