@@ -47,6 +47,8 @@ html {
   color: var(--ink);
   scroll-padding-top: 104px;
   scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 body {
@@ -60,6 +62,15 @@ body {
   font-family: var(--font);
   -webkit-font-smoothing: antialiased;
   text-rendering: geometricPrecision;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 html[data-theme="dark"] body {
@@ -413,33 +424,57 @@ html[data-theme="dark"] .nav.scrolled {
   transition: transform 360ms var(--ease-premium), filter 360ms var(--ease-premium), box-shadow 360ms var(--ease-premium), border-color 360ms var(--ease-premium);
 }
 
+.nav-reserve {
+  border-color: var(--line-strong);
+  background: transparent;
+  color: var(--ink);
+  box-shadow: none;
+}
+
+.nav:not(.scrolled) .nav-reserve {
+  border-color: rgba(255, 253, 248, 0.48);
+  background: transparent;
+  color: #fffdf8;
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.32);
+}
+
+html[data-theme="dark"] .nav-reserve {
+  border-color: rgba(246, 241, 232, 0.34);
+  background: transparent;
+  color: var(--ink);
+}
+
 .theme-toggle {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
   min-height: 44px;
-  border: 0;
+  padding: 0.25rem 0.65rem 0.25rem 0.25rem;
+  border: 1px solid var(--line-strong);
   background: transparent;
   color: var(--ink);
   font-size: 0.66rem;
   font-weight: 950;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  transition: color 220ms ease, transform 220ms ease;
+  transition: color 220ms ease, border-color 220ms ease, background 220ms ease, transform 220ms ease;
 }
 
 .theme-toggle:hover {
   color: var(--bronze);
+  border-color: var(--bronze);
   transform: translateY(-2px);
 }
 
 .nav:not(.scrolled) > .theme-toggle {
   color: rgba(255, 253, 248, 0.9);
+  border-color: rgba(255, 253, 248, 0.44);
+  background: transparent;
 }
 
 .nav:not(.scrolled) > .theme-toggle .theme-toggle-track {
-  border-color: rgba(255, 253, 248, 0.34);
-  background: rgba(8, 10, 11, 0.28);
+  border-color: transparent;
+  background: transparent;
 }
 
 .theme-toggle-track {
@@ -450,10 +485,9 @@ html[data-theme="dark"] .nav.scrolled {
   grid-template-columns: repeat(2, 1fr);
   align-items: center;
   justify-items: center;
-  border: 1px solid var(--line-strong);
-  background: color-mix(in srgb, var(--paper-2) 62%, transparent);
-  backdrop-filter: blur(16px);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  border: 1px solid transparent;
+  background: transparent;
+  box-shadow: none;
   transition: background 260ms var(--ease-premium), border-color 260ms var(--ease-premium);
 }
 
@@ -474,7 +508,7 @@ html[data-theme="dark"] .nav.scrolled {
 }
 
 .theme-toggle-sun {
-  color: #fffdf8;
+  color: var(--bronze);
 }
 
 .theme-toggle-track i {
@@ -484,18 +518,20 @@ html[data-theme="dark"] .nav.scrolled {
   left: 2px;
   width: 30px;
   height: 28px;
-  background: linear-gradient(135deg, var(--bronze), var(--cedar));
-  transition: transform 320ms var(--ease-premium), background 320ms var(--ease-premium);
+  border: 1px solid var(--bronze);
+  background: transparent;
+  transition: transform 320ms var(--ease-premium), border-color 320ms var(--ease-premium);
 }
 
 html[data-theme="dark"] .theme-toggle-track {
-  background: rgba(246, 241, 232, 0.1);
-  border-color: rgba(246, 241, 232, 0.28);
+  background: transparent;
+  border-color: transparent;
 }
 
 html[data-theme="dark"] .theme-toggle-track i {
   transform: translateX(32px);
-  background: linear-gradient(135deg, var(--green), #276a84);
+  border-color: var(--green);
+  background: transparent;
 }
 
 html[data-theme="dark"] .theme-toggle-sun {
@@ -504,7 +540,7 @@ html[data-theme="dark"] .theme-toggle-sun {
 }
 
 html[data-theme="dark"] .theme-toggle-moon {
-  color: #fffdf8;
+  color: var(--green);
   transform: rotate(8deg);
 }
 
@@ -560,6 +596,20 @@ html[data-theme="dark"] .theme-toggle-moon {
   transform: translateY(-3px);
   filter: brightness(1.05);
   box-shadow: var(--shadow-soft);
+}
+
+.nav-reserve:hover {
+  border-color: var(--bronze);
+  background: color-mix(in srgb, var(--bronze) 9%, transparent);
+  color: var(--bronze);
+  filter: none;
+  box-shadow: none;
+}
+
+.nav:not(.scrolled) .nav-reserve:hover {
+  border-color: #fffdf8;
+  background: rgba(255, 253, 248, 0.09);
+  color: #fffdf8;
 }
 
 .nav-reserve:hover::before,

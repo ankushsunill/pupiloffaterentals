@@ -5,7 +5,7 @@ export default function Document() {
     <Html lang="en" data-theme="light">
       <Head>
         <link rel="icon" href="/media/logo.png" />
-        <link rel="stylesheet" href="/final.css?v=20260715-hero-layout-v22" />
+        <link rel="stylesheet" href="/final.css?v=20260715-nav-outline-v23" />
       </Head>
       <body className="interface-redesign cinematic-redesign minimal-premium">
         <Main />
