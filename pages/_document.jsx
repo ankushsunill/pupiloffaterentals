@@ -5,7 +5,7 @@ export default function Document() {
     <Html lang="en" data-theme="light">
       <Head>
         <link rel="icon" href="/media/logo.png" />
-        <link rel="stylesheet" href="/final.css?v=20260715-nav-outline-v23" />
+        <link rel="stylesheet" href="/final.css?v=20260715-whatsapp-v25" />
       </Head>
       <body className="interface-redesign cinematic-redesign minimal-premium">
         <Main />
@@ -13,7 +13,7 @@ export default function Document() {
         <script defer src="/vendor/gsap.min.js?v=3.15.0" />
         <script defer src="/vendor/ScrollTrigger.min.js?v=3.15.0" />
         <script defer src="/vendor/lenis.min.js?v=1.3.25" />
-        <script defer src="/app.js?v=20260715-hero-layout-v22" />
+        <script defer src="/app.js?v=20260715-responsive-v24" />
       </body>
     </Html>
   );

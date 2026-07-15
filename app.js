@@ -81,6 +81,7 @@
     const button = $("#mobileMenuBtn");
     if (!menu || !button) return;
     menu.classList.toggle("active", open);
+    menu.setAttribute("aria-hidden", String(!open));
     button.classList.toggle("open", open);
     button.setAttribute("aria-expanded", String(open));
     document.body.classList.toggle("menu-open", open);
@@ -97,13 +98,32 @@
       document.documentElement.style.setProperty("--page-scroll-progress", String(Math.max(0, Math.min(y / max, 1))));
     };
 
-    update();
+    let resizeTimer = 0;
+    const syncViewport = () => {
+      const viewportHeight = window.visualViewport?.height || window.innerHeight;
+      document.documentElement.style.setProperty("--app-viewport-height", `${Math.round(viewportHeight)}px`);
+      update();
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => {
+        if (window.innerWidth > 1100) setMobileMenu(false);
+        if (galleryScrollUpdate) galleryScrollUpdate();
+        if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+      }, 140);
+    };
+
+    syncViewport();
     window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
+    window.addEventListener("resize", syncViewport, { passive: true });
+    window.addEventListener("orientationchange", syncViewport, { passive: true });
+    window.visualViewport?.addEventListener("resize", syncViewport, { passive: true });
 
     if (menuButton) {
       menuButton.addEventListener("click", () => setMobileMenu(!menuButton.classList.contains("open")));
     }
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") setMobileMenu(false);
+    });
 
     $$("a[href^='#'], [data-scroll-target]").forEach((item) => {
       item.addEventListener("click", (event) => {
