@@ -1,0 +1,2977 @@
+/* Final premium redesign layer: transparent, blended, cardless UI. */
+:root {
+  --ink: #f7f3ea;
+  --muted-ink: rgba(247, 243, 234, 0.68);
+  --soft-ink: rgba(247, 243, 234, 0.42);
+  --line: rgba(247, 243, 234, 0.16);
+  --glass: rgba(10, 12, 13, 0.28);
+  --charcoal: #08090a;
+  --warm: #c8a76a;
+  --sea: #7ec8c2;
+  --rose: #cf8278;
+  --section-pad: clamp(4.5rem, 9vw, 9rem);
+}
+
+.minimal-premium {
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 8% 8%, rgba(126, 200, 194, 0.12), transparent 25rem),
+    linear-gradient(135deg, #070808 0%, #101312 42%, #16130f 100%);
+  overflow-x: hidden;
+}
+
+.minimal-premium::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,0.55), transparent 80%);
+}
+
+.minimal-premium .page-loader {
+  background: #070808;
+}
+
+.minimal-premium .loader-content,
+.minimal-premium .loader-car {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.minimal-premium .navbar {
+  top: 0;
+  left: 0;
+  right: auto;
+  width: min(96px, 21vw);
+  height: 100vh;
+  padding: clamp(1.2rem, 2vw, 2rem) 0;
+  background: linear-gradient(90deg, rgba(5, 7, 8, 0.72), rgba(5, 7, 8, 0));
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: blur(18px);
+}
+
+.minimal-premium .nav-container {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.minimal-premium .logo {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  letter-spacing: 0.18em;
+  font-size: 0.72rem;
+  color: var(--ink);
+}
+
+.minimal-premium .nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2.4vh, 1.65rem);
+}
+
+.minimal-premium .nav-links a {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  color: var(--muted-ink);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.minimal-premium .nav-links a::after {
+  display: none;
+}
+
+.minimal-premium .nav-links a:hover,
+.minimal-premium .nav-links a.active {
+  color: var(--ink);
+}
+
+.minimal-premium .nav-cta {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(247, 243, 234, 0.08);
+  color: var(--ink);
+  font-size: 0;
+}
+
+.minimal-premium .nav-cta::before {
+  content: ">";
+  font-size: 1rem;
+}
+
+.minimal-premium .hero {
+  min-height: 100svh;
+  padding: 0 0 0 min(96px, 21vw);
+  display: grid;
+  align-items: end;
+  background: #060707;
+  isolation: isolate;
+}
+
+.minimal-premium .hero-video-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+}
+
+.minimal-premium .hero-video,
+.minimal-premium .hero-video-wrap video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(1.08) contrast(1.04);
+}
+
+.minimal-premium .hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(6,7,7,0.78) 0%, rgba(6,7,7,0.32) 34%, rgba(6,7,7,0.08) 62%),
+    linear-gradient(0deg, rgba(6,7,7,0.9) 0%, rgba(6,7,7,0.04) 52%);
+}
+
+.minimal-premium .hero-content {
+  width: min(1260px, 100%);
+  padding: clamp(6rem, 11vw, 10rem) clamp(1.25rem, 5vw, 5.5rem);
+  display: grid;
+  grid-template-columns: minmax(0, 0.98fr) minmax(260px, 0.5fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: end;
+}
+
+.minimal-premium .hero-badge,
+.minimal-premium .section-badge,
+.minimal-premium .eyebrow {
+  display: inline-flex;
+  width: fit-content;
+  padding: 0 0 0.65rem;
+  border: 0;
+  border-bottom: 1px solid var(--warm);
+  border-radius: 0;
+  background: transparent;
+  color: var(--warm);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.minimal-premium .hero-title {
+  max-width: 10ch;
+  margin: 1rem 0;
+  color: var(--ink);
+  font-size: clamp(4.2rem, 13vw, 12rem);
+  line-height: 0.82;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.minimal-premium .hero-title span {
+  display: block;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(247, 243, 234, 0.78);
+}
+
+.minimal-premium .hero-subtitle {
+  max-width: 42rem;
+  color: var(--muted-ink);
+  font-size: clamp(1rem, 1.4vw, 1.28rem);
+  line-height: 1.75;
+}
+
+.minimal-premium .hero-actions,
+.minimal-premium .section-actions,
+.minimal-premium .cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 2rem;
+}
+
+.minimal-premium .primary-btn,
+.minimal-premium .secondary-btn,
+.minimal-premium .btn-primary,
+.minimal-premium .btn-secondary,
+.minimal-premium .filter-btn,
+.minimal-premium .submit-btn {
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(247, 243, 234, 0.08);
+  color: var(--ink);
+  box-shadow: none;
+  backdrop-filter: blur(16px);
+  transition: transform 0.45s cubic-bezier(.2,.8,.2,1), background 0.45s ease, border-color 0.45s ease;
+}
+
+.minimal-premium .primary-btn:hover,
+.minimal-premium .secondary-btn:hover,
+.minimal-premium .btn-primary:hover,
+.minimal-premium .btn-secondary:hover,
+.minimal-premium .filter-btn:hover,
+.minimal-premium .submit-btn:hover {
+  transform: translateY(-3px);
+  border-color: rgba(200, 167, 106, 0.75);
+  background: rgba(200, 167, 106, 0.2);
+}
+
+.minimal-premium .hero-command-panel {
+  align-self: stretch;
+  display: grid;
+  align-content: end;
+  gap: 1.2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.minimal-premium .hero-stats,
+.minimal-premium .stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--line);
+}
+
+.minimal-premium .stat,
+.minimal-premium .stat-item {
+  padding: clamp(1rem, 2vw, 1.5rem);
+  background: rgba(6, 7, 7, 0.38);
+  border: 0;
+  border-radius: 0;
+}
+
+.minimal-premium .stat-number,
+.minimal-premium .stat-value {
+  color: var(--ink);
+  font-size: clamp(1.65rem, 3vw, 3rem);
+}
+
+.minimal-premium .stat-label {
+  color: var(--soft-ink);
+}
+
+.minimal-premium section {
+  position: relative;
+  padding: var(--section-pad) 0;
+  background: transparent;
+  border-top: 1px solid rgba(247, 243, 234, 0.08);
+}
+
+.minimal-premium .section-header,
+.minimal-premium .section-intro {
+  width: min(1180px, calc(100% - 2.5rem));
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(240px, 0.28fr);
+  gap: clamp(1.5rem, 5vw, 5rem);
+  align-items: end;
+  text-align: left;
+}
+
+.minimal-premium .section-title,
+.minimal-premium h2 {
+  color: var(--ink);
+  font-size: clamp(2.6rem, 7.2vw, 7rem);
+  line-height: 0.92;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.minimal-premium .section-subtitle,
+.minimal-premium .section-copy,
+.minimal-premium p {
+  color: var(--muted-ink);
+}
+
+.minimal-premium .experience-card,
+.minimal-premium .car-card,
+.minimal-premium .scroll-car-card,
+.minimal-premium .lease-card,
+.minimal-premium .promo-deal,
+.minimal-premium .why-item,
+.minimal-premium .faq-item,
+.minimal-premium .airport-card,
+.minimal-premium .about-content,
+.minimal-premium .chinese-brand,
+.minimal-premium .airport-service-list div,
+.minimal-premium .promo-card,
+.minimal-premium .experience-copy,
+.minimal-premium .booking-widget,
+.minimal-premium .contact-card,
+.minimal-premium .feature-card {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.minimal-premium .experience-grid,
+.minimal-premium .about-grid,
+.minimal-premium .airport-grid,
+.minimal-premium .contact-grid {
+  width: min(1180px, calc(100% - 2.5rem));
+  margin: clamp(2.5rem, 5vw, 5rem) auto 0;
+  display: grid;
+  grid-template-columns: minmax(0, 0.55fr) minmax(0, 0.45fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+}
+
+.minimal-premium .experience-media,
+.minimal-premium .about-media,
+.minimal-premium .airport-media {
+  min-height: clamp(360px, 52vw, 720px);
+  overflow: hidden;
+  border-radius: 0;
+}
+
+.minimal-premium img,
+.minimal-premium video {
+  transition: transform 1.2s cubic-bezier(.2,.8,.2,1), filter 0.8s ease;
+}
+
+.minimal-premium .experience-media:hover img,
+.minimal-premium .experience-media:hover video,
+.minimal-premium .about-media:hover img,
+.minimal-premium .car-card:hover img {
+  transform: scale(1.045);
+}
+
+.minimal-premium .cars-grid,
+.minimal-premium .fleet-grid,
+.minimal-premium .scroll-cars-grid,
+.minimal-premium .lease-grid,
+.minimal-premium .promo-grid,
+.minimal-premium .why-grid {
+  width: min(1240px, calc(100% - 2.5rem));
+  margin: clamp(2.5rem, 5vw, 5rem) auto 0;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.minimal-premium .car-card,
+.minimal-premium .scroll-car-card,
+.minimal-premium .lease-card,
+.minimal-premium .promo-deal,
+.minimal-premium .why-item {
+  grid-column: span 4;
+  min-height: 100%;
+  padding: 0;
+  border-top: 1px solid var(--line) !important;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.minimal-premium .car-image,
+.minimal-premium .car-card img,
+.minimal-premium .scroll-car-card img,
+.minimal-premium .lease-card img,
+.minimal-premium .promo-deal img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.minimal-premium .car-info,
+.minimal-premium .car-content,
+.minimal-premium .lease-content,
+.minimal-premium .promo-content,
+.minimal-premium .why-item {
+  padding: 1.25rem 0 0;
+}
+
+.minimal-premium .car-card h3,
+.minimal-premium .lease-card h3,
+.minimal-premium .promo-deal h3,
+.minimal-premium .why-item h3,
+.minimal-premium .faq-question {
+  color: var(--ink);
+  font-size: clamp(1.3rem, 2vw, 2.1rem);
+  line-height: 1.05;
+}
+
+.minimal-premium .car-meta,
+.minimal-premium .car-specs,
+.minimal-premium .lease-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+  color: var(--soft-ink);
+}
+
+.minimal-premium .price,
+.minimal-premium .car-price,
+.minimal-premium .deal-price {
+  color: var(--warm);
+}
+
+.minimal-premium .promo-section,
+.minimal-premium .cta-section {
+  background:
+    linear-gradient(90deg, rgba(8,9,10,0.76), rgba(8,9,10,0.18)),
+    var(--promo-bg, transparent);
+  background-size: cover;
+  background-position: center;
+}
+
+.minimal-premium .faq-list,
+.minimal-premium .accordion,
+.minimal-premium .footer-content {
+  width: min(980px, calc(100% - 2.5rem));
+  margin: clamp(2.5rem, 5vw, 5rem) auto 0;
+}
+
+.minimal-premium .faq-item {
+  padding: 1.35rem 0;
+  border-top: 1px solid var(--line) !important;
+}
+
+.minimal-premium input,
+.minimal-premium textarea,
+.minimal-premium select {
+  border-radius: 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  box-shadow: none;
+}
+
+.minimal-premium input:focus,
+.minimal-premium textarea:focus,
+.minimal-premium select:focus {
+  border-color: var(--warm);
+  outline: 0;
+}
+
+.minimal-premium .footer {
+  border-top: 1px solid var(--line);
+  background: rgba(4, 5, 5, 0.78);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .minimal-premium .hero-video {
+    animation: premiumVideoDrift 18s ease-in-out infinite alternate;
+  }
+
+  .minimal-premium .hero-badge,
+  .minimal-premium .hero-title,
+  .minimal-premium .hero-subtitle,
+  .minimal-premium .hero-actions,
+  .minimal-premium .hero-command-panel {
+    animation: premiumReveal 1s cubic-bezier(.2,.8,.2,1) both;
+  }
+
+  .minimal-premium .hero-title { animation-delay: 0.08s; }
+  .minimal-premium .hero-subtitle { animation-delay: 0.18s; }
+  .minimal-premium .hero-actions { animation-delay: 0.28s; }
+  .minimal-premium .hero-command-panel { animation-delay: 0.38s; }
+
+  .minimal-premium .section-header,
+  .minimal-premium .experience-grid,
+  .minimal-premium .cars-grid,
+  .minimal-premium .fleet-grid,
+  .minimal-premium .scroll-cars-grid,
+  .minimal-premium .lease-grid,
+  .minimal-premium .promo-grid,
+  .minimal-premium .why-grid {
+    animation: premiumReveal linear both;
+    animation-timeline: view();
+    animation-range: entry 8% cover 34%;
+  }
+}
+
+@keyframes premiumReveal {
+  from {
+    opacity: 0;
+    transform: translateY(34px);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes premiumVideoDrift {
+  from { transform: scale(1.02) translate3d(0, 0, 0); }
+  to { transform: scale(1.09) translate3d(-1.4%, -1%, 0); }
+}
+
+@media (max-width: 1180px) {
+  .minimal-premium .hero-content,
+  .minimal-premium .section-header,
+  .minimal-premium .section-intro,
+  .minimal-premium .experience-grid,
+  .minimal-premium .about-grid,
+  .minimal-premium .airport-grid,
+  .minimal-premium .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .minimal-premium .car-card,
+  .minimal-premium .scroll-car-card,
+  .minimal-premium .lease-card,
+  .minimal-premium .promo-deal,
+  .minimal-premium .why-item {
+    grid-column: span 6;
+  }
+}
+
+@media (max-width: 760px) {
+  .minimal-premium .navbar {
+    width: 100%;
+    height: 72px;
+    padding: 0 1rem;
+    background: linear-gradient(180deg, rgba(5,7,8,0.86), rgba(5,7,8,0));
+  }
+
+  .minimal-premium .nav-container {
+    flex-direction: row;
+  }
+
+  .minimal-premium .logo,
+  .minimal-premium .nav-links a {
+    writing-mode: horizontal-tb;
+    transform: none;
+  }
+
+  .minimal-premium .nav-links {
+    display: none;
+  }
+
+  .minimal-premium .hero {
+    min-height: 100svh;
+    padding-left: 0;
+  }
+
+  .minimal-premium .hero-content {
+    padding: 7rem 1.1rem 3.5rem;
+  }
+
+  .minimal-premium .hero-title {
+    max-width: 8ch;
+    font-size: clamp(3.6rem, 21vw, 6.6rem);
+  }
+
+  .minimal-premium .hero-stats,
+  .minimal-premium .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .minimal-premium .cars-grid,
+  .minimal-premium .fleet-grid,
+  .minimal-premium .scroll-cars-grid,
+  .minimal-premium .lease-grid,
+  .minimal-premium .promo-grid,
+  .minimal-premium .why-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .minimal-premium .car-card,
+  .minimal-premium .scroll-car-card,
+  .minimal-premium .lease-card,
+  .minimal-premium .promo-deal,
+  .minimal-premium .why-item {
+    grid-column: auto;
+  }
+
+  .minimal-premium .experience-media,
+  .minimal-premium .about-media,
+  .minimal-premium .airport-media {
+    min-height: 320px;
+  }
+}
+
+/* 11/10 final art direction: cleaner, cinematic, less text, stronger product focus. */
+body.minimal-premium {
+  --rail: clamp(78px, 6vw, 96px);
+  --edge: clamp(1rem, 4vw, 5rem);
+  --max: 1480px;
+  background: #050606;
+}
+
+body.minimal-premium::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 10vw 10vw;
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,0.38), transparent 78%);
+}
+
+body.minimal-premium .nav,
+body.minimal-premium .nav.transparent,
+body.minimal-premium .nav.scrolled {
+  width: var(--rail) !important;
+  min-width: var(--rail) !important;
+  max-width: var(--rail) !important;
+  padding: 1rem 0 !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+  background: linear-gradient(90deg, rgba(3, 4, 4, 0.88), rgba(3, 4, 4, 0.42), transparent) !important;
+}
+
+body.minimal-premium .nav-logo {
+  width: 52px !important;
+  height: 52px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+body.minimal-premium .nav-logo-img {
+  width: 44px !important;
+  height: 44px !important;
+}
+
+body.minimal-premium .nav-links {
+  gap: clamp(1.05rem, 2.2vh, 1.65rem) !important;
+}
+
+body.minimal-premium .nav-links a {
+  font-size: 0.62rem !important;
+  letter-spacing: 0.2em !important;
+  opacity: 0.76;
+  transition: opacity 0.35s ease, color 0.35s ease, transform 0.35s ease !important;
+}
+
+body.minimal-premium .nav-links a:hover {
+  opacity: 1;
+  color: #fff !important;
+  transform: rotate(180deg) translateY(-2px) !important;
+}
+
+body.minimal-premium .theme-toggle {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+}
+
+body.minimal-premium .nav-cta {
+  display: none !important;
+}
+
+body.minimal-premium .hero,
+body.minimal-premium .sale-ticker,
+body.minimal-premium main > section,
+body.minimal-premium .footer {
+  width: calc(100% - var(--rail));
+  margin-left: var(--rail);
+}
+
+body.minimal-premium .hero {
+  min-height: 100svh;
+  padding: 0 var(--edge) !important;
+  overflow: hidden;
+}
+
+body.minimal-premium .hero-video-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 72% 20%, rgba(255,255,255,0.09), transparent 22rem),
+    linear-gradient(90deg, rgba(4,5,5,0.76) 0%, rgba(4,5,5,0.28) 42%, rgba(4,5,5,0.1) 72%),
+    linear-gradient(0deg, rgba(4,5,5,0.95), transparent 42%);
+}
+
+body.minimal-premium .hero-content {
+  width: min(var(--max), 100%);
+  min-height: 100svh;
+  margin: 0 auto;
+  padding: clamp(6rem, 10vw, 9rem) 0 clamp(2.4rem, 4vw, 4rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: end;
+  gap: clamp(1rem, 2vw, 1.4rem);
+}
+
+body.minimal-premium .hero-eyebrow {
+  padding: 0;
+  border: 0;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.72rem;
+}
+
+body.minimal-premium .hero-title {
+  max-width: 9.8ch;
+  margin: 0;
+  font-size: clamp(4.4rem, 10.8vw, 11rem);
+  line-height: 0.78;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+body.minimal-premium .hero-title .word:first-child {
+  color: #f8f4ec;
+}
+
+body.minimal-premium .hero-title .accent {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(248, 244, 236, 0.62);
+}
+
+body.minimal-premium .hero-subtitle {
+  max-width: 28rem;
+  margin: 0.25rem 0 0;
+  color: rgba(248, 244, 236, 0.74);
+  font-size: clamp(0.9rem, 1.05vw, 1.05rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.8;
+}
+
+body.minimal-premium .hero-actions {
+  margin-top: 1.2rem;
+  justify-content: flex-start;
+}
+
+body.minimal-premium .btn-primary,
+body.minimal-premium .btn-secondary,
+body.minimal-premium .car-card-btn {
+  min-height: 46px;
+  padding: 0.85rem 1.25rem;
+  border-radius: 999px;
+  border-color: rgba(248, 244, 236, 0.24);
+  background: rgba(248, 244, 236, 0.08);
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  box-shadow: none;
+}
+
+body.minimal-premium .btn-primary {
+  background: #f8f4ec;
+  color: #070808;
+}
+
+body.minimal-premium .hero-stats {
+  width: min(520px, 100%);
+  margin-top: clamp(1.2rem, 3vw, 2.2rem);
+  grid-template-columns: repeat(3, 1fr);
+  background: transparent;
+  border: 0;
+  gap: 0;
+}
+
+body.minimal-premium .hero-stat {
+  padding: 0 1.1rem 0 0;
+  background: transparent;
+  border-right: 1px solid rgba(248,244,236,0.16);
+}
+
+body.minimal-premium .hero-stat:last-child {
+  border-right: 0;
+}
+
+body.minimal-premium .hero-stat .num {
+  font-size: clamp(1.35rem, 2vw, 2rem);
+}
+
+body.minimal-premium .hero-stat .label {
+  max-width: 8ch;
+  color: rgba(248,244,236,0.46);
+  font-size: 0.58rem;
+}
+
+body.minimal-premium .hero-media-strip {
+  left: auto;
+  right: var(--edge);
+  bottom: clamp(2rem, 4vw, 4rem);
+  display: grid;
+  grid-template-columns: repeat(4, clamp(70px, 7vw, 110px));
+  gap: 1px;
+  max-width: none;
+}
+
+body.minimal-premium .hero-preview {
+  width: auto;
+  height: clamp(88px, 8vw, 132px);
+  opacity: 0.72;
+  border: 0 !important;
+}
+
+body.minimal-premium .hero-preview.active {
+  opacity: 1;
+}
+
+body.minimal-premium .hero-video-controls {
+  display: none;
+}
+
+body.minimal-premium .sale-ticker {
+  height: 42px;
+  display: flex;
+  align-items: center;
+  border: 0;
+  background: #080909;
+}
+
+body.minimal-premium .sale-ticker-item {
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+}
+
+body.minimal-premium main > section {
+  min-height: 100svh;
+  padding: clamp(5rem, 9vw, 9rem) var(--edge) !important;
+}
+
+body.minimal-premium .section-header,
+body.minimal-premium .experience-copy,
+body.minimal-premium .premium-fleet-shell,
+body.minimal-premium .experience-grid,
+body.minimal-premium .about-section,
+body.minimal-premium .chinese-section,
+body.minimal-premium .lease-grid,
+body.minimal-premium .promo-card,
+body.minimal-premium .why-grid,
+body.minimal-premium .footer-grid,
+body.minimal-premium .footer-bottom {
+  width: min(var(--max), 100%) !important;
+}
+
+body.minimal-premium .section-header {
+  align-items: end;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+body.minimal-premium .section-eyebrow {
+  border: 0;
+  padding: 0;
+  color: var(--warm);
+  font-size: 0.68rem;
+}
+
+body.minimal-premium .section-title,
+body.minimal-premium .promo-title {
+  max-width: 8.5ch;
+  font-size: clamp(3.2rem, 8vw, 8.6rem);
+  line-height: 0.82;
+}
+
+body.minimal-premium .section-copy,
+body.minimal-premium .about-text,
+body.minimal-premium .chinese-text,
+body.minimal-premium .lease-card-text,
+body.minimal-premium .why-text {
+  max-width: 30rem;
+  opacity: 0.8;
+}
+
+body.minimal-premium .premium-fleet-shell {
+  margin-top: clamp(1.2rem, 2.6vw, 2rem);
+}
+
+body.minimal-premium .premium-fleet-shell .car-card,
+body.minimal-premium .premium-fleet-shell .car-card-featured {
+  flex-basis: min(76vw, 860px) !important;
+  width: min(76vw, 860px) !important;
+  min-width: min(76vw, 860px) !important;
+  height: clamp(560px, 64vw, 820px);
+  border-top: 0 !important;
+}
+
+body.minimal-premium .premium-fleet-shell .car-card-overlay {
+  padding: clamp(1.2rem, 3vw, 3rem);
+  background:
+    linear-gradient(0deg, rgba(2,3,3,0.92) 0%, rgba(2,3,3,0.42) 52%, transparent 100%);
+}
+
+body.minimal-premium .premium-fleet-shell .car-card-brand {
+  color: rgba(248,244,236,0.58);
+}
+
+body.minimal-premium .premium-fleet-shell .car-card-name {
+  max-width: 9.5ch;
+  font-size: clamp(2.8rem, 5.6vw, 6.4rem);
+  line-height: 0.82;
+}
+
+body.minimal-premium .car-card-price-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+}
+
+body.minimal-premium .car-card-price {
+  color: #f8f4ec;
+  font-size: clamp(1.25rem, 2vw, 2rem);
+}
+
+body.minimal-premium .fleet-arrow {
+  border-color: rgba(248,244,236,0.2);
+  background: rgba(2,3,3,0.62);
+}
+
+body.minimal-premium .experience-grid {
+  grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);
+}
+
+body.minimal-premium .experience-card,
+body.minimal-premium .about-visual,
+body.minimal-premium .chinese-visual,
+body.minimal-premium .airport-card-media {
+  border: 0 !important;
+  box-shadow: 0 40px 120px rgba(0,0,0,0.34) !important;
+}
+
+body.minimal-premium .experience-card-copy {
+  padding: clamp(1rem, 2vw, 1.6rem);
+}
+
+body.minimal-premium .experience-card-copy p,
+body.minimal-premium .about-feature-text,
+body.minimal-premium .faq-answer {
+  display: none;
+}
+
+body.minimal-premium .about-section,
+body.minimal-premium .chinese-section {
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+}
+
+body.minimal-premium .about-features,
+body.minimal-premium .chinese-brands {
+  background: transparent;
+  gap: 1px;
+}
+
+body.minimal-premium .about-feature,
+body.minimal-premium .chinese-brand {
+  min-height: 86px;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid rgba(248,244,236,0.14) !important;
+  background: transparent !important;
+}
+
+body.minimal-premium .lease-card-media,
+body.minimal-premium .why-media,
+body.minimal-premium .promo-deal-img {
+  aspect-ratio: 5 / 6;
+}
+
+body.minimal-premium .lease-card-title,
+body.minimal-premium .why-title,
+body.minimal-premium .promo-deal-car {
+  font-size: clamp(1.4rem, 2vw, 2.2rem);
+  line-height: 1;
+}
+
+body.minimal-premium .faq-section {
+  min-height: 70svh;
+}
+
+body.minimal-premium .faq-list {
+  max-width: 760px;
+}
+
+body.minimal-premium .faq-question {
+  font-size: clamp(1.1rem, 1.8vw, 1.7rem);
+}
+
+@media (max-width: 980px) {
+  body.minimal-premium .hero,
+  body.minimal-premium .sale-ticker,
+  body.minimal-premium main > section,
+  body.minimal-premium .footer {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  body.minimal-premium .hero-content,
+  body.minimal-premium .section-header,
+  body.minimal-premium .experience-grid,
+  body.minimal-premium .about-section,
+  body.minimal-premium .chinese-section {
+    grid-template-columns: 1fr;
+  }
+
+  body.minimal-premium .hero-media-strip {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  body.minimal-premium .hero-title {
+    font-size: clamp(3.4rem, 18vw, 5.8rem);
+  }
+
+  body.minimal-premium .section-title,
+  body.minimal-premium .promo-title {
+    font-size: clamp(2.7rem, 15vw, 4.8rem);
+  }
+
+  body.minimal-premium .hero-stats {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  body.minimal-premium .hero-stat {
+    padding-right: 0.75rem;
+  }
+
+  body.minimal-premium .premium-fleet-shell .car-card,
+  body.minimal-premium .premium-fleet-shell .car-card-featured {
+    flex-basis: calc(100vw - 2rem) !important;
+    width: calc(100vw - 2rem) !important;
+    min-width: calc(100vw - 2rem) !important;
+    height: clamp(480px, 126vw, 620px);
+  }
+
+  body.minimal-premium .premium-fleet-shell .car-card-name {
+    font-size: clamp(2.15rem, 12vw, 4rem);
+  }
+
+  body.minimal-premium .lease-grid,
+  body.minimal-premium .why-grid,
+  body.minimal-premium .promo-deals {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Final composition switch: top nav, editorial hero, and cleaner visible copy. */
+body.minimal-premium .nav,
+body.minimal-premium .nav.transparent,
+body.minimal-premium .nav.scrolled {
+  inset: 18px var(--edge) auto var(--edge) !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: 62px !important;
+  min-height: 62px !important;
+  padding: 0 0.75rem !important;
+  flex-direction: row !important;
+  border: 1px solid rgba(248,244,236,0.12) !important;
+  border-radius: 999px !important;
+  background: rgba(3,4,4,0.42) !important;
+  backdrop-filter: blur(22px) saturate(1.2) !important;
+}
+
+body.minimal-premium .nav-logo {
+  width: 46px !important;
+  height: 46px !important;
+}
+
+body.minimal-premium .nav-logo-img {
+  width: 38px !important;
+  height: 38px !important;
+}
+
+body.minimal-premium .nav-links {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 0.3rem !important;
+  padding: 0.25rem !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,0.035) !important;
+  height: 44px !important;
+  overflow: hidden !important;
+}
+
+body.minimal-premium .nav-links a {
+  writing-mode: horizontal-tb !important;
+  transform: none !important;
+  padding: 0.72rem 0.82rem !important;
+  font-size: 0.58rem !important;
+  letter-spacing: 0.12em !important;
+  color: rgba(248,244,236,0.64) !important;
+}
+
+body.minimal-premium .nav-links a:hover {
+  transform: translateY(-1px) !important;
+}
+
+body.minimal-premium .nav-actions {
+  display: none !important;
+}
+
+body.minimal-premium .theme-toggle {
+  width: 42px !important;
+  height: 42px !important;
+}
+
+body.minimal-premium .hero,
+body.minimal-premium .sale-ticker,
+body.minimal-premium main > section,
+body.minimal-premium .footer {
+  width: 100%;
+  margin-left: 0;
+}
+
+body.minimal-premium .hero-content {
+  padding-top: 8rem;
+  align-content: center;
+}
+
+body.minimal-premium .hero-title {
+  max-width: 8.2ch;
+  font-size: clamp(4rem, 9.4vw, 9.6rem);
+}
+
+body.minimal-premium .hero-subtitle {
+  position: relative;
+  max-width: 34rem;
+  color: transparent !important;
+  line-height: 0;
+}
+
+body.minimal-premium .hero-subtitle::after {
+  content: "Supercars, prestige SUVs, airport delivery and VIP concierge.";
+  display: block;
+  color: rgba(248,244,236,0.78);
+  font-size: clamp(0.98rem, 1.3vw, 1.25rem);
+  line-height: 1.7;
+  letter-spacing: 0.04em;
+}
+
+body.minimal-premium .hero-stats {
+  position: absolute;
+  right: var(--edge);
+  bottom: clamp(2.2rem, 5vw, 5rem);
+  width: min(420px, 34vw);
+}
+
+body.minimal-premium .hero-media-strip {
+  display: none;
+}
+
+body.minimal-premium .sale-ticker {
+  display: none;
+}
+
+body.minimal-premium .premium-fleet-shell {
+  width: min(100%, var(--max)) !important;
+}
+
+body.minimal-premium .premium-fleet-shell .cars-grid {
+  padding-inline: 0 !important;
+}
+
+body.minimal-premium .premium-fleet-controls {
+  left: -0.6rem;
+  right: -0.6rem;
+}
+
+body.minimal-premium .fleet-progress-dots {
+  top: auto;
+  bottom: -1.75rem;
+}
+
+@media (max-width: 980px) {
+  body.minimal-premium .nav,
+  body.minimal-premium .nav.transparent,
+  body.minimal-premium .nav.scrolled {
+    inset: 0 0 auto 0 !important;
+    height: 70px !important;
+    min-height: 70px !important;
+    border-radius: 0 !important;
+    border-width: 0 0 1px !important;
+    padding: 0 1rem !important;
+  }
+
+  body.minimal-premium .nav-links,
+  body.minimal-premium .nav-actions {
+    display: none !important;
+  }
+
+  body.minimal-premium .hero-stats {
+    position: static;
+    width: min(520px, 100%);
+  }
+}
+
+/* Full markup pass: target the existing site classes directly. */
+.minimal-premium .nav {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: clamp(74px, 7.2vw, 108px);
+  height: 100svh;
+  padding: clamp(1rem, 2vw, 1.8rem) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border: 0;
+  border-right: 1px solid rgba(247, 243, 234, 0.08);
+  background: linear-gradient(90deg, rgba(4, 5, 5, 0.74), rgba(4, 5, 5, 0));
+  box-shadow: none;
+  backdrop-filter: blur(18px);
+}
+
+.minimal-premium .nav.scrolled {
+  background: linear-gradient(90deg, rgba(4, 5, 5, 0.86), rgba(4, 5, 5, 0.04));
+}
+
+.minimal-premium .nav-progress-bar {
+  left: auto;
+  right: 0;
+  top: 0;
+  width: 1px !important;
+  height: var(--scroll-progress, 0%);
+  background: linear-gradient(to bottom, var(--warm), transparent);
+}
+
+.minimal-premium .nav-logo {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 999px;
+  border: 1px solid rgba(247, 243, 234, 0.12);
+  background: rgba(247, 243, 234, 0.06);
+}
+
+.minimal-premium .nav-logo-img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+.minimal-premium .nav-links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.9rem, 2vh, 1.45rem);
+}
+
+.minimal-premium .nav-links li {
+  display: flex;
+}
+
+.minimal-premium .nav-links a {
+  position: relative;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  padding: 0;
+  color: rgba(247, 243, 234, 0.54);
+  font-size: 0.68rem;
+  line-height: 1;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.minimal-premium .nav-link-line {
+  display: none;
+}
+
+.minimal-premium .nav-actions {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: center;
+}
+
+.minimal-premium .theme-toggle,
+.minimal-premium .mobile-menu-btn,
+.minimal-premium .chatbot-trigger {
+  border: 1px solid rgba(247, 243, 234, 0.14);
+  background: rgba(247, 243, 234, 0.06);
+  color: var(--ink);
+  box-shadow: none;
+  backdrop-filter: blur(18px);
+}
+
+.minimal-premium .hero,
+.minimal-premium .sale-ticker,
+.minimal-premium main > section,
+.minimal-premium .footer {
+  margin-left: clamp(74px, 7.2vw, 108px);
+}
+
+.minimal-premium .hero {
+  padding-left: 0;
+}
+
+.minimal-premium .hero-content {
+  min-height: 100svh;
+  align-content: end;
+  margin: 0;
+}
+
+.minimal-premium .hero-eyebrow,
+.minimal-premium .section-eyebrow {
+  width: fit-content;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--warm);
+  color: var(--warm);
+  background: transparent;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.minimal-premium .hero-command-panel,
+.minimal-premium .command-panel-head,
+.minimal-premium .command-route,
+.minimal-premium .command-options,
+.minimal-premium .command-option,
+.minimal-premium .hero-orbit-map,
+.minimal-premium .hero-preview,
+.minimal-premium .about-year-card,
+.minimal-premium .tech-badge,
+.minimal-premium .popular-badge,
+.minimal-premium .exit-popup-card,
+.minimal-premium .chatbot-window {
+  border-radius: 0 !important;
+  border-color: rgba(247, 243, 234, 0.13) !important;
+  background: rgba(7, 8, 8, 0.24) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(18px);
+}
+
+.minimal-premium .hero-command-panel {
+  border: 0 !important;
+  background: transparent !important;
+  backdrop-filter: none;
+}
+
+.minimal-premium .hero-video-controls {
+  left: auto;
+  right: clamp(1rem, 3vw, 3rem);
+  bottom: clamp(1rem, 3vw, 2.5rem);
+  display: flex;
+  flex-direction: column;
+}
+
+.minimal-premium .hero-dot {
+  width: 38px;
+  height: 2px;
+  border-radius: 0;
+  background: rgba(247, 243, 234, 0.32);
+}
+
+.minimal-premium .hero-dot.active {
+  width: 54px;
+  background: var(--warm);
+}
+
+.minimal-premium .hero-media-strip {
+  right: clamp(1rem, 3vw, 3rem);
+  bottom: clamp(6rem, 11vw, 9rem);
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.minimal-premium .hero-preview {
+  width: clamp(76px, 8vw, 128px);
+  height: clamp(96px, 11vw, 156px);
+  overflow: hidden;
+}
+
+.minimal-premium .hero-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.minimal-premium .sale-ticker {
+  border-block: 1px solid var(--line);
+  background: rgba(5, 6, 6, 0.48);
+  color: var(--muted-ink);
+  backdrop-filter: blur(18px);
+}
+
+.minimal-premium .experience-studio,
+.minimal-premium .featured-section,
+.minimal-premium .fleet-scroll-section,
+.minimal-premium .about-section,
+.minimal-premium .chinese-section,
+.minimal-premium .lease-section,
+.minimal-premium .promo-section,
+.minimal-premium .why-section,
+.minimal-premium .faq-section {
+  padding-inline: clamp(1.1rem, 4vw, 5rem);
+}
+
+.minimal-premium .experience-copy,
+.minimal-premium .chinese-text-content,
+.minimal-premium .faq-inner {
+  width: min(1180px, 100%);
+  margin-inline: auto;
+}
+
+.minimal-premium .experience-grid {
+  grid-template-columns: minmax(0, 1.2fr) minmax(230px, 0.8fr);
+}
+
+.minimal-premium .experience-card {
+  position: relative;
+  min-height: clamp(320px, 48vw, 620px);
+  overflow: hidden;
+  border-top: 1px solid var(--line) !important;
+}
+
+.minimal-premium .experience-card-wide {
+  grid-row: span 2;
+}
+
+.minimal-premium .experience-card img,
+.minimal-premium .experience-card video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.minimal-premium .experience-card-copy {
+  position: absolute;
+  inset: auto 0 0;
+  padding: clamp(1.2rem, 3vw, 2rem) 0 0;
+  background: linear-gradient(0deg, rgba(5,6,6,0.82), transparent);
+}
+
+.minimal-premium .cars-grid {
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+}
+
+.minimal-premium .car-card {
+  position: relative;
+  grid-column: span 5;
+  min-height: clamp(520px, 60vw, 760px);
+  overflow: hidden;
+}
+
+.minimal-premium .car-card-featured {
+  grid-column: span 10;
+  min-height: clamp(560px, 64vw, 820px);
+}
+
+.minimal-premium .car-card-img-wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.minimal-premium .car-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.minimal-premium .car-card-img-glow {
+  display: none;
+}
+
+.minimal-premium .car-card-overlay {
+  position: absolute;
+  inset: auto 0 0;
+  padding: clamp(1.25rem, 3vw, 2.3rem) 0 0;
+  display: grid;
+  gap: 1rem;
+  background: linear-gradient(0deg, rgba(5, 6, 6, 0.9), rgba(5, 6, 6, 0.2), transparent);
+}
+
+.minimal-premium .car-card-brand,
+.minimal-premium .car-card-price-unit,
+.minimal-premium .promo-validity,
+.minimal-premium .airport-kicker {
+  color: var(--soft-ink);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.minimal-premium .car-card-name,
+.minimal-premium .airport-title,
+.minimal-premium .why-title {
+  color: var(--ink);
+  font-size: clamp(1.65rem, 4vw, 4.2rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.minimal-premium .car-card-specs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+}
+
+.minimal-premium .car-spec {
+  padding: 0.9rem;
+  background: rgba(5, 6, 6, 0.56);
+}
+
+.minimal-premium .car-card-btn {
+  width: fit-content;
+  padding: 0.85rem 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(247, 243, 234, 0.08);
+  color: var(--ink);
+}
+
+.minimal-premium .sale-badge,
+.minimal-premium .promo-save {
+  border-radius: 0;
+  border: 1px solid rgba(200, 167, 106, 0.42);
+  background: rgba(8, 9, 9, 0.42);
+  color: var(--warm);
+  box-shadow: none;
+}
+
+.minimal-premium .scroll-track-wrap {
+  width: min(1300px, 100%);
+  margin: clamp(2.5rem, 6vw, 5rem) auto 0;
+  overflow: hidden;
+  display: grid;
+  gap: 1.2rem;
+}
+
+.minimal-premium .scroll-track {
+  display: flex;
+  gap: 1.2rem;
+  will-change: transform;
+}
+
+.minimal-premium .scroll-car-card {
+  flex: 0 0 clamp(240px, 28vw, 420px);
+  min-height: clamp(360px, 42vw, 560px);
+  overflow: hidden;
+}
+
+.minimal-premium .about-section,
+.minimal-premium .chinese-section {
+  display: grid !important;
+  grid-template-columns: minmax(0, 0.52fr) minmax(0, 0.48fr);
+  gap: clamp(2rem, 6vw, 6rem);
+  align-items: center;
+}
+
+.minimal-premium .about-visual,
+.minimal-premium .chinese-visual {
+  min-height: clamp(420px, 56vw, 760px);
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.minimal-premium .about-content,
+.minimal-premium .chinese-text-content {
+  min-height: auto;
+}
+
+.minimal-premium .about-quote {
+  padding: 1.2rem 0 1.2rem 1.2rem;
+  border-radius: 0;
+  background: transparent;
+  border-left: 1px solid var(--warm);
+  color: var(--muted-ink);
+}
+
+.minimal-premium .about-features,
+.minimal-premium .chinese-brands {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+}
+
+.minimal-premium .about-feature,
+.minimal-premium .chinese-brand {
+  padding: 1.15rem;
+  border: 0;
+  border-radius: 0;
+  background: rgba(5, 6, 6, 0.42) !important;
+}
+
+.minimal-premium .lease-grid,
+.minimal-premium .why-grid,
+.minimal-premium .promo-deals {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.minimal-premium .lease-card,
+.minimal-premium .promo-deal,
+.minimal-premium .why-item {
+  position: relative;
+  min-height: 100%;
+  border-top: 1px solid var(--line) !important;
+}
+
+.minimal-premium .lease-card-media,
+.minimal-premium .why-media,
+.minimal-premium .promo-deal-img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 0;
+}
+
+.minimal-premium .lease-card-media img,
+.minimal-premium .why-media img,
+.minimal-premium .promo-deal-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.minimal-premium .lease-card-number {
+  color: var(--warm);
+  font-size: clamp(2.2rem, 6vw, 5rem);
+  line-height: 0.9;
+}
+
+.minimal-premium .airport-card {
+  width: min(1180px, 100%);
+  margin: clamp(2.5rem, 6vw, 5rem) auto 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 0.64fr) minmax(260px, 0.36fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  border-top: 1px solid var(--line) !important;
+}
+
+.minimal-premium .airport-card-media {
+  grid-column: 1 / -1;
+  margin: 0;
+  height: clamp(300px, 44vw, 560px);
+  overflow: hidden;
+}
+
+.minimal-premium .airport-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.minimal-premium .promo-card {
+  width: min(1180px, 100%);
+  margin-inline: auto;
+  text-align: left;
+}
+
+.minimal-premium .promo-title {
+  max-width: 9ch;
+  color: var(--ink);
+  font-size: clamp(3.4rem, 10vw, 10rem);
+  line-height: 0.82;
+}
+
+.minimal-premium .faq-list {
+  border-top: 1px solid var(--line);
+}
+
+.minimal-premium .faq-question {
+  width: 100%;
+  padding: 1.2rem 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+}
+
+.minimal-premium .footer {
+  padding: clamp(3rem, 7vw, 6rem) clamp(1.1rem, 4vw, 5rem) 2rem;
+}
+
+.minimal-premium .footer-grid {
+  width: min(1180px, 100%);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: minmax(260px, 1.4fr) repeat(3, minmax(150px, 0.6fr));
+  gap: clamp(1.5rem, 4vw, 4rem);
+}
+
+.minimal-premium .footer-bottom {
+  width: min(1180px, 100%);
+  margin: 3rem auto 0;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--line);
+}
+
+@media (max-width: 980px) {
+  .minimal-premium .nav {
+    inset: 0 0 auto 0;
+    width: 100%;
+    height: 76px;
+    padding: 0 1rem;
+    flex-direction: row;
+    border-right: 0;
+    border-bottom: 1px solid rgba(247, 243, 234, 0.08);
+    background: linear-gradient(180deg, rgba(4,5,5,0.84), rgba(4,5,5,0));
+  }
+
+  .minimal-premium .nav-logo {
+    width: 46px;
+    height: 46px;
+  }
+
+  .minimal-premium .nav-links,
+  .minimal-premium .nav-actions {
+    display: none;
+  }
+
+  .minimal-premium .mobile-menu-btn {
+    display: inline-flex;
+  }
+
+  .minimal-premium .hero,
+  .minimal-premium .sale-ticker,
+  .minimal-premium main > section,
+  .minimal-premium .footer {
+    margin-left: 0;
+  }
+
+  .minimal-premium .hero-content {
+    padding-top: 7rem;
+    grid-template-columns: 1fr;
+  }
+
+  .minimal-premium .hero-media-strip {
+    display: none;
+  }
+
+  .minimal-premium .about-section,
+  .minimal-premium .chinese-section,
+  .minimal-premium .airport-card,
+  .minimal-premium .footer-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .minimal-premium .car-card,
+  .minimal-premium .car-card-featured {
+    grid-column: 1 / -1;
+    min-height: clamp(440px, 92vw, 680px);
+  }
+
+  .minimal-premium .lease-grid,
+  .minimal-premium .why-grid,
+  .minimal-premium .promo-deals {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .minimal-premium .hero-title,
+  .minimal-premium .section-title,
+  .minimal-premium .promo-title {
+    max-width: 100%;
+    font-size: clamp(3.2rem, 17vw, 5.6rem);
+  }
+
+  .minimal-premium .hero-command-panel,
+  .minimal-premium .hero-orbit-map,
+  .minimal-premium .hero-slide-label {
+    display: none;
+  }
+
+  .minimal-premium .hero-stats,
+  .minimal-premium .car-card-specs,
+  .minimal-premium .about-features,
+  .minimal-premium .chinese-brands {
+    grid-template-columns: 1fr;
+  }
+
+  .minimal-premium .hero-video-controls {
+    flex-direction: row;
+    right: auto;
+    left: 1.1rem;
+  }
+}
+
+/* Loader safety net: never leave visitors on the loading screen. */
+.minimal-premium .loader {
+  animation: loaderAutoRelease 0.55s ease 2.8s forwards;
+}
+
+.minimal-premium .loader.loader-done,
+.minimal-premium .loader[hidden] {
+  animation: none;
+}
+
+@keyframes loaderAutoRelease {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+/* Alignment normalization: final structural pass for desktop, tablet, and mobile. */
+.minimal-premium {
+  --side-rail: clamp(76px, 7vw, 106px);
+  --page-gutter: clamp(1.15rem, 4vw, 4.8rem);
+  --content-max: 1180px;
+  --wide-max: 1320px;
+}
+
+.minimal-premium *,
+.minimal-premium *::before,
+.minimal-premium *::after {
+  box-sizing: border-box;
+}
+
+.minimal-premium .nav {
+  z-index: 1000;
+  width: var(--side-rail);
+}
+
+.minimal-premium .hero,
+.minimal-premium .sale-ticker,
+.minimal-premium main > section,
+.minimal-premium .footer {
+  width: calc(100% - var(--side-rail));
+  margin-left: var(--side-rail);
+}
+
+.minimal-premium main > section {
+  padding: clamp(4.5rem, 8vw, 8rem) var(--page-gutter);
+}
+
+.minimal-premium .hero {
+  min-height: 100svh;
+  padding: 0 var(--page-gutter);
+}
+
+.minimal-premium .hero-content,
+.minimal-premium .section-header,
+.minimal-premium .section-intro,
+.minimal-premium .experience-copy,
+.minimal-premium .experience-grid,
+.minimal-premium .cars-grid,
+.minimal-premium .scroll-track-wrap,
+.minimal-premium .about-section,
+.minimal-premium .chinese-section,
+.minimal-premium .lease-grid,
+.minimal-premium .airport-card,
+.minimal-premium .promo-card,
+.minimal-premium .why-grid,
+.minimal-premium .faq-inner,
+.minimal-premium .footer-grid,
+.minimal-premium .footer-bottom {
+  width: min(var(--content-max), 100%);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.minimal-premium .hero-content {
+  min-height: 100svh;
+  padding: clamp(7rem, 10vw, 10rem) 0 clamp(3rem, 6vw, 5rem);
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
+  gap: clamp(2rem, 4vw, 4rem);
+}
+
+.minimal-premium .hero-title {
+  max-width: 11ch;
+}
+
+.minimal-premium .hero-command-panel {
+  max-width: 380px;
+  justify-self: end;
+}
+
+.minimal-premium .hero-stats {
+  width: 100%;
+}
+
+.minimal-premium .hero-media-strip {
+  max-width: min(420px, 31vw);
+  align-items: stretch;
+}
+
+.minimal-premium .hero-preview {
+  min-width: 0;
+}
+
+.minimal-premium .section-header,
+.minimal-premium .section-intro {
+  grid-template-columns: minmax(0, 0.72fr) minmax(280px, 0.28fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+}
+
+.minimal-premium .section-title,
+.minimal-premium .promo-title {
+  overflow-wrap: anywhere;
+}
+
+.minimal-premium .experience-studio .experience-grid {
+  grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+  align-items: stretch;
+}
+
+.minimal-premium .experience-card {
+  min-width: 0;
+}
+
+.minimal-premium .experience-card-copy,
+.minimal-premium .car-card-overlay {
+  padding: clamp(1.25rem, 2.8vw, 2.4rem);
+}
+
+.minimal-premium .cars-grid {
+  max-width: var(--wide-max);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: stretch;
+}
+
+.minimal-premium .car-card {
+  grid-column: span 6;
+  min-height: clamp(500px, 54vw, 720px);
+}
+
+.minimal-premium .car-card-featured {
+  grid-column: span 12;
+}
+
+.minimal-premium .car-card-overlay {
+  align-content: end;
+}
+
+.minimal-premium .car-card-specs {
+  width: min(520px, 100%);
+}
+
+.minimal-premium .scroll-track-wrap {
+  max-width: var(--wide-max);
+}
+
+.minimal-premium .about-section,
+.minimal-premium .chinese-section {
+  width: min(var(--content-max), calc(100% - (var(--page-gutter) * 2)));
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.minimal-premium .about-visual,
+.minimal-premium .chinese-visual,
+.minimal-premium .about-content,
+.minimal-premium .chinese-text-content {
+  min-width: 0;
+}
+
+.minimal-premium .about-visual,
+.minimal-premium .chinese-visual {
+  order: 0;
+}
+
+.minimal-premium .about-content,
+.minimal-premium .chinese-text-content {
+  order: 1;
+}
+
+.minimal-premium .about-video,
+.minimal-premium .chinese-video,
+.minimal-premium .experience-video,
+.minimal-premium .hero-video {
+  display: block;
+}
+
+.minimal-premium .lease-grid,
+.minimal-premium .why-grid,
+.minimal-premium .promo-deals {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.minimal-premium .lease-card,
+.minimal-premium .why-item,
+.minimal-premium .promo-deal {
+  grid-column: auto;
+  min-width: 0;
+}
+
+.minimal-premium .airport-card {
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.42fr);
+  align-items: start;
+}
+
+.minimal-premium .airport-card-copy,
+.minimal-premium .airport-card-side {
+  min-width: 0;
+}
+
+.minimal-premium .airport-card-media {
+  grid-column: 1 / -1;
+}
+
+.minimal-premium .faq-inner {
+  max-width: 920px;
+}
+
+.minimal-premium .chatbot-window,
+.minimal-premium .exit-popup-card {
+  max-width: calc(100vw - 2rem);
+}
+
+@media (max-width: 1180px) {
+  .minimal-premium .hero-content,
+  .minimal-premium .section-header,
+  .minimal-premium .section-intro,
+  .minimal-premium .experience-studio .experience-grid,
+  .minimal-premium .about-section,
+  .minimal-premium .chinese-section,
+  .minimal-premium .airport-card {
+    grid-template-columns: 1fr;
+  }
+
+  .minimal-premium .hero-command-panel {
+    max-width: 100%;
+    justify-self: stretch;
+  }
+
+  .minimal-premium .section-copy,
+  .minimal-premium .about-text,
+  .minimal-premium .chinese-text {
+    max-width: 760px;
+  }
+
+  .minimal-premium .car-card,
+  .minimal-premium .car-card-featured {
+    grid-column: span 12;
+  }
+
+  .minimal-premium .lease-grid,
+  .minimal-premium .why-grid,
+  .minimal-premium .promo-deals {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 980px) {
+  .minimal-premium {
+    --side-rail: 0px;
+    --page-gutter: clamp(1rem, 4vw, 2rem);
+  }
+
+  .minimal-premium .nav {
+    width: 100%;
+    height: 74px;
+  }
+
+  .minimal-premium .hero,
+  .minimal-premium .sale-ticker,
+  .minimal-premium main > section,
+  .minimal-premium .footer {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .minimal-premium .hero {
+    padding: 0 var(--page-gutter);
+  }
+
+  .minimal-premium main > section {
+    padding: clamp(3.8rem, 8vw, 6rem) var(--page-gutter);
+  }
+
+  .minimal-premium .hero-content {
+    padding-top: 6.5rem;
+    gap: 1.6rem;
+  }
+
+  .minimal-premium .about-section,
+  .minimal-premium .chinese-section {
+    width: 100%;
+  }
+
+  .minimal-premium .about-visual,
+  .minimal-premium .chinese-visual,
+  .minimal-premium .experience-card {
+    min-height: clamp(320px, 62vw, 560px);
+  }
+
+  .minimal-premium .footer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .minimal-premium .hero {
+    min-height: auto;
+  }
+
+  .minimal-premium .hero-content {
+    min-height: 100svh;
+    padding-bottom: 2.4rem;
+  }
+
+  .minimal-premium .hero-title,
+  .minimal-premium .section-title,
+  .minimal-premium .promo-title {
+    font-size: clamp(2.8rem, 15vw, 5rem);
+    line-height: 0.9;
+  }
+
+  .minimal-premium .hero-subtitle,
+  .minimal-premium .section-copy,
+  .minimal-premium .about-text,
+  .minimal-premium .chinese-text,
+  .minimal-premium p {
+    font-size: 0.98rem;
+    line-height: 1.7;
+  }
+
+  .minimal-premium .hero-actions,
+  .minimal-premium .section-actions,
+  .minimal-premium .cta-actions {
+    align-items: stretch;
+  }
+
+  .minimal-premium .btn-primary,
+  .minimal-premium .btn-secondary,
+  .minimal-premium .primary-btn,
+  .minimal-premium .secondary-btn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .minimal-premium .lease-grid,
+  .minimal-premium .why-grid,
+  .minimal-premium .promo-deals,
+  .minimal-premium .about-features,
+  .minimal-premium .chinese-brands,
+  .minimal-premium .footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .minimal-premium .car-card {
+    min-height: clamp(420px, 112vw, 620px);
+  }
+
+  .minimal-premium .car-card-overlay {
+    padding: 1.1rem;
+  }
+
+  .minimal-premium .car-card-specs {
+    grid-template-columns: 1fr;
+  }
+
+  .minimal-premium .car-card-name,
+  .minimal-premium .airport-title,
+  .minimal-premium .why-title {
+    font-size: clamp(1.55rem, 8vw, 2.6rem);
+  }
+
+  .minimal-premium .sale-ticker {
+    margin-top: 0;
+  }
+
+  .minimal-premium .chatbot-window {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    width: auto;
+  }
+}
+
+@media (max-width: 420px) {
+  .minimal-premium .hero-title,
+  .minimal-premium .section-title,
+  .minimal-premium .promo-title {
+    font-size: clamp(2.45rem, 14vw, 3.6rem);
+  }
+
+  .minimal-premium .hero-content {
+    padding-top: 5.7rem;
+  }
+
+  .minimal-premium .nav {
+    height: 66px;
+  }
+
+  .minimal-premium main > section {
+    padding-top: 3.2rem;
+    padding-bottom: 3.2rem;
+  }
+}
+
+/* Late cascade correction for old bundled styles.css rules. */
+html:has(body.minimal-premium),
+body.minimal-premium {
+  overflow-x: clip;
+}
+
+body.minimal-premium .nav,
+body.minimal-premium .nav.transparent,
+body.minimal-premium .nav.scrolled {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: auto !important;
+  bottom: 0 !important;
+  width: var(--side-rail) !important;
+  min-width: var(--side-rail) !important;
+  max-width: var(--side-rail) !important;
+  height: 100svh !important;
+  min-height: 100svh !important;
+  padding: clamp(1rem, 2vw, 1.8rem) 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: nowrap !important;
+  gap: 1rem !important;
+  border: 0 !important;
+  border-right: 1px solid rgba(247, 243, 234, 0.08) !important;
+  border-radius: 0 !important;
+  transform: none !important;
+  background: linear-gradient(90deg, rgba(4, 5, 5, 0.78), rgba(4, 5, 5, 0)) !important;
+  box-shadow: none !important;
+}
+
+body.minimal-premium .nav-logo {
+  flex: 0 0 auto !important;
+}
+
+body.minimal-premium .nav-logo-img {
+  width: 34px !important;
+  height: 34px !important;
+}
+
+body.minimal-premium .nav-links {
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
+  width: auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+body.minimal-premium .nav-links a {
+  writing-mode: vertical-rl !important;
+  transform: rotate(180deg) !important;
+  width: auto !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: rgba(247, 243, 234, 0.6) !important;
+  white-space: nowrap !important;
+}
+
+body.minimal-premium .nav-actions {
+  flex: 0 0 auto !important;
+}
+
+body.minimal-premium .nav-progress-bar {
+  left: auto !important;
+  right: 0 !important;
+  top: 0 !important;
+  bottom: auto !important;
+  width: 1px !important;
+  min-width: 1px !important;
+  max-width: 1px !important;
+  background: linear-gradient(to bottom, var(--warm), transparent) !important;
+}
+
+body.minimal-premium .section-motion.from-left,
+body.minimal-premium .motion-child.from-left,
+body.minimal-premium .section-motion.from-right,
+body.minimal-premium .motion-child.from-right {
+  transform: translate3d(0, 18px, 0);
+}
+
+body.minimal-premium .section-motion.visible,
+body.minimal-premium .motion-child.visible {
+  transform: translate3d(0, 0, 0);
+}
+
+@media (max-width: 980px) {
+  body.minimal-premium .nav,
+  body.minimal-premium .nav.transparent,
+  body.minimal-premium .nav.scrolled {
+    inset: 0 0 auto 0 !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    height: 74px !important;
+    min-height: 74px !important;
+    padding: 0 var(--page-gutter) !important;
+    flex-direction: row !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid rgba(247, 243, 234, 0.08) !important;
+    background: linear-gradient(180deg, rgba(4, 5, 5, 0.86), rgba(4, 5, 5, 0)) !important;
+  }
+
+  body.minimal-premium .nav-links,
+  body.minimal-premium .nav-actions {
+    display: none !important;
+  }
+
+  body.minimal-premium .mobile-menu-btn {
+    display: inline-flex !important;
+  }
+}
+
+body.minimal-premium .nav-actions {
+  display: none !important;
+}
+
+body.minimal-premium .nav-actions {
+  display: none !important;
+}
+
+/* Keep the final top bar minimal. */
+body.minimal-premium .nav-actions {
+  display: none !important;
+}
+
+@media (max-width: 420px) {
+  body.minimal-premium .nav,
+  body.minimal-premium .nav.transparent,
+  body.minimal-premium .nav.scrolled {
+    height: 66px !important;
+    min-height: 66px !important;
+  }
+}
+
+body.minimal-premium .cars-grid {
+  display: grid !important;
+  grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+}
+
+body.minimal-premium .cars-grid > .car-card {
+  grid-column: span 6 !important;
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+body.minimal-premium .cars-grid > .car-card-featured {
+  grid-column: 1 / -1 !important;
+}
+
+@media (max-width: 1180px) {
+  body.minimal-premium .cars-grid > .car-card,
+  body.minimal-premium .cars-grid > .car-card-featured {
+    grid-column: 1 / -1 !important;
+  }
+}
+
+/* Cinematic rebuild layer: image-first, lower text density, smooth premium carousel. */
+body.minimal-premium {
+  --cinema-max: 1460px;
+  --cinema-gutter: clamp(1rem, 4.5vw, 5.5rem);
+  background:
+    linear-gradient(115deg, rgba(9, 11, 10, 0.98), rgba(13, 14, 13, 0.92) 42%, rgba(7, 7, 7, 0.98)),
+    #080908;
+}
+
+body.minimal-premium main > section {
+  min-height: min(1000px, 100svh);
+  display: grid;
+  align-content: center;
+  padding: clamp(4rem, 8vw, 8rem) var(--cinema-gutter) !important;
+  border-top: 0;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0)),
+    radial-gradient(circle at 85% 18%, rgba(200, 167, 106, 0.09), transparent 28rem);
+}
+
+body.minimal-premium main > section:nth-of-type(even) {
+  background:
+    linear-gradient(180deg, rgba(126, 200, 194, 0.045), rgba(255,255,255,0)),
+    radial-gradient(circle at 12% 80%, rgba(207, 130, 120, 0.08), transparent 26rem);
+}
+
+body.minimal-premium .hero {
+  min-height: 100svh;
+  background: #050606;
+}
+
+body.minimal-premium .hero-content {
+  width: min(var(--cinema-max), 100%);
+  grid-template-columns: minmax(0, 0.78fr) minmax(240px, 0.22fr);
+}
+
+body.minimal-premium .hero-title {
+  max-width: 9ch;
+  font-size: clamp(4.7rem, 12.5vw, 13rem);
+  letter-spacing: 0;
+}
+
+body.minimal-premium .hero-subtitle {
+  max-width: 35rem;
+}
+
+body.minimal-premium .hero-command-panel,
+body.minimal-premium .hero-orbit-map,
+body.minimal-premium .hero-slide-label {
+  display: none !important;
+}
+
+body.minimal-premium .section-copy,
+body.minimal-premium .about-text,
+body.minimal-premium .chinese-text,
+body.minimal-premium .lease-card-text,
+body.minimal-premium .why-text,
+body.minimal-premium .footer-tagline,
+body.minimal-premium .faq-answer-text {
+  display: -webkit-box;
+  max-width: 46rem;
+  overflow: hidden;
+  color: rgba(247, 243, 234, 0.62);
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+body.minimal-premium .section-header,
+body.minimal-premium .section-intro,
+body.minimal-premium .experience-copy,
+body.minimal-premium .promo-card,
+body.minimal-premium .faq-inner {
+  width: min(var(--cinema-max), 100%) !important;
+  margin-inline: auto;
+}
+
+body.minimal-premium .section-header {
+  grid-template-columns: minmax(0, 0.8fr) minmax(220px, 0.2fr);
+}
+
+body.minimal-premium .section-title,
+body.minimal-premium .promo-title {
+  max-width: 11ch;
+  font-size: clamp(3.4rem, 8.8vw, 9.4rem);
+  line-height: 0.84;
+}
+
+body.minimal-premium .experience-grid {
+  width: min(var(--cinema-max), 100%) !important;
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+  grid-auto-rows: minmax(300px, 1fr);
+  gap: clamp(0.9rem, 1.8vw, 1.4rem);
+}
+
+body.minimal-premium .experience-card {
+  min-height: clamp(360px, 52vw, 760px);
+  isolation: isolate;
+}
+
+body.minimal-premium .experience-card:not(.experience-card-wide) {
+  min-height: clamp(280px, 25vw, 370px);
+}
+
+body.minimal-premium .experience-card-copy h3,
+body.minimal-premium .experience-card-copy p {
+  max-width: 28rem;
+}
+
+body.minimal-premium .premium-fleet-shell {
+  position: relative;
+  width: min(var(--cinema-max), 100%);
+  margin: clamp(2rem, 4vw, 4rem) auto 0;
+}
+
+body.minimal-premium .premium-fleet-shell .cars-grid {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 0 clamp(1rem, 2vw, 1.4rem);
+  display: flex !important;
+  gap: clamp(1rem, 2vw, 1.35rem) !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 0;
+  scrollbar-width: none;
+}
+
+body.minimal-premium .premium-fleet-shell .cars-grid::-webkit-scrollbar {
+  display: none;
+}
+
+body.minimal-premium .premium-fleet-shell .car-card,
+body.minimal-premium .premium-fleet-shell .car-card-featured {
+  flex: 0 0 min(82vw, 720px) !important;
+  width: min(82vw, 720px) !important;
+  min-width: min(82vw, 720px) !important;
+  height: clamp(520px, 62vw, 780px);
+  min-height: 0 !important;
+  scroll-snap-align: start;
+  opacity: 0.72;
+  transform: scale(0.965);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(.2,.8,.2,1), filter 0.6s ease;
+}
+
+body.minimal-premium .premium-fleet-shell .car-card.is-active {
+  opacity: 1;
+  transform: scale(1);
+  filter: saturate(1.08);
+}
+
+body.minimal-premium .premium-fleet-shell .car-card-img-wrap {
+  inset: 0;
+}
+
+body.minimal-premium .premium-fleet-shell .car-card-overlay {
+  min-height: 52%;
+  display: grid;
+  align-content: end;
+  background: linear-gradient(0deg, rgba(3, 4, 4, 0.92), rgba(3, 4, 4, 0.32), transparent);
+}
+
+body.minimal-premium .premium-fleet-shell .car-card-specs {
+  display: none;
+}
+
+body.minimal-premium .premium-fleet-shell .car-card-brand {
+  font-size: 0.72rem;
+}
+
+body.minimal-premium .premium-fleet-shell .car-card-name {
+  max-width: 10ch;
+  font-size: clamp(2.4rem, 5vw, 5rem);
+}
+
+body.minimal-premium .premium-fleet-controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  z-index: 8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+body.minimal-premium .fleet-arrow {
+  width: clamp(46px, 5vw, 68px);
+  height: clamp(46px, 5vw, 68px);
+  border: 1px solid rgba(247, 243, 234, 0.22);
+  border-radius: 999px;
+  background: rgba(6, 7, 7, 0.48);
+  color: var(--ink);
+  font-size: clamp(1.6rem, 3vw, 2.6rem);
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  pointer-events: auto;
+  backdrop-filter: blur(18px);
+  transition: transform 0.35s ease, background 0.35s ease, border-color 0.35s ease;
+}
+
+body.minimal-premium .fleet-arrow:hover {
+  transform: scale(1.08);
+  border-color: rgba(200, 167, 106, 0.72);
+  background: rgba(200, 167, 106, 0.2);
+}
+
+body.minimal-premium .fleet-progress-dots {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + clamp(290px, 34vw, 420px));
+  display: flex;
+  gap: 0.5rem;
+  pointer-events: auto;
+  transform: translateX(-50%);
+}
+
+body.minimal-premium .fleet-dot {
+  width: 28px;
+  height: 2px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: rgba(247, 243, 234, 0.26);
+  cursor: pointer;
+}
+
+body.minimal-premium .fleet-dot.active {
+  background: var(--warm);
+}
+
+body.minimal-premium .fleet-scroll-section {
+  min-height: auto;
+}
+
+body.minimal-premium .scroll-track-wrap {
+  width: min(var(--cinema-max), 100%) !important;
+}
+
+body.minimal-premium .scroll-car-card {
+  flex: 0 0 clamp(260px, 24vw, 390px);
+  min-height: clamp(360px, 36vw, 520px);
+}
+
+body.minimal-premium .about-section,
+body.minimal-premium .chinese-section {
+  width: min(var(--cinema-max), calc(100% - (var(--cinema-gutter) * 2))) !important;
+  min-height: 100svh;
+  grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+  gap: clamp(1.2rem, 3vw, 3rem);
+}
+
+body.minimal-premium .about-visual,
+body.minimal-premium .chinese-visual {
+  min-height: clamp(420px, 58vw, 820px);
+}
+
+body.minimal-premium .about-content,
+body.minimal-premium .chinese-text-content {
+  padding: clamp(1rem, 3vw, 2rem) 0;
+}
+
+body.minimal-premium .about-features,
+body.minimal-premium .chinese-brands {
+  max-width: 720px;
+}
+
+body.minimal-premium .lease-grid,
+body.minimal-premium .why-grid,
+body.minimal-premium .promo-deals {
+  width: min(var(--cinema-max), 100%) !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.9rem, 2vw, 1.35rem);
+}
+
+body.minimal-premium .lease-card,
+body.minimal-premium .why-item,
+body.minimal-premium .promo-deal {
+  padding-top: 0;
+}
+
+body.minimal-premium .lease-card-media,
+body.minimal-premium .why-media,
+body.minimal-premium .promo-deal-img {
+  aspect-ratio: 16 / 19;
+}
+
+body.minimal-premium .airport-card {
+  width: min(var(--cinema-max), 100%) !important;
+  grid-template-columns: minmax(0, 0.65fr) minmax(280px, 0.35fr);
+}
+
+body.minimal-premium .airport-card-media {
+  height: clamp(360px, 48vw, 700px);
+}
+
+body.minimal-premium .faq-section {
+  min-height: auto;
+}
+
+body.minimal-premium .faq-list {
+  width: min(900px, 100%);
+}
+
+body.minimal-premium .footer {
+  min-height: auto;
+}
+
+@media (max-width: 1180px) {
+  body.minimal-premium .hero-content,
+  body.minimal-premium .section-header,
+  body.minimal-premium .experience-grid,
+  body.minimal-premium .about-section,
+  body.minimal-premium .chinese-section,
+  body.minimal-premium .airport-card {
+    grid-template-columns: 1fr;
+  }
+
+  body.minimal-premium .premium-fleet-shell .car-card,
+  body.minimal-premium .premium-fleet-shell .car-card-featured {
+    flex-basis: min(86vw, 660px) !important;
+    width: min(86vw, 660px) !important;
+    min-width: min(86vw, 660px) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  body.minimal-premium main > section {
+    min-height: auto;
+    padding: clamp(3.4rem, 12vw, 5.5rem) 1rem !important;
+  }
+
+  body.minimal-premium .hero {
+    padding-inline: 1rem;
+  }
+
+  body.minimal-premium .hero-content {
+    min-height: 100svh;
+    padding-top: 6.4rem;
+  }
+
+  body.minimal-premium .hero-title,
+  body.minimal-premium .section-title,
+  body.minimal-premium .promo-title {
+    max-width: 9ch;
+    font-size: clamp(3.15rem, 17vw, 5.8rem);
+  }
+
+  body.minimal-premium .hero-subtitle {
+    max-width: 20rem;
+  }
+
+  body.minimal-premium .section-copy,
+  body.minimal-premium .about-text,
+  body.minimal-premium .chinese-text,
+  body.minimal-premium .lease-card-text,
+  body.minimal-premium .why-text {
+    -webkit-line-clamp: 2;
+  }
+
+  body.minimal-premium .premium-fleet-shell .car-card,
+  body.minimal-premium .premium-fleet-shell .car-card-featured {
+    flex-basis: calc(100vw - 2rem) !important;
+    width: calc(100vw - 2rem) !important;
+    min-width: calc(100vw - 2rem) !important;
+    height: clamp(460px, 122vw, 620px);
+  }
+
+  body.minimal-premium .premium-fleet-shell .car-card-name {
+    font-size: clamp(2.1rem, 12vw, 4.2rem);
+  }
+
+  body.minimal-premium .premium-fleet-controls {
+    top: auto;
+    bottom: 1rem;
+    transform: none;
+    padding-inline: 0.75rem;
+  }
+
+  body.minimal-premium .fleet-progress-dots {
+    top: auto;
+    bottom: -2rem;
+  }
+
+  body.minimal-premium .lease-grid,
+  body.minimal-premium .why-grid,
+  body.minimal-premium .promo-deals,
+  body.minimal-premium .about-features,
+  body.minimal-premium .chinese-brands {
+    grid-template-columns: 1fr;
+  }
+
+  body.minimal-premium .about-section,
+  body.minimal-premium .chinese-section {
+    width: 100% !important;
+    min-height: auto;
+  }
+}
+
+/* Absolute final lock: the 11/10 composition must win the cascade. */
+body.minimal-premium.final-ui-lock,
+body.minimal-premium {
+  --final-edge: clamp(1rem, 4vw, 5rem);
+}
+
+body.minimal-premium .nav,
+body.minimal-premium .nav.transparent,
+body.minimal-premium .nav.scrolled {
+  position: fixed !important;
+  inset: 18px var(--final-edge) auto var(--final-edge) !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: 62px !important;
+  min-height: 62px !important;
+  padding: 0 0.75rem !important;
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  justify-content: normal !important;
+  column-gap: clamp(1rem, 2vw, 2rem) !important;
+  border: 1px solid rgba(248,244,236,0.14) !important;
+  border-radius: 999px !important;
+  background: rgba(3,4,4,0.44) !important;
+  box-shadow: none !important;
+  transform: none !important;
+  backdrop-filter: blur(22px) saturate(1.2) !important;
+}
+
+body.minimal-premium .nav > * {
+  position: static !important;
+  transform: none !important;
+}
+
+body.minimal-premium .nav-logo {
+  width: 46px !important;
+  height: 46px !important;
+  flex: 0 0 46px !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+body.minimal-premium .nav-logo-img {
+  width: 38px !important;
+  height: 38px !important;
+}
+
+body.minimal-premium .nav-links {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.28rem !important;
+  width: auto !important;
+  padding: 0.25rem !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,0.035) !important;
+}
+
+body.minimal-premium .nav-links li {
+  display: flex !important;
+}
+
+body.minimal-premium .nav-links a {
+  writing-mode: horizontal-tb !important;
+  transform: none !important;
+  padding: 0.72rem 0.8rem !important;
+  border-radius: 999px !important;
+  color: rgba(248,244,236,0.64) !important;
+  font-size: 0.58rem !important;
+  letter-spacing: 0.12em !important;
+  line-height: 1 !important;
+}
+
+body.minimal-premium .nav-links a:hover {
+  background: rgba(248,244,236,0.08) !important;
+  color: #fff !important;
+  transform: translateY(-1px) !important;
+}
+
+body.minimal-premium .nav-actions {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 0.6rem !important;
+  flex: 0 0 auto !important;
+}
+
+body.minimal-premium .theme-toggle {
+  display: none !important;
+}
+
+body.minimal-premium .nav-cta {
+  display: inline-flex !important;
+  width: auto !important;
+  height: 42px !important;
+  padding: 0 1rem !important;
+  font-size: 0.58rem !important;
+}
+
+body.minimal-premium .nav-cta::before {
+  display: none !important;
+}
+
+body.minimal-premium .nav-progress-bar {
+  position: absolute !important;
+  left: 1.5rem !important;
+  right: 1.5rem !important;
+  top: auto !important;
+  bottom: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+  height: 1px !important;
+  background: linear-gradient(90deg, transparent, var(--warm), transparent) !important;
+}
+
+body.minimal-premium .hero,
+body.minimal-premium .sale-ticker,
+body.minimal-premium main > section,
+body.minimal-premium .footer {
+  width: 100% !important;
+  margin-left: 0 !important;
+}
+
+body.minimal-premium .hero-content {
+  padding-top: 8rem !important;
+  align-content: center !important;
+}
+
+body.minimal-premium .hero-media-strip,
+body.minimal-premium .hero-video-controls,
+body.minimal-premium .sale-ticker {
+  display: none !important;
+}
+
+body.minimal-premium .hero-title {
+  max-width: 8.2ch !important;
+  font-size: clamp(4rem, 9.4vw, 9.6rem) !important;
+}
+
+body.minimal-premium .hero-title::before,
+body.minimal-premium .hero-title::after {
+  content: none !important;
+  display: none !important;
+}
+
+body.minimal-premium .hero-title .word {
+  display: block !important;
+  position: relative !important;
+  width: auto !important;
+  height: auto !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+body.minimal-premium .hero-subtitle {
+  position: relative !important;
+  max-width: 34rem !important;
+  color: transparent !important;
+  line-height: 0 !important;
+}
+
+body.minimal-premium .hero-subtitle::after {
+  content: "Supercars, prestige SUVs, airport delivery and VIP concierge.";
+  display: block;
+  color: rgba(248,244,236,0.78);
+  font-size: clamp(0.98rem, 1.3vw, 1.25rem);
+  line-height: 1.7;
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 980px) {
+  body.minimal-premium .nav,
+  body.minimal-premium .nav.transparent,
+  body.minimal-premium .nav.scrolled {
+    inset: 0 0 auto 0 !important;
+    height: 70px !important;
+    min-height: 70px !important;
+    border-radius: 0 !important;
+    border-width: 0 0 1px !important;
+    padding: 0 1rem !important;
+  }
+
+  body.minimal-premium .nav-links,
+  body.minimal-premium .nav-actions {
+    display: none !important;
+  }
+
+  body.minimal-premium .mobile-menu-btn {
+    display: inline-flex !important;
+  }
+}

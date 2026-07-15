@@ -9,10 +9,11 @@
     content="POF Rental is a luxury car rental Dubai service offering premium cars, monthly deals, airport delivery, sports cars, prestige SUVs, VIP chauffeur options, and Chinese luxury cars."
     name="description" />
   <title>POF Rental | Dubai Luxury Car Rental</title>
+  <link href="https://cdn.jsdelivr.net" rel="preconnect" />
   <link as="image" href="media/logo.png" rel="preload" />
-  <link as="image" href="media/01.webp" rel="preload" />
-  <link as="image" href="media/range-rover-autobiography.webp" rel="preload" />
-  <link href="styles.css" rel="stylesheet" />
+  <link href="styles.css?v=20260710-loader-fix" rel="stylesheet" />
+  <link href="redesign.css?v=20260710-loader-fix" rel="stylesheet" />
+  <link href="final.css?v=20260710-final" rel="stylesheet" />
   <style>
     .about-section {
       display: flex;
@@ -146,10 +147,13 @@
       }
     }
   </style>
-  <script defer="" src="app.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@latest/dist/gsap.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@latest/dist/ScrollTrigger.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/lenis@latest/dist/lenis.min.js"></script>
+  <script defer="" src="app.js?v=20260710-loader-fix"></script>
 </head>
 
-<body>
+<body class="interface-redesign cinematic-redesign minimal-premium">
   <div aria-live="polite" class="loader" id="loader">
     <div class="loader-glow"></div>
     <div class="loader-logo-wrap">
@@ -223,7 +227,36 @@
           preload="auto">
           <source src="media/huraccan.webm" type="video/webm" />
         </video>
+        <video class="hero-video" data-critical-video="true" data-hero-index="1" loop muted playsinline preload="none">
+          <source data-src="media/huraccan.webm" type="video/webm" />
+        </video>
+        <video class="hero-video" data-critical-video="true" data-hero-index="2" loop muted playsinline preload="none">
+          <source data-src="media/purosangue.mp4" type="video/mp4" />
+        </video>
+        <video class="hero-video" data-critical-video="true" data-hero-index="3" loop muted playsinline preload="none">
+          <source data-src="media/helio.mp4" type="video/mp4" />
+        </video>
         <div class="hero-video-shade"></div>
+      </div>
+      <div aria-hidden="true" class="scroll-3d-stage">
+        <div class="scroll-3d-depth">
+          <figure class="scroll-3d-panel panel-main">
+            <video muted loop playsinline preload="metadata">
+              <source src="media/huraccan.webm" type="video/webm" />
+            </video>
+          </figure>
+          <figure class="scroll-3d-panel panel-left">
+            <img alt="" src="media/4 2.webp" loading="eager" decoding="async" />
+          </figure>
+          <figure class="scroll-3d-panel panel-right">
+            <img alt="" src="media/2.webp" loading="eager" decoding="async" />
+          </figure>
+          <figure class="scroll-3d-panel panel-small">
+            <img alt="" src="media/range-rover-autobiography.webp" loading="lazy" decoding="async" />
+          </figure>
+          <div class="scroll-3d-orbit orbit-a"></div>
+          <div class="scroll-3d-orbit orbit-b"></div>
+        </div>
       </div>
       <div class="hero-glass-line hero-glass-line-left"></div>
       <div class="hero-glass-line hero-glass-line-right"></div>
@@ -237,17 +270,73 @@
           Dubai · UAE Luxury Rentals
           <span class="eyebrow-line"></span>
         </div>
-        <h1 class="hero-title"><span class="word">LUXURY CARS</span><br /><span class="word accent">Rentals Dubai</span>
+        <h1 class="hero-title"><span class="word">DUBAI</span><br /><span class="word accent">SUPERCAR</span>
         </h1>
         <p class="hero-subtitle">Premium Cars · Monthly Deals ·
           <br> Airport Delivery · VIP Concierge
         </p>
+        <div class="hero-command-panel" aria-label="Concierge booking planner">
+          <div class="command-panel-head">
+            <span>Live Booking Path</span>
+            <strong>04 min</strong>
+          </div>
+          <div class="command-route">
+            <span>DXB</span>
+            <i></i>
+            <span>Hotel</span>
+            <i></i>
+            <span>Keys</span>
+          </div>
+          <div class="command-options">
+            <button data-scroll-target="#fleet" type="button">Supercar</button>
+            <button data-scroll-target="#lease" type="button">Monthly</button>
+            <button data-scroll-target="#offers" type="button">Offer</button>
+          </div>
+        </div>
         <div aria-label="Homepage video selector" class="hero-video-controls" id="heroVideoControls">
           <button aria-label="Show video 1" class="hero-dot active" data-hero-dot="0" type="button"></button>
+          <button aria-label="Show video 2" class="hero-dot" data-hero-dot="1" type="button"></button>
+          <button aria-label="Show video 3" class="hero-dot" data-hero-dot="2" type="button"></button>
+          <button aria-label="Show video 4" class="hero-dot" data-hero-dot="3" type="button"></button>
         </div>
 
         <div aria-live="polite" class="hero-slide-label" id="heroSlideLabel">Experience Luxury Car Rental Dubai With POF
           Rental</div>
+        <div class="hero-actions">
+          <a class="btn-primary magnetic"
+            href="https://wa.me/?text=Hello%20POF%20Rental%2C%20I%20want%20a%20VIP%20luxury%20car%20rental%20quote%20in%20Dubai."
+            rel="noreferrer" target="_blank"><span>Start Concierge Quote</span></a>
+          <button class="btn-secondary magnetic" data-scroll-target="#fleet" type="button">View Fleet</button>
+        </div>
+        <div aria-label="POF Rental service highlights" class="hero-stats">
+          <div class="hero-stat"><span class="num">24/7</span><span class="label">Concierge</span></div>
+          <div class="hero-stat"><span class="num">DXB</span><span class="label">Delivery</span></div>
+          <div class="hero-stat"><span class="num">VIP</span><span class="label">Handover</span></div>
+        </div>
+        <div class="hero-orbit-map" aria-hidden="true">
+          <span class="orbit-line"></span>
+          <div class="orbit-node orbit-node-a">Fleet</div>
+          <div class="orbit-node orbit-node-b">Driver</div>
+          <div class="orbit-node orbit-node-c">Handover</div>
+        </div>
+        <div class="hero-media-strip" aria-label="Featured experiences">
+          <button class="hero-preview active" data-hero-preview="0" type="button">
+            <img alt="Lamborghini preview" src="media/01.webp" loading="lazy" decoding="async" />
+            <span><strong>Supercar</strong><small>Huracan motion</small></span>
+          </button>
+          <button class="hero-preview" data-hero-preview="1" type="button">
+            <img alt="Porsche preview" src="media/4 2.webp" loading="lazy" decoding="async" />
+            <span><strong>Track icon</strong><small>GT3 RS drive</small></span>
+          </button>
+          <button class="hero-preview" data-hero-preview="2" type="button">
+            <img alt="Ferrari preview" src="media/2.webp" loading="lazy" decoding="async" />
+            <span><strong>V12 luxury</strong><small>Purosangue arrival</small></span>
+          </button>
+          <button class="hero-preview" data-hero-preview="3" type="button">
+            <img alt="Heli transfer preview" src="media/10.webp" loading="lazy" decoding="async" />
+            <span><strong>HeliDubai</strong><small>VIP transfer</small></span>
+          </button>
+        </div>
       </div>
 
       <div class="hero-bottom-fade"></div>
@@ -282,9 +371,9 @@
       </div>
       <div class="experience-grid">
         <article class="experience-card experience-card-wide fade-up" data-cursor="hover">
-          <video class="experience-video" autoplay muted loop playsinline poster="media/porsche.mp4">
-            <source src="media/porsche.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
+          <video class="experience-video" data-lazy-video="true" muted loop playsinline poster="media/4 2.webp"
+            preload="none">
+            <source data-src="media/huraccan.webm" type="video/webm" />
           </video>
           <div class="experience-card-copy">
             <span>01</span>
@@ -469,8 +558,8 @@
     </section>
     <section class="about-section" id="about">
       <div class="about-visual reveal-group">
-        <video class="about-video" autoplay muted loop playsinline preload="metadata">
-          <source src="media/purosangue.mp4" type="video/mp4" />
+        <video class="about-video" data-lazy-video="true" muted loop playsinline preload="none">
+          <source data-src="media/purosangue.mp4" type="video/mp4" />
         </video>
         <div class="about-visual-overlay"></div>
         <div class="about-year-card">
@@ -538,8 +627,10 @@
         <a class="btn-primary fade-up delay-4" href="#fleet"><span>Explore POF x HeliDubai</span></a>
       </div>
       <div class="chinese-visual fade-up">
-        <video alt="POF Rental x HeliDubai luxury experience" class="chinese-img chinese-video" decoding="async"
-          loading="lazy" src="media/helio.mp4" autoplay muted loop playsinline></video>
+        <video aria-label="POF Rental x HeliDubai luxury experience" class="chinese-img chinese-video"
+          data-lazy-video="true" muted loop playsinline preload="none">
+          <source data-src="media/helio.mp4" type="video/mp4" />
+        </video>
         <div class="chinese-img-accent"></div>
         <div class="tech-badge">
           <div class="tech-badge-title">Luxury · Heli Transfer</div>

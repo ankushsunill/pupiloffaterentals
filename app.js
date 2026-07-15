@@ -1,47 +1,15 @@
 (function () {
   "use strict";
 
-  const WHATSAPP_BASE = "https://wa.me/?text=";
-  const DEFAULT_THEME = "light";
-  const CHAT_ENDPOINT = window.POF_CHAT_ENDPOINT || "";
-  const HERO_LABELS = [
-    "Close-up performance details in motion",
-    "Open-air supercar arrival sequence",
-    "Track-bred sports presence",
-    "Palm-lined Dubai delivery drive",
-    "Electric luxury movement"
-  ];
-
-  const fleet = [
-    { brand: "Mercedes-AMG", name: "G63 AMG", hp: "577", torque: "850Nm", sprint: "4.2", price: "2,500", img: "media/2 3.webp" },
-    { brand: "Ferrari", name: "Roma Spider", hp: "620", torque: "760Nm", sprint: "3.4", price: "4,200", img: "media/01 2.webp" },
-    { brand: "Lamborghini", name: "Huracan EVO", hp: "640", torque: "600Nm", sprint: "2.9", price: "5,500", img: "media/01.webp" },
-    { brand: "Rolls-Royce", name: "Ghost", hp: "563", torque: "900Nm", sprint: "4.8", price: "6,800", img: "media/DSC07812.webp" },
-    { brand: "Bentley", name: "Continental GT", hp: "542", torque: "770Nm", sprint: "4.0", price: "4,800", img: "media/4.webp" },
-    { brand: "Porsche", name: "Cayenne Turbo GT", hp: "640", torque: "800Nm", sprint: "3.3", price: "2,800", img: "media/44.webp" },
-    { brand: "McLaren", name: "Artura", hp: "671", torque: "720Nm", sprint: "3.0", price: "4,900", img: "media/4 2.webp" },
-    { brand: "Range Rover", name: "Autobiography", hp: "523", torque: "750Nm", sprint: "4.6", price: "2,200", img: "media/range-rover-autobiography.webp" }
-  ];
-
-  const quickSuggestions = [
-    "Current deals & offers",
-    "Best car for a business trip",
-    "Airport delivery info",
-    "Monthly lease rates",
-    "Compare Ferrari vs Lamborghini",
-    "Chinese EV options"
-  ];
-
   const $ = (selector, scope = document) => scope.querySelector(selector);
   const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
-
-  function whatsappUrl(message) {
-    return WHATSAPP_BASE + encodeURIComponent(message);
-  }
-
-  function currentTime() {
-    return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  }
+  const prefersReducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let lenis = null;
+  let chatOpen = false;
+  let chatLoading = false;
+  let gsapBooted = false;
+  let smoothScrollBooted = false;
+  let galleryScrollUpdate = null;
 
   function safeStorage(storage, key, value) {
     try {
@@ -53,172 +21,57 @@
     }
   }
 
-
-  function onScrollRaf(update, includeResize = false) {
-    let ticking = false;
-    const run = () => {
-      ticking = false;
-      update();
-    };
-
-    const requestUpdate = () => {
-      if (ticking) return;
-      ticking = true;
-      window.requestAnimationFrame(run);
-    };
-
-    update();
-    window.addEventListener("scroll", requestUpdate, { passive: true });
-    if (includeResize) window.addEventListener("resize", requestUpdate);
-  }
-
-  function loadVideo(video) {
-    if (!video || video.dataset.videoLoaded === "true") return;
-    video.querySelectorAll("source[data-src]").forEach((source) => {
-      source.src = source.dataset.src;
-    });
-    video.dataset.videoLoaded = "true";
-    video.load();
-  }
-
-  function shouldUseMotionMedia() {
-    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-    const constrainedNetwork = connection && (connection.saveData || /(^|-)2g$/.test(connection.effectiveType || ""));
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    return !constrainedNetwork && !reducedMotion;
-  }
-
-  function playVideo(video) {
-    if (!video || !shouldUseMotionMedia()) return;
-    loadVideo(video);
-    const play = video.play();
-    if (play && typeof play.catch === "function") play.catch(() => { });
-  }
-
-  function buildLoaderTicks() {
-    const ticks = $("#ringTicks");
-    if (!ticks) return;
-
-    const svgNS = "http://www.w3.org/2000/svg";
-    for (let i = 0; i < 24; i += 1) {
-      const angle = i * 15 * Math.PI / 180;
-      const r1 = 50;
-      const r2 = 54;
-      const line = document.createElementNS(svgNS, "line");
-      line.setAttribute("x1", String(60 + r1 * Math.cos(angle)));
-      line.setAttribute("y1", String(60 + r1 * Math.sin(angle)));
-      line.setAttribute("x2", String(60 + r2 * Math.cos(angle)));
-      line.setAttribute("y2", String(60 + r2 * Math.sin(angle)));
-      line.setAttribute("stroke", "rgba(201,168,76,0.4)");
-      line.setAttribute("stroke-width", i % 6 === 0 ? "1.5" : "0.5");
-      ticks.appendChild(line);
-    }
-  }
-
-  function syncLoaderTheme() {
-    const loader = $("#loader");
-    if (!loader) return;
-    loader.dataset.theme = document.documentElement.dataset.theme || DEFAULT_THEME;
-  }
-
   function initLoader() {
-    syncLoaderTheme();
     const loader = $("#loader");
     const bar = $("#loaderBar");
     const count = $("#loaderCount");
+    const stage = $("#loaderStage");
     if (!loader || !bar || !count) return;
 
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let progress = reducedMotion ? 100 : 0;
-
+    let progress = prefersReducedMotion() ? 100 : 0;
+    const startedAt = performance.now();
+    const duration = 880;
     const finish = () => {
-      const logoWrap = $(".loader-logo-wrap");
-      const navLogo = $(".nav-logo-img");
-
-      if (!reducedMotion && logoWrap && navLogo) {
-        const source = logoWrap.getBoundingClientRect();
-        const target = navLogo.getBoundingClientRect();
-        const dx = target.left + target.width / 2 - (source.left + source.width / 2);
-        const dy = target.top + target.height / 2 - (source.top + source.height / 2);
-        const scale = Math.max(0.42, Math.min(0.82, target.width / source.width));
-
-        loader.style.setProperty("--loader-dx", `${dx}px`);
-        loader.style.setProperty("--loader-dy", `${dy}px`);
-        loader.style.setProperty("--loader-scale", String(scale));
-        loader.classList.add("loader-merging");
-
-        window.setTimeout(() => {
-          loader.classList.add("loader-done");
-          loader.hidden = true;
-        }, 620);
-        return;
-      }
-
-      loader.classList.add("loader-done");
-      window.setTimeout(() => {
-        loader.hidden = true;
-      }, 320);
-    };
-
-    if (reducedMotion) {
       bar.style.width = "100%";
       count.textContent = "100";
+      if (stage) stage.textContent = "Arrival ready";
+      window.setTimeout(() => {
+        loader.classList.add("loader-done");
+        window.setTimeout(() => { loader.hidden = true; }, 820);
+      }, 140);
+    };
+
+    if (progress === 100) {
       finish();
       return;
     }
 
-    const interval = window.setInterval(() => {
-      progress = Math.min(100, progress + Math.random() * 18 + 12);
-      bar.style.width = progress + "%";
-      count.textContent = String(Math.floor(progress)).padStart(3, "0");
-      if (progress >= 100) {
-        window.clearInterval(interval);
-        window.setTimeout(finish, 120);
+    const render = (now) => {
+      const elapsed = now - startedAt;
+      const linear = Math.min(elapsed / duration, 1);
+      progress = Math.round((1 - Math.pow(1 - linear, 3)) * 100);
+      bar.style.width = `${progress}%`;
+      count.textContent = String(progress).padStart(3, "0");
+      if (stage) {
+        stage.textContent = progress < 38 ? "Loading fleet film" : progress < 72 ? "Connecting concierge" : "Preparing handover";
       }
-    }, 34);
+      if (linear < 1) window.requestAnimationFrame(render);
+      else finish();
+    };
+
+    window.requestAnimationFrame(render);
   }
 
-  function applyTheme(theme) {
-    const nextTheme = theme === "light" ? "light" : "dark";
-    document.documentElement.dataset.theme = nextTheme;
-    safeStorage(localStorage, "pof-theme", nextTheme);
-    syncLoaderTheme();
-
-    $$("[data-theme-toggle]").forEach((button) => {
-      const isDark = nextTheme === "dark";
-      button.textContent = isDark ? "⏾" : "☀︎";
-      button.setAttribute("aria-label", isDark ? "Current theme: dark. Switch to light theme" : "Current theme: light. Switch to dark theme");
-      button.setAttribute("title", isDark ? "Dark theme" : "Light theme");
-    });
-  }
-
-  function initTheme() {
-    const defaultVersion = "light-2026-07";
-    if (safeStorage(localStorage, "pof-theme-default-version") !== defaultVersion) {
-      safeStorage(localStorage, "pof-theme", DEFAULT_THEME);
-      safeStorage(localStorage, "pof-theme-manual", "false");
-      safeStorage(localStorage, "pof-theme-default-version", defaultVersion);
-    }
-
-    const hasManualTheme = safeStorage(localStorage, "pof-theme-manual") === "true";
-    applyTheme(hasManualTheme ? safeStorage(localStorage, "pof-theme") || DEFAULT_THEME : DEFAULT_THEME);
-    $$("[data-theme-toggle]").forEach((button) => {
-      button.addEventListener("click", () => {
-        safeStorage(localStorage, "pof-theme-manual", "true");
-        applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
-      });
-    });
-  }
-
-  function scrollToSection(target) {
+  function scrollToTarget(target) {
     if (!target || !target.startsWith("#")) return false;
     const element = $(target);
     if (!element) return false;
 
-    element.scrollIntoView({
-      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
-      block: "start"
-    });
+    if (lenis && !prefersReducedMotion()) {
+      lenis.scrollTo(element, { offset: -84, duration: 1.05 });
+    } else {
+      element.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
+    }
     if (history.replaceState) history.replaceState(null, "", target);
     return true;
   }
@@ -227,7 +80,6 @@
     const menu = $("#mobileNav");
     const button = $("#mobileMenuBtn");
     if (!menu || !button) return;
-
     menu.classList.toggle("active", open);
     button.classList.toggle("open", open);
     button.setAttribute("aria-expanded", String(open));
@@ -236,458 +88,507 @@
 
   function initNavigation() {
     const nav = $("#siteNav");
-    const progressBar = $("#navProgress");
     const menuButton = $("#mobileMenuBtn");
 
-    const onScroll = () => {
-      const scrollY = window.scrollY || document.documentElement.scrollTop;
-      const maxScroll = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
-      if (nav) nav.classList.toggle("scrolled", scrollY > 64);
-      if (progressBar) progressBar.style.width = `${(scrollY / maxScroll) * 100}%`;
+    const update = () => {
+      const y = window.scrollY || document.documentElement.scrollTop;
+      const max = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+      if (nav) nav.classList.toggle("scrolled", y > 42);
+      document.documentElement.style.setProperty("--page-scroll-progress", String(Math.max(0, Math.min(y / max, 1))));
     };
 
-    onScrollRaf(onScroll);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
 
     if (menuButton) {
-      menuButton.addEventListener("click", () => {
-        setMobileMenu(!menuButton.classList.contains("open"));
-      });
+      menuButton.addEventListener("click", () => setMobileMenu(!menuButton.classList.contains("open")));
     }
 
-    $$("a[href^='#']").forEach((link) => {
-      link.addEventListener("click", (event) => {
-        const target = link.getAttribute("href");
-        if (scrollToSection(target)) {
+    $$("a[href^='#'], [data-scroll-target]").forEach((item) => {
+      item.addEventListener("click", (event) => {
+        const target = item.getAttribute("href") || item.dataset.scrollTarget;
+        if (scrollToTarget(target)) {
           event.preventDefault();
           setMobileMenu(false);
         }
       });
     });
+  }
 
-    $$("[data-scroll-target]").forEach((button) => {
-      button.addEventListener("click", () => scrollToSection(button.dataset.scrollTarget));
-    });
+  function initTheme() {
+    const root = document.documentElement;
+    const buttons = $$("#themeToggle, #mobileThemeToggle");
+    const labels = $$("#themeToggleText, #mobileThemeToggleText");
+    if (!buttons.length) return;
 
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
-        setMobileMenu(false);
-        closeExitPopup();
-        setChatOpen(false);
-      }
+    const apply = (theme) => {
+      const nextTheme = theme === "dark" ? "dark" : "light";
+      root.setAttribute("data-theme", nextTheme);
+      labels.forEach((label) => { label.textContent = nextTheme === "dark" ? "Dark" : "Light"; });
+      buttons.forEach((button) => {
+        button.setAttribute("aria-label", nextTheme === "dark" ? "Switch to light theme" : "Switch to dark theme");
+        button.setAttribute("aria-pressed", String(nextTheme === "dark"));
+      });
+      safeStorage(localStorage, "pof-theme", nextTheme);
+    };
+
+    apply(safeStorage(localStorage, "pof-theme") || "light");
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        apply(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+      });
     });
   }
 
-  function initHero() {
-    const videos = $$(".hero-video");
-    const label = $("#heroSlideLabel");
-    const videoWrap = $("#heroVideoWrap");
-    const dots = $$('[data-hero-dot]');
-    const previews = $$('[data-hero-preview]');
-    if (videos.length === 0) return;
-
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const allowHeroVideo = shouldUseMotionMedia();
-    let active = 0;
-    let timer = null;
-    let heroVisible = true;
-
-    const startTimer = () => {
-      window.clearInterval(timer);
-      if (!reducedMotion && allowHeroVideo && videos.length > 1) timer = window.setInterval(() => setActive(active + 1), 7000);
+  function initVideos() {
+    const play = (video) => {
+      if (!video || prefersReducedMotion()) return;
+      const promise = video.play();
+      if (promise && typeof promise.catch === "function") promise.catch(() => {});
     };
 
-    const setActive = (index, userAction = false) => {
-      active = ((index % videos.length) + videos.length) % videos.length;
-      videos.forEach((video, currentIndex) => {
-        const isActive = currentIndex === active;
-        video.classList.toggle("active", isActive);
-        if (isActive && heroVisible && allowHeroVideo && !reducedMotion) {
-          playVideo(video);
-        } else {
-          video.pause();
-        }
-      });
-      dots.forEach((dot) => dot.classList.toggle("active", Number(dot.dataset.heroDot) === active));
-      previews.forEach((preview) => preview.classList.toggle("active", Number(preview.dataset.heroPreview) === active));
-      if (label) label.textContent = HERO_LABELS[active] || HERO_LABELS[0];
-      if (userAction) startTimer();
-    };
+    $$(".hero-video.active, .scroll-3d-panel video").forEach(play);
 
-    dots.forEach((dot) => dot.addEventListener("click", () => setActive(Number(dot.dataset.heroDot), true)));
-    previews.forEach((preview) => preview.addEventListener("click", () => setActive(Number(preview.dataset.heroPreview), true)));
-
-    if ("IntersectionObserver" in window && videoWrap) {
-      const observer = new IntersectionObserver((entries) => {
-        heroVisible = entries.some((entry) => entry.isIntersecting);
-        if (heroVisible) {
-          if (allowHeroVideo && !reducedMotion) playVideo(videos[active]);
-          startTimer();
-        } else {
-          window.clearInterval(timer);
-          videos.forEach((video) => video.pause());
-        }
-      }, { threshold: 0.08 });
-      observer.observe(videoWrap);
+    const heroVideos = $$(".hero-video");
+    if (heroVideos.length > 1 && !prefersReducedMotion()) {
+      let index = 0;
+      window.setInterval(() => {
+        heroVideos[index].classList.remove("active");
+        index = (index + 1) % heroVideos.length;
+        heroVideos[index].classList.add("active");
+        play(heroVideos[index]);
+      }, 5200);
     }
 
-    setActive(0);
-    startTimer();
-
-    const onScroll = () => {
-      if (!videoWrap) return;
-      const hero = $(".hero");
-      if (!hero) return;
-      const rect = hero.getBoundingClientRect();
-      const progress = Math.min(1, Math.max(0, -rect.top / Math.max(rect.height, 1)));
-      videoWrap.style.transform = `translate3d(0, ${progress * 8}%, 0) scale(${1 + progress * 0.025})`;
-      document.documentElement.style.setProperty("--hero-progress", progress.toFixed(3));
-    };
-    onScrollRaf(onScroll);
-  }
-
-  function initReveal() {
-    const revealItems = $$(".fade-up, .section-motion, .motion-child");
+    const lazyVideos = $$("video[data-lazy-video]");
     if (!("IntersectionObserver" in window)) {
-      revealItems.forEach((item) => item.classList.add("visible"));
+      lazyVideos.forEach(play);
       return;
     }
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-          observer.unobserve(entry.target);
+        const video = entry.target;
+        if (entry.isIntersecting) play(video);
+        else video.pause();
+      });
+    }, { rootMargin: "80px 0px", threshold: 0.12 });
+
+    lazyVideos.forEach((video) => observer.observe(video));
+  }
+
+  function initHoverEffects() {
+    if (prefersReducedMotion() || !window.matchMedia("(hover: hover)").matches) return;
+
+    $$(".fleet-row, .gallery-panel, .offer-runway div, .editorial-band figure, .story-media, .heli-media, .cinema-grid figure, .media-suite figure").forEach((item) => {
+      item.addEventListener("pointermove", (event) => {
+        const rect = item.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+        const y = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+        item.style.setProperty("--tilt-x", `${(-y * 4).toFixed(2)}deg`);
+        item.style.setProperty("--tilt-y", `${(x * 5).toFixed(2)}deg`);
+      });
+
+      item.addEventListener("pointerleave", () => {
+        item.style.setProperty("--tilt-x", "0deg");
+        item.style.setProperty("--tilt-y", "0deg");
+      });
+    });
+  }
+
+  function initSmoothScroll() {
+    if (prefersReducedMotion() || !window.Lenis) return;
+    if (smoothScrollBooted) return;
+    smoothScrollBooted = true;
+    lenis = new window.Lenis({
+      duration: 1.12,
+      easing: (t) => 1 - Math.pow(1 - t, 4),
+      smoothWheel: true,
+      wheelMultiplier: 0.86,
+      touchMultiplier: 1.05,
+      lerp: 0.105
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      window.requestAnimationFrame(raf);
+    }
+    window.requestAnimationFrame(raf);
+
+    lenis.on("scroll", () => {
+      if (window.ScrollTrigger) window.ScrollTrigger.update();
+      if (galleryScrollUpdate) galleryScrollUpdate();
+    });
+  }
+
+  function initGsap() {
+    if (prefersReducedMotion() || !window.gsap || !window.ScrollTrigger) return;
+    if (gsapBooted) return;
+    gsapBooted = true;
+    const gsap = window.gsap;
+    const ScrollTrigger = window.ScrollTrigger;
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.set(".nav", { y: -24, opacity: 0 });
+    gsap.set(".hero .kicker, .hero h1, .hero-copy, .hero-actions, .hero-dashboard", { y: 36, opacity: 0 });
+    gsap.set(".hero-dashboard > *", { y: 18, opacity: 0 });
+    gsap.set(".hero-media", { scale: 1.14, filter: "brightness(0.78) saturate(1.18)" });
+    gsap.timeline({ defaults: { ease: "expo.out" }, delay: 0.08 })
+      .to(".nav", { y: 0, opacity: 1, duration: 0.58 }, 0)
+      .to(".hero .kicker", { y: 0, opacity: 1, duration: 0.52 }, 0.04)
+      .to(".hero h1", { y: 0, opacity: 1, duration: 0.78 }, 0.12)
+      .to(".hero-copy", { y: 0, opacity: 1, duration: 0.62 }, 0.28)
+      .to(".hero-media", { scale: 1, filter: "brightness(1) saturate(1.05)", duration: 1.08 }, 0.04)
+      .to(".hero-actions", { y: 0, opacity: 1, duration: 0.58 }, 0.5)
+      .to(".hero-dashboard", { y: 0, opacity: 1, duration: 0.62 }, 0.58)
+      .to(".hero-dashboard > *", { y: 0, opacity: 1, duration: 0.46, stagger: 0.045 }, 0.68);
+
+    gsap.to(".hero-media", {
+      scale: 1.16,
+      yPercent: 10,
+      ease: "none",
+      scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true }
+    });
+
+    gsap.to(".hero-orbit", {
+      rotateZ: 70,
+      rotateX: 12,
+      ease: "none",
+      scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 1.4 }
+    });
+
+    gsap.utils.toArray("main > section:not(.hero):not(.motion-gallery), .marquee, .footer").forEach((section) => {
+      gsap.fromTo(section,
+        { y: 86, opacity: 0.36, filter: "blur(14px)" },
+        {
+          y: 0,
+          opacity: 1,
+          filter: "blur(0px)",
+          ease: "power3.out",
+          scrollTrigger: { trigger: section, start: "top 92%", end: "top 48%", scrub: 0.85 }
         }
-      });
-    }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
-
-    revealItems.forEach((item) => observer.observe(item));
-  }
-
-  function initSectionMotion() {
-    $$("main > section:not(.hero), .sale-ticker, .footer").forEach((section, index) => {
-      section.classList.add("section-motion", index % 2 === 0 ? "from-left" : "from-right");
+      );
     });
 
-    $$(".lease-card, .why-item, .promo-deal, .about-feature, .airport-card, .faq-item, .promo-card").forEach((item, index) => {
-      item.classList.add("motion-child", index % 2 === 0 ? "from-left" : "from-right");
-      item.style.setProperty("--motion-delay", `${Math.min(index % 4, 3) * 80}ms`);
+    gsap.utils.toArray(".flow-lines div, .fleet-row, .lease-lanes article, .faq-item, .heli-tags span, .offer-runway div, .cinema-copy-intro figure, .cinema-grid figure, .media-suite figure").forEach((item) => {
+      gsap.fromTo(item,
+        { y: 64, opacity: 0, rotateX: 5, transformPerspective: 1200 },
+        {
+          y: 0,
+          opacity: 1,
+          rotateX: 0,
+          duration: 0.9,
+          ease: "expo.out",
+          scrollTrigger: { trigger: item, start: "top 92%", toggleActions: "play none none reverse" }
+        }
+      );
+    });
+
+    gsap.utils.toArray(".fleet-row").forEach((row, index) => {
+      gsap.fromTo(row,
+        { rotateY: index % 2 === 0 ? -8 : 8, z: -80 },
+        {
+          rotateY: 0,
+          z: 0,
+          ease: "none",
+          scrollTrigger: { trigger: row, start: "top bottom", end: "center center", scrub: 0.8 }
+        }
+      );
+    });
+
+    gsap.utils.toArray(".gallery-row").forEach((row) => {
+      const panels = $$(".gallery-panel", row);
+
+      gsap.fromTo(panels,
+        { opacity: 0.38, scale: 0.965, rotateX: 3, transformPerspective: 1400 },
+        {
+          opacity: 1,
+          scale: 1,
+          rotateX: 0,
+          duration: 0.8,
+          stagger: 0.055,
+          ease: "power3.out",
+          scrollTrigger: { trigger: row, start: "top 90%", toggleActions: "play none none reverse" }
+        }
+      );
+    });
+
+    gsap.utils.toArray(".fleet-image-wrap img, .story-media video, .heli-video, .cinema-copy-intro img, .cinema-grid img, .cinema-grid video, .media-suite img, .media-suite video, .editorial-band img, .offer-runway img").forEach((media) => {
+      gsap.to(media, {
+        scale: 1.13,
+        yPercent: -5,
+        ease: "none",
+        scrollTrigger: { trigger: media, start: "top bottom", end: "bottom top", scrub: 1.1 }
+      });
+    });
+
+    gsap.utils.toArray(".story-media, .heli-media, .cinema-copy-intro figure, .cinema-grid figure, .media-suite figure, .editorial-band figure").forEach((media, index) => {
+      gsap.fromTo(media,
+        { rotateX: 7, rotateY: index % 2 === 0 ? -6 : 6, y: 80, opacity: 0.58, transformPerspective: 1400 },
+        {
+          rotateX: 0,
+          rotateY: 0,
+          y: 0,
+          opacity: 1,
+          ease: "power2.out",
+          scrollTrigger: { trigger: media, start: "top 90%", end: "center 56%", scrub: 0.9 }
+        }
+      );
     });
   }
 
-  function initScrollMotion() {
-    if (window.matchMedia("(max-width: 900px), (prefers-reduced-motion: reduce)").matches) return;
+  function initGalleryScrollMotion() {
+    if (prefersReducedMotion()) return;
+    const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+    const states = $$(".gallery-row").map((row) => ({
+      row,
+      viewport: $(".gallery-viewport", row),
+      track: $(".gallery-track", row),
+      previous: $('[data-gallery-move="previous"]', row),
+      next: $('[data-gallery-move="next"]', row),
+      current: null,
+      target: 0,
+      base: 0,
+      travel: 0,
+      manualOffset: 0,
+      dragging: false,
+      dragStartX: 0,
+      dragStartOffset: 0
+    })).filter((state) => state.track && state.viewport);
+    if (!states.length) return;
+    let frame = 0;
+    let lastTime = performance.now();
 
-    const animatedSections = $$(".section-motion");
-    if (animatedSections.length === 0) return;
+    const update = (time) => {
+      frame = 0;
+      const viewportWidth = document.documentElement.clientWidth || window.innerWidth || 1;
+      const viewportHeight = window.innerHeight || 1;
+      const elapsed = Math.min(Math.max(time - lastTime, 0), 64);
+      const blend = 1 - Math.pow(0.0008, elapsed / 1000);
+      let moving = false;
+      lastTime = time;
 
-    let lastScrollY = -1;
-    const update = () => {
-      const scrollY = Math.round(window.scrollY || document.documentElement.scrollTop || 0);
-      if (Math.abs(scrollY - lastScrollY) < 24) return;
-      lastScrollY = scrollY;
+      states.forEach((state) => {
+        const rect = state.row.getBoundingClientRect();
+        const verticalRun = Math.max(viewportHeight + rect.height, 1);
+        const progress = Math.max(0, Math.min((viewportHeight - rect.top) / verticalRun, 1));
+        const travel = Math.max(state.track.scrollWidth - viewportWidth, 0);
+        const movesLeft = state.row.dataset.galleryDirection !== "ltr";
 
-      const viewport = window.innerHeight || 1;
-      animatedSections.forEach((section) => {
-        const rect = section.getBoundingClientRect();
-        const progress = Math.min(1, Math.max(0, (viewport - rect.top) / (viewport + rect.height)));
-        section.style.setProperty("--scroll-progress", progress.toFixed(2));
+        state.travel = travel;
+        state.base = movesLeft ? -travel * progress : -travel * (1 - progress);
+        state.target = clamp(state.base + state.manualOffset, -travel, 0);
+        if (state.current === null) state.current = state.target;
+        state.current += (state.target - state.current) * blend;
+        if (Math.abs(state.target - state.current) < 0.12) {
+          state.current = state.target;
+        } else {
+          moving = true;
+        }
+
+        state.track.style.transform = `translate3d(${state.current.toFixed(2)}px, 0, 0)`;
+        const laneProgress = travel > 0 ? Math.abs(state.target) / travel : 0;
+        state.row.style.setProperty("--lane-progress", laneProgress.toFixed(4));
+        if (state.previous) state.previous.disabled = state.target >= -0.5;
+        if (state.next) state.next.disabled = state.target <= -travel + 0.5;
       });
+
+      if (moving) frame = window.requestAnimationFrame(update);
     };
 
-    onScrollRaf(update, true);
-  }
-
-  function fleetCard(car) {
-    const message = `Hello POF Rental, I want to book the ${car.name}. Please share availability and price.`;
-    return `
-      <article class="scroll-car-card fade-up">
-        <div class="scroll-car-img-wrap">
-          <img src="${car.img}" alt="${car.name}" class="scroll-car-img" loading="lazy" decoding="async">
-        </div>
-        <div class="scroll-car-info">
-          <div class="scroll-car-brand">${car.brand}</div>
-          <div class="scroll-car-name">${car.name}</div>
-          <div class="scroll-car-specs">
-            <div class="scroll-car-spec"><span class="scroll-spec-val">${car.hp}</span><span class="scroll-spec-label">HP</span></div>
-            <div class="scroll-car-spec"><span class="scroll-spec-val">${car.torque}</span><span class="scroll-spec-label">Torque</span></div>
-            <div class="scroll-car-spec"><span class="scroll-spec-val">${car.sprint}s</span><span class="scroll-spec-label">0-100</span></div>
-          </div>
-          <div class="scroll-car-footer">
-            <div class="scroll-car-price">AED ${car.price} <span>/day</span></div>
-            <a class="mini-book-link" href="${whatsappUrl(message)}" target="_blank" rel="noreferrer">Book</a>
-          </div>
-        </div>
-      </article>
-    `;
-  }
-
-  function renderFleetRows() {
-    const rowOne = $("[data-scroll-row='left']");
-    const rowTwo = $("[data-scroll-row='right']");
-    if (!rowOne || !rowTwo) return;
-
-    const firstRow = fleet.slice(0, 4);
-    const secondRow = fleet.slice(4);
-    rowOne.innerHTML = [...firstRow, ...firstRow].map(fleetCard).join("");
-    rowTwo.innerHTML = [...secondRow, ...secondRow].map(fleetCard).join("");
-  }
-
-  function initFleetScroll() {
-    const section = $(".fleet-scroll-section");
-    const rows = $$("[data-scroll-row]");
-    if (!section || rows.length === 0) return;
-
-    const update = () => {
-      const rect = section.getBoundingClientRect();
-      const viewport = window.innerHeight || 1;
-      const progress = Math.min(1, Math.max(0, (viewport - rect.top) / (viewport + rect.height)));
-
-      rows.forEach((row) => {
-        const wrapperWidth = row.parentElement ? row.parentElement.clientWidth : window.innerWidth;
-        const distance = Math.max(row.scrollWidth - wrapperWidth, 220);
-        const direction = row.dataset.scrollRow === "right" ? -1 : 1;
-        const x = direction === 1 ? -distance * progress : -distance + distance * progress;
-        row.style.transform = `translate3d(${x}px, 0, 0)`;
-      });
+    const requestUpdate = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(update);
     };
 
-    onScrollRaf(update, true);
-  }
+    states.forEach((state) => {
+      const stepBy = (direction) => {
+        const panel = $(".gallery-panel", state.track);
+        const gap = Number.parseFloat(getComputedStyle(state.track).columnGap || getComputedStyle(state.track).gap) || 0;
+        const step = panel ? panel.getBoundingClientRect().width + gap : window.innerWidth * 0.72;
+        state.manualOffset += direction * step;
+        requestUpdate();
+      };
 
-  function initCards() {
-    $$(".car-card").forEach((card) => {
-      const image = $(".car-card-img", card);
-      if (!image) return;
+      state.previous?.addEventListener("click", () => stepBy(1));
+      state.next?.addEventListener("click", () => stepBy(-1));
 
-      card.addEventListener("mousemove", (event) => {
-        const rect = card.getBoundingClientRect();
-        const x = (event.clientX - rect.left) / rect.width - 0.5;
-        const y = (event.clientY - rect.top) / rect.height - 0.5;
-        image.style.transform = `translate(${x * 15}px, ${y * 10}px) scale(1.08)`;
-        card.style.transform = `perspective(1000px) rotateY(${x * 4}deg) rotateX(${-y * 4}deg)`;
+      state.viewport.addEventListener("pointerdown", (event) => {
+        if (event.button !== 0 || event.target.closest("a, button")) return;
+        state.dragging = true;
+        state.dragStartX = event.clientX;
+        state.dragStartOffset = state.manualOffset;
+        state.row.classList.add("is-dragging");
+        state.viewport.setPointerCapture?.(event.pointerId);
       });
 
-      card.addEventListener("mouseleave", () => {
-        image.style.transform = "";
-        card.style.transform = "";
+      state.viewport.addEventListener("pointermove", (event) => {
+        if (!state.dragging) return;
+        state.manualOffset = state.dragStartOffset + event.clientX - state.dragStartX;
+        requestUpdate();
       });
+
+      const finishDrag = (event) => {
+        if (!state.dragging) return;
+        state.dragging = false;
+        state.row.classList.remove("is-dragging");
+        if (state.viewport.hasPointerCapture?.(event.pointerId)) state.viewport.releasePointerCapture(event.pointerId);
+      };
+
+      state.viewport.addEventListener("pointerup", finishDrag);
+      state.viewport.addEventListener("pointercancel", finishDrag);
     });
 
-    if (!window.matchMedia("(pointer: fine) and (min-width: 1180px)").matches) return;
-
-    $$(".lease-card, .why-item, .promo-deal, .about-feature, .airport-card, .faq-item, .promo-card").forEach((surface) => {
-      surface.classList.add("interactive-surface");
-    });
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate, { passive: true });
+    window.addEventListener("orientationchange", requestUpdate, { passive: true });
+    galleryScrollUpdate = requestUpdate;
+    document.documentElement.dataset.galleryMotion = "ready";
+    requestUpdate();
   }
 
-  function initFAQ() {
+  function initCustomCursor() {
+    const cursor = $("#cursorOrbit");
+    const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (!cursor || !finePointer || prefersReducedMotion()) return;
+
+    let targetX = -100;
+    let targetY = -100;
+    let currentX = -100;
+    let currentY = -100;
+    let cursorFrame = 0;
+
+    const render = () => {
+      currentX += (targetX - currentX) * 0.2;
+      currentY += (targetY - currentY) * 0.2;
+      cursor.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px, 0) translate(-50%, -50%)`;
+      if (Math.abs(targetX - currentX) > 0.08 || Math.abs(targetY - currentY) > 0.08) {
+        cursorFrame = window.requestAnimationFrame(render);
+      } else {
+        cursorFrame = 0;
+      }
+    };
+
+    window.setTimeout(() => document.body.classList.add("cursor-enhanced"), 850);
+    document.addEventListener("pointermove", (event) => {
+      if (event.pointerType && event.pointerType !== "mouse") return;
+      targetX = event.clientX;
+      targetY = event.clientY;
+      cursor.classList.add("visible");
+      cursor.classList.toggle("is-active", Boolean(event.target.closest("a, button, input, [role='button']")));
+      cursor.classList.toggle("is-media", Boolean(event.target.closest("img, video, .gallery-viewport")));
+      if (!cursorFrame) cursorFrame = window.requestAnimationFrame(render);
+    }, { passive: true });
+    document.addEventListener("pointerdown", () => cursor.classList.add("is-pressed"), { passive: true });
+    document.addEventListener("pointerup", () => cursor.classList.remove("is-pressed"), { passive: true });
+    document.documentElement.addEventListener("mouseleave", () => cursor.classList.remove("visible"));
+    window.addEventListener("blur", () => cursor.classList.remove("visible"));
+  }
+
+  function initFaq() {
     $$(".faq-question").forEach((button) => {
       button.addEventListener("click", () => {
         const item = button.closest(".faq-item");
         if (!item) return;
-        const isOpen = item.classList.toggle("open");
-        button.setAttribute("aria-expanded", String(isOpen));
+        const open = item.classList.toggle("open");
+        button.setAttribute("aria-expanded", String(open));
+        const toggle = $("span", button);
+        if (toggle) toggle.textContent = open ? "-" : "+";
       });
     });
   }
 
-  function getConciergeReply(text) {
+  function currentTime() {
+    return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  }
+
+  function conciergeReply(text) {
     const query = text.toLowerCase();
-    const normalized = query
-      .replace(/[^a-z0-9\s]/g, " ")
-      .replace(/\s+/g, " ")
-      .trim();
-
-    if (!normalized) {
-      return "I'm here with you. Send me a quick note about dates, vehicle style, or budget and I will guide you.";
+    if (query.includes("airport") || query.includes("dxb") || query.includes("delivery")) {
+      return "Yes, POF Rental offers DXB airport delivery plus hotel and residence drop-off across Dubai. Send your arrival time, terminal, preferred car, and rental duration for the smoothest handover.";
     }
-
-    if (/\b(how are you|how r you|how are u|how do you do|how is it going|how's it going)\b/.test(normalized)) {
-      return "I'm good, thank you for asking. How are you doing today? If you are planning a Dubai rental, I can also help you pick the right car.";
-    }
-
-    if (/^(hi|hello|hey|yo|hiya|good morning|good afternoon|good evening|salam|assalam|asalam)\b/.test(normalized)) {
-      return "Hello, welcome to POF Rental. I'm Aria, your Dubai luxury fleet concierge. How can I help today - booking, prices, airport delivery, or car recommendations?";
-    }
-
-    if (/\b(i am good|i m good|im good|i am fine|i m fine|im fine|doing good|doing well|all good|great|fine thanks)\b/.test(normalized)) {
-      return "Glad to hear that. What can I help you with today - a supercar for the day, an airport delivery, or a monthly lease?";
-    }
-
-    if (/\b(thank you|thanks|appreciate|thank)\b/.test(normalized)) {
-      return "You're very welcome. If you share your date, delivery area, and preferred car style, I can help narrow the best options.";
-    }
-
-    if (/\b(bye|goodbye|see you|talk later)\b/.test(normalized)) {
-      return "Goodbye for now. When you are ready, send your dates and preferred car category and POF Rental can help with availability.";
-    }
-
-    if (/\b(who are you|your name|what are you)\b/.test(normalized)) {
-      return "I'm Aria, the POF Rental concierge assistant. I can help with Dubai fleet options, pricing guidance, airport delivery, chauffeur requests, and long-term lease choices.";
-    }
-
-    if (/\b(help|what can you do|support)\b/.test(normalized)) {
-      return "I can help you compare cars, check what details are needed for availability, explain airport delivery, suggest monthly lease options, and prepare a WhatsApp booking message.";
-    }
-
-    if (/\b(location|where are you|address|map)\b/.test(normalized)) {
-      return "POF Rental serves Dubai, UAE, with delivery to hotels, residences, and DXB airport. Share your delivery area and rental date for the most accurate guidance.";
-    }
-
-    if (/\b(contact|phone|number|call|whatsapp|talk to human|agent)\b/.test(normalized)) {
-      return "You can use the WhatsApp button in this chat for the fastest concierge response. Include your rental date, delivery location, vehicle preference, and rental duration.";
-    }
-
-    if (/\b(open|hours|timing|time|24 7|available now)\b/.test(normalized)) {
-      return "Concierge support is positioned for 24/7 assistance. For live availability, send your preferred car, pickup time, and delivery location through WhatsApp.";
-    }
-
-    if (/\b(document|license|licence|passport|id|requirements)\b/.test(normalized)) {
-      return "For most rentals, you should be ready with a valid driving license, ID or passport details, and your delivery location. Requirements can vary by residency and vehicle category.";
-    }
-
-    if (/\b(cheap|budget|lowest|affordable|best price|value)\b/.test(normalized)) {
-      return "For best value, compare weekly or monthly rates instead of daily pricing. Prestige SUVs and Chinese luxury EVs often give the strongest comfort-to-price balance.";
-    }
-
-    if (query.includes("airport") || query.includes("dxb") || query.includes("pickup") || query.includes("delivery")) {
-      return "Yes, POF Rental offers DXB airport delivery plus hotel and residence drop-off across Dubai. For a smooth handover, send your arrival time, terminal, preferred car, and rental duration.";
-    }
-
     if (query.includes("monthly") || query.includes("month") || query.includes("lease") || query.includes("long")) {
-      return "For longer stays, weekly rentals start from AED 2,500/week, monthly lease options from AED 8,500/month, and 3-12 month plans from AED 6,000/month depending on the model. Prestige SUVs and Chinese luxury EVs are often the strongest monthly value.";
+      return "Weekly rentals start from AED 2,500/week, monthly lease options from AED 8,500/month, and long-term plans from AED 6,000/month depending on the model.";
     }
-
-    if (query.includes("business") || query.includes("recommend") || query.includes("choose") || query.includes("which car")) {
-      return "For business travel, I would suggest a Mercedes-AMG G63, Range Rover Autobiography, or Rolls-Royce Ghost. For a sharper weekend drive, Porsche 911 GT3 RS or Ferrari Roma Spider feel more special. Tell me your occasion and number of passengers for a tighter recommendation.";
+    if (query.includes("deal") || query.includes("offer") || query.includes("sale") || query.includes("discount")) {
+      return "The Exclusive Super Sale runs June 25 - July 1, 2026: Ferrari Purosangue and Ferrari 12 Cilindri from AED 3,399/day, plus Porsche 911 GT3 RS from AED 1,899/day.";
     }
-
-    if (/\b(family|kids|child|children|suv|space|luggage|bags)\b/.test(normalized)) {
-      return "For family comfort or luggage space, I would lean toward a Range Rover Autobiography, Mercedes-AMG G63, Porsche Cayenne Turbo GT, or a luxury Chinese SUV. Share passenger count and bags for a better fit.";
-    }
-
-    if (query.includes("chinese") || query.includes("ev") || query.includes("electric") || query.includes("byd") || query.includes("zeekr") || query.includes("hongqi")) {
-      return "The Chinese luxury fleet focuses on Jetour, BYD, Zeekr, and Hongqi models. They are ideal if you want premium interiors, advanced cabin tech, and electric or hybrid comfort for Dubai city driving.";
-    }
-
     if (query.includes("ferrari") || query.includes("lamborghini") || query.includes("porsche") || query.includes("supercar")) {
-      return "For supercars, the Ferrari Purosangue is a luxury performance SUV, Ferrari 12 Cilindri is pure V12 theatre, Lamborghini Huracan EVO is the dramatic choice, and Porsche 911 GT3 RS is the precise driver's car. I can help compare them for comfort, status, or performance.";
+      return "For supercars, Ferrari Purosangue gives V12 luxury, Ferrari 12 Cilindri is pure V12 theatre, Lamborghini Huracan EVO is dramatic, and Porsche 911 GT3 RS is the precise driver's car.";
     }
-
     if (query.includes("chauffeur") || query.includes("driver")) {
-      return "Chauffeur service is available for executives and VIP guests with advance booking. Share the date, itinerary, pickup location, and preferred vehicle tier so the concierge can prepare a quote.";
+      return "Chauffeur service is available for executives and VIP guests with advance booking. Share the date, itinerary, pickup location, and preferred vehicle tier.";
     }
-
-    if (query.includes("deal") || query.includes("offers") || query.includes("sale") || query.includes("discount") || query.includes("promotion")) {
-      return "The headline offer is the Exclusive Super Sale from June 25 to July 1, 2026: Ferrari Purosangue and Ferrari 12 Cilindri from AED 3,399/day, plus Porsche 911 GT3 RS from AED 1,899/day. Share your rental date and I can guide you to the fastest booking path.";
+    if (query.includes("price") || query.includes("deposit") || query.includes("fee")) {
+      return "Pricing is confirmed clearly before booking, with no hidden fees and no-deposit options on select models. The final rate depends on vehicle, duration, delivery location, and seasonal availability.";
     }
-
-    if (query.includes("deposit") || query.includes("hidden") || query.includes("fee") || query.includes("price")) {
-      return "Pricing is confirmed clearly before booking, with no hidden fees and no-deposit options on select models. The final rate depends on the vehicle, rental duration, delivery location, and seasonal availability.";
-    }
-
-    if (query.includes("available") || query.includes("availability") || query.includes("book") || query.includes("reserve")) {
-      return "To check availability quickly, share your rental date, duration, delivery location, and preferred car or category. For the fastest human confirmation, use the WhatsApp button and include those details.";
-    }
-
-    return "I can help with fleet options, pricing, airport delivery, chauffeur service, Chinese EVs, and long-term leases. Tell me your date, location, rental duration, and the kind of experience you want - comfort, status, performance, or best value.";
+    return "Welcome to POF Rental. I can help with fleet options, pricing, airport delivery, chauffeur service, Chinese EVs, and long-term leases. Share your date, delivery area, duration, and preferred style.";
   }
 
-  async function resolveChatReply(text) {
-    if (!CHAT_ENDPOINT) return getConciergeReply(text);
-
-    const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), 12000);
-
-    try {
-      const response = await fetch(CHAT_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: text,
-          brand: "POF Rental",
-          context: "Dubai luxury car rental concierge"
-        }),
-        signal: controller.signal
-      });
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
-      return data.reply || data.message || getConciergeReply(text);
-    } catch (_) {
-      return getConciergeReply(text);
-    } finally {
-      window.clearTimeout(timeout);
-    }
-  }
-
-  let chatOpen = false;
-  let chatLoading = false;
-
-  function appendChatMessage(role, text, options = {}) {
+  function appendMessage(role, text) {
     const messages = $("#chatMessages");
-    if (!messages) return null;
-
+    if (!messages) return;
     const message = document.createElement("div");
-    message.className = `chat-msg ${role}${options.error ? " error" : ""}`;
-
-    if (role === "bot") {
-      const avatar = document.createElement("div");
-      avatar.className = "chat-avatar-dot";
-      avatar.innerHTML = "&#10022;";
-      message.appendChild(avatar);
-    }
+    message.className = `chat-msg ${role}`;
 
     const wrap = document.createElement("div");
     wrap.className = "chat-bubble-wrap";
-
     const bubble = document.createElement("div");
     bubble.className = "chat-bubble";
     bubble.textContent = text;
-    wrap.appendChild(bubble);
-
     const time = document.createElement("div");
     time.className = "chat-time";
     time.textContent = currentTime();
-    wrap.appendChild(time);
-
-    if (options.suggestions) {
-      const suggestions = document.createElement("div");
-      suggestions.className = "chat-suggestions";
-      quickSuggestions.forEach((suggestion) => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "chat-suggestion";
-        button.textContent = suggestion;
-        button.addEventListener("click", () => sendChatMessage(suggestion));
-        suggestions.appendChild(button);
-      });
-      wrap.appendChild(suggestions);
-    }
-
+    wrap.append(bubble, time);
     message.appendChild(wrap);
     messages.appendChild(message);
     messages.scrollTop = messages.scrollHeight;
-    return message;
   }
 
-  function appendTyping() {
+  function setChatTyping(show) {
     const messages = $("#chatMessages");
-    if (!messages) return null;
+    if (!messages) return;
+    $("#chatTyping")?.remove();
+    if (!show) return;
 
     const message = document.createElement("div");
-    message.className = "chat-msg bot";
-    message.innerHTML = `
-      <div class="chat-avatar-dot">&#10022;</div>
-      <div class="chat-bubble-wrap">
-        <div class="chatbot-typing" aria-label="Aria is typing">
-          <span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>
-        </div>
-      </div>
-    `;
+    message.className = "chat-msg bot typing";
+    message.id = "chatTyping";
+    message.setAttribute("aria-label", "Aria is typing");
+    const wrap = document.createElement("div");
+    wrap.className = "chat-bubble-wrap";
+    const bubble = document.createElement("div");
+    bubble.className = "chat-bubble";
+    bubble.innerHTML = "<span></span><span></span><span></span>";
+    wrap.appendChild(bubble);
+    message.appendChild(wrap);
     messages.appendChild(message);
     messages.scrollTop = messages.scrollHeight;
-    return message;
+  }
+
+  function setChatNudge(open, remember = false) {
+    const nudge = $("#chatNudge");
+    if (!nudge) return;
+    nudge.classList.toggle("visible", open);
+    nudge.setAttribute("aria-hidden", String(!open));
+    if (remember) safeStorage(sessionStorage, "pof-chat-nudge-seen-v16", "true");
+  }
+
+  function setChatOpen(open) {
+    const panel = $("#chatbotWindow");
+    const trigger = $("#chatTrigger");
+    if (!panel || !trigger) return;
+
+    chatOpen = open;
+    panel.classList.toggle("open", open);
+    panel.setAttribute("aria-hidden", String(!open));
+    trigger.classList.toggle("active", open);
+    if (open) trigger.classList.add("seen");
+    trigger.setAttribute("aria-label", open ? "Close chat with Aria" : "Open chat with Aria");
+    trigger.setAttribute("aria-expanded", String(open));
+    if (open) setChatNudge(false, true);
+    if (open && window.matchMedia("(min-width: 721px)").matches) window.setTimeout(() => $("#chatInput")?.focus(), 120);
   }
 
   function updateChatInput() {
@@ -698,227 +599,94 @@
     input.disabled = chatLoading;
   }
 
-  function sendChatMessage(rawText) {
+  function sendChat(text) {
+    const value = String(text || "").trim();
+    if (!value || chatLoading) return;
     const input = $("#chatInput");
-    const text = String(rawText || "").trim();
-    if (!text || chatLoading) return;
-
-    setChatOpen(true);
-    $$(".chat-suggestions").forEach((el) => el.remove());
     if (input) input.value = "";
-    appendChatMessage("user", text);
-
+    setChatOpen(true);
+    appendMessage("user", value);
     chatLoading = true;
+    setChatTyping(true);
     updateChatInput();
-    const typing = appendTyping();
-
-    window.setTimeout(async () => {
-      if (typing) typing.remove();
-      appendChatMessage("bot", await resolveChatReply(text));
+    window.setTimeout(() => {
+      setChatTyping(false);
+      appendMessage("bot", conciergeReply(value));
       chatLoading = false;
       updateChatInput();
-      if (input) input.focus();
-    }, 560 + Math.random() * 520);
-  }
-
-  function setChatOpen(open) {
-    const windowEl = $("#chatbotWindow");
-    const trigger = $("#chatTrigger");
-    const icon = $("#chatTriggerIcon");
-    const input = $("#chatInput");
-    if (!windowEl || !trigger || !icon) return;
-
-    chatOpen = open;
-    windowEl.classList.toggle("open", chatOpen);
-    windowEl.setAttribute("aria-hidden", String(!chatOpen));
-    trigger.classList.toggle("active", chatOpen);
-    trigger.setAttribute("aria-label", chatOpen ? "Close chat with Aria" : "Open chat with Aria");
-    icon.innerHTML = chatOpen ? "&times;" : "&#10022;";
-
-    if (chatOpen && input) {
-      window.setTimeout(() => input.focus(), 120);
-    }
+    }, 720);
   }
 
   function initChat() {
-    appendChatMessage(
-      "bot",
-      "Welcome to POF Rental. I'm Aria, your Dubai luxury fleet concierge. Are you looking to explore our fleet, check availability, or enquire about a long-term lease?",
-      { suggestions: true }
-    );
-
-    const trigger = $("#chatTrigger");
-    const close = $("#chatClose");
-    const form = $("#chatForm");
-    const input = $("#chatInput");
-
-    if (trigger) trigger.addEventListener("click", () => setChatOpen(!chatOpen));
-    if (close) close.addEventListener("click", () => setChatOpen(false));
-
-    if (form) {
-      form.addEventListener("submit", (event) => {
-        event.preventDefault();
-        sendChatMessage(input ? input.value : "");
-      });
+    appendMessage("bot", "Welcome to POF Rental. I'm Aria, your Dubai luxury fleet concierge. Are you looking to explore our fleet, check availability, or enquire about a long-term lease?");
+    $("#chatTrigger")?.addEventListener("click", () => setChatOpen(!chatOpen));
+    $("#chatClose")?.addEventListener("click", () => setChatOpen(false));
+    $("#chatForm")?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      sendChat($("#chatInput")?.value || "");
+    });
+    $("#chatInput")?.addEventListener("input", updateChatInput);
+    $$("[data-chat-text]").forEach((button) => button.addEventListener("click", () => sendChat(button.dataset.chatText)));
+    $("#chatNudgeAction")?.addEventListener("click", () => {
+      setChatNudge(false, true);
+      setChatOpen(true);
+    });
+    $("#chatNudgeClose")?.addEventListener("click", () => setChatNudge(false, true));
+    if (window.matchMedia("(min-width: 721px)").matches) {
+      window.setTimeout(() => {
+        if (!chatOpen && safeStorage(sessionStorage, "pof-chat-nudge-seen-v16") !== "true") setChatNudge(true);
+      }, 4200);
     }
-
-    if (input) input.addEventListener("input", updateChatInput);
-    $$(".quick-action-btn[data-chat-text]").forEach((button) => {
-      button.addEventListener("click", () => sendChatMessage(button.dataset.chatText));
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && chatOpen) setChatOpen(false);
     });
     updateChatInput();
   }
 
-  function showExitPopup() {
-    const popup = $("#exitPopup");
-    if (!popup || safeStorage(sessionStorage, "pof-exit-popup-seen") === "true") return;
-    safeStorage(sessionStorage, "pof-exit-popup-seen", "true");
-    popup.hidden = false;
-  }
-
-  function closeExitPopup() {
-    const popup = $("#exitPopup");
-    if (popup) popup.hidden = true;
-  }
-
   function initExitPopup() {
-    document.addEventListener("mouseout", (event) => {
-      const leavingTop = event.clientY <= 8;
-      const leavingDocument = !event.relatedTarget && !event.toElement;
-      if (leavingTop || leavingDocument) showExitPopup();
-    });
-
-    window.setTimeout(() => {
-      if (window.innerWidth <= 768) showExitPopup();
-    }, 14000);
-
-    $$("[data-close-exit]").forEach((button) => {
-      button.addEventListener("click", closeExitPopup);
-    });
-  }
-
-  function initCursor() {
-    const cursor = $(".cursor");
-    const follower = $(".cursor-follower");
-    if (!cursor || !follower || window.matchMedia("(pointer: coarse)").matches) return;
-
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let followerX = mouseX;
-    let followerY = mouseY;
-
-    document.addEventListener("mousemove", (event) => {
-      mouseX = event.clientX;
-      mouseY = event.clientY;
-      cursor.style.left = `${mouseX}px`;
-      cursor.style.top = `${mouseY}px`;
-    });
-
-    document.addEventListener("mouseover", (event) => {
-      if (event.target.closest("a, button, input, [data-cursor='hover']")) {
-        cursor.classList.add("hover");
-        follower.classList.add("hover");
-      }
-    });
-
-    document.addEventListener("mouseout", () => {
-      cursor.classList.remove("hover");
-      follower.classList.remove("hover");
-    });
-
-    const animate = () => {
-      followerX += (mouseX - followerX) * 0.12;
-      followerY += (mouseY - followerY) * 0.12;
-      follower.style.left = `${followerX}px`;
-      follower.style.top = `${followerY}px`;
-      window.requestAnimationFrame(animate);
+    const popup = $("#exitPopup");
+    if (!popup) return;
+    const armedAt = Date.now() + 30000;
+    const show = () => {
+      if (safeStorage(sessionStorage, "pof-exit-popup-seen") === "true") return;
+      safeStorage(sessionStorage, "pof-exit-popup-seen", "true");
+      popup.hidden = false;
     };
-    animate();
-  }
-
-  function initLazyVideos() {
-    const videos = $$('video[data-lazy-video="true"]:not(.hero-video)');
-    if (videos.length === 0) return;
-
-    if (!("IntersectionObserver" in window)) {
-      videos.forEach((video) => playVideo(video));
-      return;
-    }
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        const video = entry.target;
-        if (entry.isIntersecting) {
-          playVideo(video);
-        } else {
-          video.pause();
-          video.currentTime = 0;
-        }
-      });
-    }, { rootMargin: "180px 0px", threshold: 0.05 });
-
-    videos.forEach((video) => observer.observe(video));
-  }
-
-  function initMediaFallbacks() {
-    $$(".car-card-img, .scroll-car-img, .experience-card img, .about-visual-img").forEach((media) => {
-      if (media.tagName !== "IMG") return;
-      media.addEventListener("error", () => {
-        if (media.dataset.fallbackApplied === "true") return;
-        media.dataset.fallbackApplied = "true";
-        media.src = "media/01.webp";
-      });
+    document.addEventListener("mouseout", (event) => {
+      if (Date.now() >= armedAt && window.scrollY > 600 && event.clientY <= 8 && !event.relatedTarget) show();
     });
+    if (window.innerWidth <= 768) window.setTimeout(show, 45000);
+    $$("[data-close-exit]").forEach((button) => button.addEventListener("click", () => { popup.hidden = true; }));
   }
 
-  function initMagneticButtons() {
-    const targets = $$(".magnetic, .btn-primary, .btn-secondary, .nav-cta, .car-card-btn, .mini-book-link, .hero-preview");
-    if (!window.matchMedia("(pointer: fine) and (min-width: 1180px)").matches) return;
-
-    targets.forEach((target) => {
-      target.addEventListener("mousemove", (event) => {
-        const rect = target.getBoundingClientRect();
-        const x = event.clientX - rect.left - rect.width / 2;
-        const y = event.clientY - rect.top - rect.height / 2;
-        target.style.setProperty("--magnetic-x", `${x * 0.12}px`);
-        target.style.setProperty("--magnetic-y", `${y * 0.12}px`);
-      });
-      target.addEventListener("mouseleave", () => {
-        target.style.setProperty("--magnetic-x", "0px");
-        target.style.setProperty("--magnetic-y", "0px");
-      });
-    });
-  }
-
-  function initLanguageButtons() {
-    $$(".footer-language").forEach((button) => {
-      button.addEventListener("click", () => {
-        $$(".footer-language").forEach((item) => item.classList.remove("active"));
-        button.classList.add("active");
-      });
-    });
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    buildLoaderTicks();
-    renderFleetRows();
-    initSectionMotion();
-    initTheme();
+  function boot() {
+    if (document.documentElement.dataset.pofBooted === "true") return;
+    document.documentElement.dataset.pofBooted = "true";
     initLoader();
     initNavigation();
-    initHero();
-    initReveal();
-    initScrollMotion();
-    initFleetScroll();
-    initCards();
-    initLazyVideos();
-    initMediaFallbacks();
-    initMagneticButtons();
-    initFAQ();
+    initTheme();
+    initVideos();
+    initHoverEffects();
+    initSmoothScroll();
+    initGsap();
+    initGalleryScrollMotion();
+    initCustomCursor();
+    window.addEventListener("load", initSmoothScroll, { once: true });
+    window.addEventListener("load", initGsap, { once: true });
+    initFaq();
     initChat();
     initExitPopup();
-    // Disabled by default: custom cursor animation can cause scroll jank on hosted builds.
-    // initCursor();
-    initLanguageButtons();
-  });
+  }
+
+  function bootAfterHydration() {
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(boot);
+    });
+  }
+
+  if (document.documentElement.dataset.pofReactHydrated === "true") {
+    bootAfterHydration();
+  } else {
+    window.addEventListener("pof:react-hydrated", bootAfterHydration, { once: true });
+  }
 }());
