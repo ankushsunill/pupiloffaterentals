@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "node server.cjs",
     "start": "node server.cjs",
+    "prebuild": "node scripts/prepare-public.cjs",
     "build": "next build",
     "static:build": "node scripts/build.cjs",
     "preview": "node server.cjs"
