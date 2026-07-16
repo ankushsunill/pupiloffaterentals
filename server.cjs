@@ -6,7 +6,8 @@ const url = require('url');
 const root = __dirname;
 const port = Number(process.env.PORT || 5173);
 const host = process.env.HOST || '0.0.0.0';
-const dev = process.env.NODE_ENV !== 'production';
+const dev = process.argv.includes('--dev') || process.env.NODE_ENV === 'development';
+if (!process.env.NODE_ENV) process.env.NODE_ENV = dev ? 'development' : 'production';
 
 let nextApp = null;
 let nextHandler = null;
@@ -37,7 +38,7 @@ const mimeTypes = {
 };
 
 const staticPrefixes = ['/media/', '/vendor/'];
-const staticFiles = new Set(['/app.js', '/styles.css', '/redesign.css', '/final.css', '/favicon.ico', '/robots.txt']);
+const staticFiles = new Set(['/app.js', '/styles.css', '/redesign.css', '/final.css', '/favicon.ico']);
 
 function isStaticRequest(pathname) {
   return staticFiles.has(pathname) || staticPrefixes.some((prefix) => pathname.startsWith(prefix));

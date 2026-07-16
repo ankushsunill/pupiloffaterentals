@@ -2,13 +2,12 @@
   "name": "pof-rental-premium-rebuild",
   "version": "1.0.1",
   "private": true,
-  "description": "Premium static rebuild of the POF Rental website with local video/image assets and npm dev server.",
+  "description": "Hybrid Next.js rebuild of the POF Rental website with server-rendered content, an enquiry API, and responsive motion.",
   "scripts": {
-    "dev": "node server.cjs",
+    "dev": "node server.cjs --dev",
     "start": "node server.cjs",
     "prebuild": "node scripts/prepare-public.cjs",
     "build": "next build",
-    "static:build": "node scripts/build.cjs",
     "preview": "node server.cjs"
   },
   "dependencies": {
