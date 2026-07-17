@@ -75,7 +75,7 @@
     if (!element) return false;
 
     if (lenis && !prefersReducedMotion()) {
-      lenis.scrollTo(element, { offset: -84, duration: 1.05 });
+      lenis.scrollTo(element, { offset: -84, duration: 0.72 });
     } else {
       element.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
     }
@@ -233,12 +233,12 @@
     if (smoothScrollBooted) return;
     smoothScrollBooted = true;
     lenis = new window.Lenis({
-      duration: 1.12,
+      duration: 0.82,
       easing: (t) => 1 - Math.pow(1 - t, 4),
       smoothWheel: true,
-      wheelMultiplier: 0.86,
-      touchMultiplier: 1.05,
-      lerp: 0.105
+      wheelMultiplier: 1.12,
+      touchMultiplier: 1.12,
+      lerp: 0.16
     });
 
     function raf(time) {
@@ -276,13 +276,13 @@
     gsap.to(".hero-title-line:first-child", {
       xPercent: -3.5,
       ease: "none",
-      scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 1 }
+      scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 0.55 }
     });
 
     gsap.to(".hero-title-line:last-child", {
       xPercent: 2.5,
       ease: "none",
-      scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 1 }
+      scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 0.55 }
     });
 
     gsap.to(".hero-media", {
@@ -296,7 +296,7 @@
       rotateZ: 70,
       rotateX: 12,
       ease: "none",
-      scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 1.4 }
+      scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 0.7 }
     });
 
     gsap.utils.toArray("main > section:not(.hero):not(.motion-gallery), .marquee, .footer").forEach((section) => {
@@ -307,7 +307,7 @@
           opacity: 1,
           filter: "blur(0px)",
           ease: "power3.out",
-          scrollTrigger: { trigger: section, start: "top 92%", end: "top 48%", scrub: 0.85 }
+          scrollTrigger: { trigger: section, start: "top 92%", end: "top 56%", scrub: 0.45 }
         }
       );
     });
@@ -333,7 +333,7 @@
           rotateY: 0,
           z: 0,
           ease: "none",
-          scrollTrigger: { trigger: row, start: "top bottom", end: "center center", scrub: 0.8 }
+          scrollTrigger: { trigger: row, start: "top bottom", end: "center center", scrub: 0.45 }
         }
       );
     });
@@ -360,7 +360,7 @@
         scale: 1.13,
         yPercent: -5,
         ease: "none",
-        scrollTrigger: { trigger: media, start: "top bottom", end: "bottom top", scrub: 1.1 }
+        scrollTrigger: { trigger: media, start: "top bottom", end: "bottom top", scrub: 0.6 }
       });
     });
 
@@ -373,7 +373,7 @@
           y: 0,
           opacity: 1,
           ease: "power2.out",
-          scrollTrigger: { trigger: media, start: "top 90%", end: "center 56%", scrub: 0.9 }
+          scrollTrigger: { trigger: media, start: "top 90%", end: "center 62%", scrub: 0.5 }
         }
       );
     });
