@@ -62,3 +62,23 @@ test("mobile menu stays readable in dark mode and shows one logo", async ({ page
   const serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));
   expect(serious).toEqual([]);
 });
+
+test("digital concierge launcher remains readable in dark mode", async ({ page, isMobile }) => {
+  await page.goto("/");
+  if (isMobile) {
+    await page.getByRole("button", { name: "Menu" }).click();
+    await page.locator("#mobileThemeToggle").click();
+    await page.getByRole("button", { name: "Menu" }).click();
+  } else {
+    await page.locator("#themeToggle").click();
+  }
+
+  const launcher = page.getByRole("button", { name: "Open POF digital concierge" });
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(launcher).toBeVisible();
+  await expect(launcher).toHaveCSS("background-color", "rgb(13, 17, 19)");
+
+  const results = await new AxeBuilder({ page }).include(".floating-concierge-launcher").analyze();
+  const serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));
+  expect(serious).toEqual([]);
+});

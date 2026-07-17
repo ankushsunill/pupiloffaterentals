@@ -4756,6 +4756,12 @@ main > section,
   transition: width 320ms var(--ease-premium), background 240ms ease;
 }
 
+html[data-theme="dark"] .floating-concierge-launcher {
+  border-color: rgba(255, 253, 248, 0.22);
+  background: #0d1113;
+  color: #fffdf8;
+}
+
 .floating-concierge-launcher:hover,
 .floating-concierge-launcher.is-open {
   animation-play-state: paused;
