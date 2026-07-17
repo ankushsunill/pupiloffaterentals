@@ -25,6 +25,7 @@ npm run check
 ```
 
 `npm run check` is the required pre-push check and is also executed by GitHub Actions.
+It includes a media-size budget so oversized hero and feature videos cannot be added accidentally.
 
 ## Architecture
 
