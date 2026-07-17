@@ -692,6 +692,14 @@ html[data-theme="dark"] .theme-toggle-moon {
   transition: opacity 280ms ease, transform 280ms ease, visibility 0s linear 280ms;
 }
 
+.offers-section,
+.faq-section,
+.concierge-builder,
+.footer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}
+
 html[data-theme="dark"] .mobile-nav-overlay {
   background: rgba(23, 25, 28, 0.97);
 }

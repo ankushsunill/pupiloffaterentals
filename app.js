@@ -26,14 +26,12 @@
     const stage = $("#loaderStage");
     if (!loader || !bar || !count) return;
 
-    const heroVideo = $(".hero-video.active");
-    let pageReady = document.readyState === "complete";
-    let mediaReady = !heroVideo || heroVideo.readyState >= 2;
+    let pageReady = document.readyState !== "loading";
     let progress = 0;
     let finished = false;
     const startedAt = performance.now();
-    const minimumDuration = prefersReducedMotion() ? 0 : 420;
-    const maximumDuration = 4200;
+    const minimumDuration = prefersReducedMotion() ? 0 : 180;
+    const maximumDuration = 1400;
 
     const finish = () => {
       if (finished) return;
@@ -43,20 +41,18 @@
       if (stage) stage.textContent = "Arrival ready";
       window.setTimeout(() => {
         loader.classList.add("loader-done");
-        window.setTimeout(() => { loader.hidden = true; }, 820);
-      }, prefersReducedMotion() ? 0 : 100);
+        window.setTimeout(() => { loader.hidden = true; }, 560);
+      }, prefersReducedMotion() ? 0 : 40);
     };
 
     const markPageReady = () => { pageReady = true; };
-    const markMediaReady = () => { mediaReady = true; };
     window.addEventListener("load", markPageReady, { once: true });
-    heroVideo?.addEventListener("loadeddata", markMediaReady, { once: true });
 
     const render = (now) => {
       const elapsed = now - startedAt;
-      const ready = pageReady && mediaReady;
+      const ready = pageReady;
       const target = ready ? 100 : Math.min(92, 18 + (elapsed / maximumDuration) * 74);
-      progress += (target - progress) * 0.12;
+      progress += (target - progress) * 0.2;
       bar.style.width = `${progress}%`;
       count.textContent = String(Math.min(99, Math.round(progress))).padStart(3, "0");
       if (stage) {
@@ -251,6 +247,20 @@
       if (window.ScrollTrigger) window.ScrollTrigger.update();
       if (galleryScrollUpdate) galleryScrollUpdate();
     });
+  }
+
+  function initMotionRuntime() {
+    const startedAt = performance.now();
+    const bootMotion = () => {
+      initSmoothScroll();
+      initGsap();
+      if ((!smoothScrollBooted || !gsapBooted) && performance.now() - startedAt < 10000) {
+        window.setTimeout(bootMotion, 120);
+      }
+    };
+
+    if ("requestIdleCallback" in window) window.requestIdleCallback(bootMotion, { timeout: 1200 });
+    else window.setTimeout(bootMotion, 120);
   }
 
   function initGsap() {
@@ -567,12 +577,9 @@
     initTheme();
     initVideos();
     initHoverEffects();
-    initSmoothScroll();
-    initGsap();
+    initMotionRuntime();
     initGalleryScrollMotion();
     initCustomCursor();
-    window.addEventListener("load", initSmoothScroll, { once: true });
-    window.addEventListener("load", initGsap, { once: true });
     initFaq();
   }
 
