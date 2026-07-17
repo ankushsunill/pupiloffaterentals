@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { clean, createWhatsAppUrl, isCalendarDate, parseEnquiry } from "../lib/enquiry.mjs";
 
-const validBody = { vehicle: "Ferrari Purosangue", duration: "Daily rental", delivery: "Dubai hotel or residence", date: "2026-08-20", note: "Two passengers" };
+const validBody = { vehicle: "ferrari-purosangue", duration: "Daily rental", delivery: "Dubai hotel or residence", date: "2026-08-20", note: "Two passengers" };
 
 test("clean normalizes whitespace and limits length", () => {
   assert.equal(clean("  hello\n  Dubai  ", 20), "hello Dubai");
@@ -18,12 +18,14 @@ test("calendar date validation rejects impossible dates", () => {
 test("parseEnquiry accepts and normalizes valid input", () => {
   const result = parseEnquiry({ ...validBody, note: "  Two\n passengers " });
   assert.equal(result.error, undefined);
+  assert.equal(result.enquiry.vehicle, "Ferrari Purosangue");
   assert.equal(result.enquiry.note, "Two passengers");
 });
 
 test("parseEnquiry rejects invalid input", () => {
   assert.match(parseEnquiry(null).error, /Invalid/);
   assert.match(parseEnquiry({ ...validBody, duration: "Forever" }).error, /required/);
+  assert.match(parseEnquiry({ ...validBody, vehicle: "invented-supercar" }).error, /required/);
   assert.match(parseEnquiry({ ...validBody, date: "2026-02-30" }).error, /date/);
 });
 

@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import AxeBuilder from "@axe-core/playwright";
 
 test("renders the core experience without browser errors", async ({ page }) => {
   const errors = [];
@@ -36,4 +37,11 @@ test("page exposes essential accessibility landmarks", async ({ page }) => {
   await expect(page.getByRole("main")).toHaveCount(1);
   await expect(page.getByRole("contentinfo")).toHaveCount(1);
   await expect(page.locator("img:not([alt])")).toHaveCount(0);
+});
+
+test("essential page has no serious automated accessibility violations", async ({ page }) => {
+  await page.goto("/");
+  const results = await new AxeBuilder({ page }).analyze();
+  const serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));
+  expect(serious).toEqual([]);
 });

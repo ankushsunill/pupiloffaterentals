@@ -206,7 +206,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <ConciergeBuilder fleet={fleet.map(({ brand, model }) => `${brand} ${model}`)} />
+        <ConciergeBuilder fleet={fleet.map(({ id, brand, model }) => ({ id, label: `${brand} ${model}` }))} />
 
         <section className="editorial-band">
           <div>

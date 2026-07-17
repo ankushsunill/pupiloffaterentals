@@ -55,8 +55,8 @@ export default function ConciergeBuilder({ fleet }) {
           <label htmlFor="enquiry-vehicle">Preferred vehicle</label>
           <select id="enquiry-vehicle" name="vehicle" onChange={updateField} required value={form.vehicle}>
             <option value="">Choose a model or ask for guidance</option>
-            <option value="Concierge recommendation">Concierge recommendation</option>
-            {fleet.map((vehicle) => <option key={vehicle} value={vehicle}>{vehicle}</option>)}
+            <option value="concierge-recommendation">Concierge recommendation</option>
+            {fleet.map((vehicle) => <option key={vehicle.id} value={vehicle.id}>{vehicle.label}</option>)}
           </select>
         </div>
 

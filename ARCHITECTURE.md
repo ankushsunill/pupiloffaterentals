@@ -10,6 +10,7 @@ POF Rental is a content-first luxury rental experience. The engineering prioriti
 - `LandingPage` remains a server component so the primary experience ships as HTML.
 - `ConciergeBuilder` and `FloatingConcierge` are client components because they own interactive state.
 - The enquiry API validates an untrusted JSON boundary with a shared Zod schema and returns a WhatsApp URL. It stores and forwards no customer data.
+- Vehicle selections cross that boundary as canonical IDs and are resolved to trusted display names on the server; arbitrary client-supplied model names are rejected.
 - The motion layer is progressive enhancement. Navigation, content, forms, and direct contact links work independently of animation.
 
 ## Quality strategy
@@ -17,7 +18,7 @@ POF Rental is a content-first luxury rental experience. The engineering prioriti
 The repository uses three complementary checks:
 
 1. Node tests protect domain validation and URL construction.
-2. Playwright tests protect desktop/mobile journeys, keyboard dialog behavior, browser errors, and semantic landmarks.
+2. Playwright and Axe protect desktop/mobile journeys, keyboard dialog behavior, browser errors, semantic landmarks, and serious accessibility violations.
 3. A media budget prevents accidental performance regressions from oversized assets.
 
 Every pull request runs the production build and both test layers in GitHub Actions.

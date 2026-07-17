@@ -14,4 +14,4 @@ The target is WCAG 2.2 AA for all essential browsing and enquiry journeys.
 
 ## Verification
 
-Playwright checks essential landmarks, image alternatives, keyboard dialog behavior, and both desktop and mobile flows. Before a major release, manually verify keyboard traversal, 200% zoom, Windows High Contrast Mode, VoiceOver or NVDA announcements, and representative touch devices.
+Playwright checks essential landmarks, image alternatives, keyboard dialog behavior, and both desktop and mobile flows. Axe fails CI for serious or critical automated violations. Before a major release, manually verify keyboard traversal, 200% zoom, Windows High Contrast Mode, VoiceOver or NVDA announcements, and representative touch devices.

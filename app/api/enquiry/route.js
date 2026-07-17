@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server.js";
 import { createWhatsAppUrl, parseEnquiry } from "../../../lib/enquiry.mjs";
 
 const MAX_BODY_BYTES = 2048;

@@ -7,6 +7,7 @@
   --line: rgba(21, 23, 25, 0.13);
   --line-strong: rgba(21, 23, 25, 0.24);
   --bronze: #ad7f35;
+  --bronze-text: #855b1d;
   --cedar: #8e4f35;
   --green: #087a72;
   --plum: #79314a;
@@ -27,6 +28,7 @@ html[data-theme="dark"] {
   --line: rgba(246, 241, 232, 0.14);
   --line-strong: rgba(246, 241, 232, 0.26);
   --bronze: #d1a75a;
+  --bronze-text: #d1a75a;
   --cedar: #a96243;
   --green: #39b7aa;
   --plum: #c77896;
@@ -2059,7 +2061,7 @@ html[data-theme="light"] .gallery-panel-copy {
 
 .offer-runway span {
   position: static;
-  color: var(--bronze);
+  color: var(--bronze-text);
 }
 
 .offer-runway strong {
