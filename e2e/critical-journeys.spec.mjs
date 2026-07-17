@@ -45,3 +45,20 @@ test("essential page has no serious automated accessibility violations", async (
   const serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));
   expect(serious).toEqual([]);
 });
+
+test("mobile menu stays readable in dark mode and shows one logo", async ({ page, isMobile }) => {
+  test.skip(!isMobile, "Mobile navigation is only interactive on narrow viewports.");
+
+  await page.goto("/");
+  await page.getByRole("button", { name: "Menu" }).click();
+  await page.locator("#mobileThemeToggle").click();
+
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(page.locator("#mobileNav")).toBeVisible();
+  await expect(page.locator("#siteNav .nav-logo img")).toHaveCount(1);
+  await expect(page.locator("#mobileNav img")).toHaveCount(0);
+
+  const results = await new AxeBuilder({ page }).include("#mobileNav").analyze();
+  const serious = results.violations.filter((violation) => ["serious", "critical"].includes(violation.impact));
+  expect(serious).toEqual([]);
+});

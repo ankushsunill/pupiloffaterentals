@@ -683,6 +683,7 @@ html[data-theme="dark"] .theme-toggle-moon {
   gap: 1.1rem;
   padding: 6rem clamp(1rem, 6vw, 4rem);
   background: rgba(255, 253, 248, 0.96);
+  color: var(--ink);
   backdrop-filter: blur(18px);
   opacity: 0;
   visibility: hidden;
@@ -691,17 +692,16 @@ html[data-theme="dark"] .theme-toggle-moon {
   transition: opacity 280ms ease, transform 280ms ease, visibility 0s linear 280ms;
 }
 
+html[data-theme="dark"] .mobile-nav-overlay {
+  background: rgba(23, 25, 28, 0.97);
+}
+
 .mobile-nav-overlay.active {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
   transform: translateY(0);
   transition-delay: 0s;
-}
-
-.mobile-nav-logo {
-  width: 220px;
-  margin-bottom: 1.5rem;
 }
 
 .mobile-nav-link {
@@ -3999,10 +3999,6 @@ main > section,
     align-content: start;
     overflow-y: auto;
     padding: max(6rem, calc(env(safe-area-inset-top) + 5rem)) 1rem max(2rem, env(safe-area-inset-bottom));
-  }
-
-  .mobile-nav-logo {
-    width: min(190px, 52vw);
   }
 
   .mobile-nav-link {

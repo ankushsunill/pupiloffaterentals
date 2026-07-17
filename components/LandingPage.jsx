@@ -76,7 +76,6 @@ export default function LandingPage() {
       </nav>
 
       <div aria-hidden="true" className="mobile-nav-overlay" id="mobileNav" inert>
-        <Image alt="POF Rental" className="mobile-nav-logo" height={120} src="/media/logo.png" width={360} />
         <ThemeToggle mobile />
         {navItems.map(([label, href], index) => (
           <a className="mobile-nav-link" href={href} key={href} style={{ "--i": index }}>
