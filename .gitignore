@@ -5,5 +5,7 @@ dist/
 .next/
 .next-dev/
 *.log
+playwright-report/
+test-results/
 .codex-analysis/
 public/

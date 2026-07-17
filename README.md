@@ -22,10 +22,13 @@ Open `http://localhost:3000`.
 npm test
 npm run build
 npm run check
+npm run test:e2e
 ```
 
 `npm run check` is the required pre-push check and is also executed by GitHub Actions.
 It includes a media-size budget so oversized hero and feature videos cannot be added accidentally.
+
+See [ARCHITECTURE.md](ARCHITECTURE.md), [ACCESSIBILITY.md](ACCESSIBILITY.md), and [PERFORMANCE.md](PERFORMANCE.md) for the design decisions, verification strategy, and measurable budgets behind the implementation.
 
 ## Architecture
 
