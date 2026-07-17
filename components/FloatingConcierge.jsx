@@ -55,6 +55,7 @@ export default function FloatingConcierge() {
   const triggerRef = useRef(null);
   const closeRef = useRef(null);
   const messagesRef = useRef(null);
+  const panelRef = useRef(null);
 
   const whatsappUrl = useMemo(
     () => wa(`Hello POF Rental, I am contacting you from the website concierge. ${handoff}`),
@@ -65,14 +66,31 @@ export default function FloatingConcierge() {
     if (!open) return undefined;
     closeRef.current?.focus();
 
-    const closeOnEscape = (event) => {
-      if (event.key !== "Escape") return;
-      setOpen(false);
-      triggerRef.current?.focus();
+    const handleDialogKeyDown = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setOpen(false);
+        triggerRef.current?.focus();
+        return;
+      }
+      if (event.key !== "Tab" || !panelRef.current) return;
+      const focusable = Array.from(panelRef.current.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      ));
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
 
-    document.addEventListener("keydown", closeOnEscape);
-    return () => document.removeEventListener("keydown", closeOnEscape);
+    document.addEventListener("keydown", handleDialogKeyDown);
+    return () => document.removeEventListener("keydown", handleDialogKeyDown);
   }, [open]);
 
   useEffect(() => {
@@ -133,8 +151,10 @@ export default function FloatingConcierge() {
       <section
         aria-hidden={!open}
         aria-label="POF digital concierge"
+        aria-modal={open ? "true" : undefined}
         className={`floating-concierge-panel${open ? " is-open" : ""}`}
         id={panelId}
+        ref={panelRef}
         role="dialog"
       >
         <header className="floating-concierge-header">

@@ -45,9 +45,9 @@ export default function RootLayout({ children }) {
     <html data-theme="light" lang="en">
       <body className="interface-redesign cinematic-redesign minimal-premium">
         {children}
-        <Script src="/vendor/gsap.min.js?v=3.15.0" strategy="beforeInteractive" />
-        <Script src="/vendor/ScrollTrigger.min.js?v=3.15.0" strategy="beforeInteractive" />
-        <Script src="/vendor/lenis.min.js?v=1.3.25" strategy="beforeInteractive" />
+        <Script src="/vendor/gsap.min.js?v=3.15.0" strategy="afterInteractive" />
+        <Script src="/vendor/ScrollTrigger.min.js?v=3.15.0" strategy="afterInteractive" />
+        <Script src="/vendor/lenis.min.js?v=1.3.25" strategy="afterInteractive" />
         <Script src="/app.js?v=20260715-hybrid-v26" strategy="afterInteractive" />
       </body>
     </html>
